@@ -4,5 +4,5 @@ from . import views
 # . means importing from current directory
 
 urlpatterns = [
-    url(r'^$', views.index) # This is the base index for .../api/createPost
+    url(r'^$', views.index) # This is the base index for .../api/createPoll
 ]

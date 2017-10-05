@@ -5,5 +5,5 @@ from . import views
 urlpatterns = [
     url(r'^$', views.index, name='index'), # This is the base index for .../api/
     # url(r'^register/', include('register.urls')), # This is .../api/register
-    url(r'^createPost/', include('knowItAllAPI.createPost.urls')),  # This is .../api/createPost
+    url(r'^createPoll/', include('knowItAllAPI.createPoll.urls')),  # This is .../api/createPoll
 ]
