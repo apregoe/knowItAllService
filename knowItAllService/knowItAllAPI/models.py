@@ -22,7 +22,7 @@ class Review(models.Model):
     topicID = models.ForeignKey(Topic, on_delete=models.CASCADE)
     rating = models.DecimalField(max_digits=2, decimal_places=1)
     comment = models.CharField(max_length=300, default="")
-    dateCreated = models.DateTimeField(auto_now_add=True, blank=True)
+    # dateCreated = models.DateTimeField(default=datetime.now(), blank=True)
 
 class Poll(models.Model):
     # def setDeadline(dayLimit):
