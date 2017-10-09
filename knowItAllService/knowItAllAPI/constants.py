@@ -1,10 +1,9 @@
 ### Classes
 
 ## User
-sessionToken_param = 'sessionToken'
-email = 'email'
-password = 'password'
-userVerified = 'userVerified'
+email_param = 'email'
+password_param = 'password'
+userVerified_param = 'userVerified'
 
 ## Topic
 topic_param = 'topic'
