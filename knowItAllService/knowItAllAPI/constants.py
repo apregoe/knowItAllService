@@ -33,6 +33,7 @@ pollChoiceID_param = 'pollChoiceID'
 ### JsonResponse
 POST_400 = {'status': 400, 'message': "Error, please use POST."}
 UNIQUE_400 = {'status': 400, 'message': "Error: Data already exists!"}
+PASSWORD_400 = {'status': 400, 'message': "Error, user password not correct."}
 
 ## createTopic
 createTopic_400_ALL = {'status': 400, 'message': "Error: please provide a topic and a category."}
@@ -45,6 +46,10 @@ createPoll_400_DL = {'status': 400, 'message': "Error, dayLimit must be a value 
 
 ## login
 login_400_DNE = {'status': 400, 'message': "Error: user does not exist."}
+
+
+## authenticate
+authenticate_400_AA = {'status': 400, 'message': "Error, user already authenticated."}
 
 ### Categories
 CATEGORIES = {

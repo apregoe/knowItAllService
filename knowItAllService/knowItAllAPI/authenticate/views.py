@@ -4,7 +4,7 @@ from django.db import IntegrityError
 from .models import UserProfile
 from ..constants import *
 
-def login(request):
+def authenticate(request):
     if request.method != "POST":
         return JsonResponse(POST_400, status=400)
 
@@ -15,15 +15,20 @@ def login(request):
     # User has an account
     if user.exists():
         user = UserProfile.objects.get(username=username)
-
         # Password is correct
         if user.password == password:
+            # If User already authenticated
+            if user.userVerified == True:
+                return JsonResponse(authenticate_400_AA, status=400)
+
+            user.userVerified = True
+            user.save()
             return JsonResponse({'status': 200,
-                         'message': "User logged in successfully.",
+                         'message': "User authenticated successfully.",
                          'data': {'username': username, 'password': password }}
                         , status=200)
-        else:
-            return JsonResponse(PASSWORD_400, status=400)
+
+        return JsonResponse(PASSWORD_400, status=400)
     else:
         # Failure
         return JsonResponse(login_400_DNE, status=400)
