@@ -43,3 +43,12 @@ createTopic_400_C = {'status': 400, 'message': "Error: category must be an int 1
 createPoll_400_ALL = {'status': 400, 'message': "Error, please provide userID, text, choices, and openForever."}
 createPoll_400_OF = {'status': 400, 'message': "Error, openForever must be either 1 (true) or 0 (false)."}
 createPoll_400_DL = {'status': 400, 'message': "Error, dayLimit must be a value > 0."}
+
+
+### Categories
+CATEGORIES = {
+    1: "Academic",
+    2: "Food",
+    3: "Social",
+    4: "Entertainment"
+}

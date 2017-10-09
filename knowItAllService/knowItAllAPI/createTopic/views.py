@@ -28,7 +28,8 @@ def createTopic(request):
         t.save()
         return JsonResponse({'status': 200,
                          'message': "Successfully created topic.",
-                         'data': {'topic': t.name, 'category': t.category}}
+                         'data': {'topic': t.name, 'category': CATEGORIES.get(t.category)}}
                         , status=200)
+
     except IntegrityError:
         return JsonResponse(UNIQUE_400, status=400)

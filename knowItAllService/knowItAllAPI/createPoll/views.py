@@ -1,8 +1,15 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404
+from rest_framework.views import APIView # Return 404 object
+from rest_framework.response import Response # Send specific response
+from rest_framework import status # Return 404 object
+# from .models import Poll
+# from .serializers import PollSerializer
+
 from django.http import JsonResponse
 from .models import UserProfile, Poll, PollChoice
 from django.db import IntegrityError
 from ..constants import *
+import json
 
 def createPoll(request):
     if request.method != "POST":
@@ -40,9 +47,16 @@ def createPoll(request):
     try:
         p.save()
         # Store each choice into db
-        for choice in choices.split(','):
+        cList = choices.split(',')
+        for choice in cList:
             c = PollChoice(pollID=p, text=choice)
             c.save()
 
+        return JsonResponse({'status': 200,
+                         'message': "Successfully created poll.",
+                         'data': {'Poll': p.text, 'choices': cList }}
+                        , status=200)
+
     except IntegrityError:
             return JsonResponse(UNIQUE_400, status=400)
+

@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 from datetime import datetime, timedelta
 '''
     ID for each class will automatically be created, don't need to declare it; called pk (primary key)
@@ -11,14 +12,20 @@ from datetime import datetime, timedelta
     Adding days -> https://stackoverflow.com/a/15289461
 '''
 
-class UserProfile(models.Model):
-    sessionToken = models.CharField(max_length=200, default='')
-    email = models.EmailField(unique=True)
-    password = models.CharField(max_length=200, default='')
+# class UserProfile(models.Model):
+#     user = models.OneToOneField(User)
+#     userVerified = models.BooleanField(default=False)
+#     def __str__(self):
+#         return self.email +  " -- " + ("Verified" if self.userVerified else "Not Verified")
+
+class UserProfile(AbstractUser):
+    '''
+    Here is your User class which is fully customizable and
+    based off of the AbstractUser from auth.models
+    '''
     userVerified = models.BooleanField(default=False)
-    # How each entry of this class will be displayed on admin page
     def __str__(self):
-        return self.email +  " -- " + ("Verified" if self.userVerified else "Not Verified")
+        return self.username +  " -- " + ("Verified" if self.userVerified else "Not Verified")
 
 class Topic(models.Model):
     name = models.CharField(max_length=200, default='', unique=True) # Ex. CSCI 310, Prof. Michael Schindler
