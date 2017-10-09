@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
-from .models import Poll, PollChoice
+from .models import UserProfile, Poll, PollChoice
+from django.db import IntegrityError
 from ..constants import *
 
 def createPoll(request):
@@ -13,43 +14,35 @@ def createPoll(request):
     choices = request.GET.get(choices_param)
     openForever = request.GET.get(openForever_param)
     dayLimit = request.GET.get(dayLimit_param)
+    print(openForever)
 
     # Check if all parameters provided
     if any(var is None for var in [userID, text, choices, openForever]):
         return JsonResponse(createPoll_400_ALL, status=400, safe=False)
 
-    # Check if time parameters are correct
-    if openForever != 'true' or openForever != 'false':
+    # Check if openForever is correct
+    if not openForever.isdigit():
         return JsonResponse(createPoll_400_OF, status=400, safe=False)
+    else:
+        openForever = int(openForever)
+    if not (0 <= openForever <= 1):
+        return JsonResponse(createPoll_400_OF, status=400, safe=False)
+
     # Check if dayLimit is filled out correctly
-    elif openForever == 'false' and (dayLimit == None or not dayLimit.isdigit() or int(dayLimit) < 1):
+    elif openForever == 0 and (dayLimit == None or not dayLimit.isdigit() or int(dayLimit) < 1):
         return JsonResponse(createPoll_400_DL, status=400, safe=False)
     else:
         dayLimit = 0
-        openForever = True if openForever=='true' else False
+        openForever = True if openForever==1 else False
 
     # Store poll into db
-    p = Poll(userID=userID, text=text, numVotes=0, openForever=openForever, dayLimit=dayLimit)
-    p.save()
+    p = Poll(userID=UserProfile.objects.get(pk=1), text=text, numVotes=0, openForever=openForever, dayLimit=dayLimit)
+    try:
+        p.save()
+        # Store each choice into db
+        for choice in choices.split(','):
+            c = PollChoice(pollID=p, text=choice)
+            c.save()
 
-    # Store each choice into db
-    for choice in choices.split(','):
-        c = PollChoice(pollID=p.pk, text=choice)
-        c.save()
-
-   # userID = models.ForeignKey(User, on_delete=models.CASCADE) # who owns the poll
-   #  text = models.CharField(max_length=300)
-   #  numVotes = models.IntegerField()
-   #  openForever = models.BooleanField() # will the poll be open forever?
-   #  dayLimit = models.IntegerField() # if False, many days will the poll be open for?
-   #  dateCreated = models.DateTimeField(auto_now_add=True, blank=True)
-   #  startTimeStamp = models.DateTimeField(auto_now_add=True, blank=True)
-   #
-   #      def get_deadline():
-   #          return datetime.today() + timedelta(days=20)
-   #
-   #      class Bill(models.Model):
-   #          name = models.CharField(max_length=50)
-   #          customer = models.ForeignKey(User, related_name='bills')
-   #          date = models.DateField(default=datetime.today)
-   #          deadline = models.DateField(default=get_deadline)
+    except IntegrityError:
+            return JsonResponse(UNIQUE_400, status=400)

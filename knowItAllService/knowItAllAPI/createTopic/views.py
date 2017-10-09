@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.db import IntegrityError
 from .models import Topic
 from ..constants import *
 
@@ -23,8 +24,11 @@ def createTopic(request):
 
     # Store data into db
     t = Topic(name=topic,category=category, avRating=0, numReviews=0)
-    t.save()
-    return JsonResponse({'status': 200,
+    try:
+        t.save()
+        return JsonResponse({'status': 200,
                          'message': "Successfully created topic.",
                          'data': {'topic': t.name, 'category': t.category}}
                         , status=200)
+    except IntegrityError:
+        return JsonResponse(UNIQUE_400, status=400)
