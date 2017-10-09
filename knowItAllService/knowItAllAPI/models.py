@@ -18,11 +18,9 @@ from datetime import datetime, timedelta
 #     def __str__(self):
 #         return self.email +  " -- " + ("Verified" if self.userVerified else "Not Verified")
 
+# https://stackoverflow.com/a/16125609
+# Fully customizable User class based off AbstractUser
 class UserProfile(AbstractUser):
-    '''
-    Here is your User class which is fully customizable and
-    based off of the AbstractUser from auth.models
-    '''
     userVerified = models.BooleanField(default=False)
     def __str__(self):
         return self.username +  " -- " + ("Verified" if self.userVerified else "Not Verified")

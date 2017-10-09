@@ -1,7 +1,7 @@
 ### Classes
 
 ## User
-email_param = 'email'
+username_param = 'username'
 password_param = 'password'
 userVerified_param = 'userVerified'
 
@@ -43,6 +43,8 @@ createPoll_400_ALL = {'status': 400, 'message': "Error, please provide userID, t
 createPoll_400_OF = {'status': 400, 'message': "Error, openForever must be either 1 (true) or 0 (false)."}
 createPoll_400_DL = {'status': 400, 'message': "Error, dayLimit must be a value > 0."}
 
+## login
+login_400_DNE = {'status': 400, 'message': "Error: user does not exist."}
 
 ### Categories
 CATEGORIES = {
