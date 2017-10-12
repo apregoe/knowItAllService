@@ -1,9 +1,14 @@
 from rest_framework import serializers
 from .models import *
 
-class PollSerializer(serializers.ModelSerializer):
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review # b/c you import all the classes, need to specify which model
+        fields = "__all__" # fields = ('avRating', 'numReviews')
 
+class PollSerializer(serializers.ModelSerializer):
     class Meta:
         model = Poll
-        # fields = ('avRating', 'numReviews')
         fields = "__all__"
+
+# https://stackoverflow.com/a/44979954
