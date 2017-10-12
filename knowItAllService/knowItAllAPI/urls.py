@@ -4,9 +4,11 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'), # This is the base index for .../api/
+
     url(r'^register', include('knowItAllAPI.register.urls')), # This is .../api/register
     url(r'^login', include('knowItAllAPI.login.urls')),
     url(r'^authenticate', include('knowItAllAPI.authenticate.urls')),
+    url(r'^editProfile', include('knowItAllAPI.editProfile.urls')),
 
     url(r'^createCategory', include('knowItAllAPI.createCategory.urls')),
     url(r'^createPoll', include('knowItAllAPI.createPoll.urls')),

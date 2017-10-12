@@ -6,6 +6,9 @@ password_param = 'password'
 check_param = 'check'
 userVerified_param = 'userVerified'
 
+## Edit Profile
+newPassword_param = 'newPassword'
+
 ## Category
 populate_param = 'populate'
 
