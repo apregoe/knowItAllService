@@ -39,6 +39,7 @@ comment_param = 'comment'
 
 
 ### JsonResponse
+GET_400 = {'status': 400, 'message': "Error, please use GET."}
 POST_400 = {'status': 400, 'message': "Error, please use POST."}
 UNIQUE_400 = {'status': 400, 'message': "Error: Data already exists!"}
 PASSWORD_400 = {'status': 400, 'message': "Error, user password not correct."}
