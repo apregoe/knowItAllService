@@ -1,30 +1,22 @@
-from django.shortcuts import get_object_or_404
-from rest_framework.views import APIView # Return 404 object
-from rest_framework.response import Response # Send specific response
-from rest_framework import status # Return 404 object
-# from .models import Poll
-# from .serializers import PollSerializer
-
 from django.http import JsonResponse
 from .models import UserProfile, Poll, PollChoice
 from django.db import IntegrityError
+from django.core.exceptions import ObjectDoesNotExist
 from ..constants import *
-import json
 
 def createPoll(request):
     if request.method != "POST":
         return JsonResponse(POST_400, status=400, safe=False)
 
     # Grab the query parameters; note that .GET must be used to grab parameters from the actual URL
-    userID = int(request.GET.get(userID_param))
+    username = request.GET.get(username_param)
     text = request.GET.get(text_param)
     choices = request.GET.get(choices_param)
     openForever = request.GET.get(openForever_param)
     dayLimit = request.GET.get(dayLimit_param)
-    print(openForever)
 
     # Check if all parameters provided
-    if any(var is None for var in [userID, text, choices, openForever]):
+    if any(var is None for var in [username, text, choices, openForever]):
         return JsonResponse(createPoll_400_ALL, status=400, safe=False)
 
     # Check if openForever is correct
@@ -43,8 +35,9 @@ def createPoll(request):
         openForever = True if openForever==1 else False
 
     # Store poll into db
-    p = Poll(userID=UserProfile.objects.get(pk=1), text=text, numVotes=0, openForever=openForever, dayLimit=dayLimit)
     try:
+        p = Poll(userID=UserProfile.objects.get(username=username), text=text, numVotes=0, openForever=openForever,
+                 dayLimit=dayLimit)
         p.save()
         # Store each choice into db
         cList = choices.split(',')
@@ -56,7 +49,11 @@ def createPoll(request):
                          'message': "Successfully created poll.",
                          'data': {'Poll': p.text, 'choices': cList }}
                         , status=200)
-
+    # Data already exists
     except IntegrityError:
             return JsonResponse(UNIQUE_400, status=400)
+
+    # User does not exist
+    except ObjectDoesNotExist:
+            return JsonResponse(USER_400, status=400)
 

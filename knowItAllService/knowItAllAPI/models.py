@@ -26,21 +26,24 @@ class UserProfile(AbstractUser):
         return self.username +  " -- " + ("Verified" if self.userVerified else "Not Verified")
 
 class Topic(models.Model):
-    name = models.CharField(max_length=200, default='', unique=True) # Ex. CSCI 310, Prof. Michael Schindler
+    title = models.CharField(max_length=200, default='', unique=True) # Ex. CSCI 310, Prof. Michael Schindler
     category = models.CharField(max_length=200, default='') # 1 of the 4: Academic, Entertainment, Social, Location
     avRating = models.DecimalField(max_digits=2, decimal_places=1) # Ex. 4.5 stars
     numReviews = models.IntegerField()
     def __str__(self):
-        return self.name
+        return self.title
 
 class Review(models.Model):
     userID = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     topicID = models.ForeignKey(Topic, on_delete=models.CASCADE)
     rating = models.DecimalField(max_digits=2, decimal_places=1)
-    comment = models.CharField(max_length=200, default='')
+    comment = models.CharField(max_length=200, default='', null=True)
     dateCreated = models.DateTimeField(auto_now_add=True, null=True)
     def __str__(self):
-        return "Topic " + self.topicID.name + " -- " + self.rating
+        return self.topicID.title + " -- " + str(self.rating) + " brains"
+    # User can only create one review per topic
+    class Meta:
+        unique_together = (('userID', 'topicID'))
 
 class Poll(models.Model):
     # def setDeadline(dayLimit):
@@ -69,3 +72,6 @@ class Vote(models.Model):
     pollChoiceID = models.ForeignKey(PollChoice, on_delete=models.CASCADE)
     def __str__(self):
         return self.pollChoiceID.text + " -- User " + self.userID.email
+
+# notifications
+# Read/unread

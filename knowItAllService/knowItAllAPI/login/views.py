@@ -26,4 +26,4 @@ def login(request):
             return JsonResponse(PASSWORD_400, status=400)
     else:
         # Failure
-        return JsonResponse(login_400_DNE, status=400)
+        return JsonResponse(USER_400, status=400)
