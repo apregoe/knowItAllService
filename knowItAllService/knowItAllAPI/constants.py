@@ -7,6 +7,7 @@ userVerified_param = 'userVerified'
 
 ## Topic
 title_param = 'title'
+type_param = 'type'
 category_param = 'category'
 avRating_param = 'avRating'
 numReviews_param = 'numReviews'
@@ -46,6 +47,7 @@ PASSWORD_400 = {'status': 400, 'message': "Error, user password not correct."}
 
 ## login
 USER_400 = {'status': 400, 'message': "Error: user does not exist."}
+DATA_400 = {'status': 400, 'message': "Error: data does not exist."}
 
 ## authenticate
 authenticate_400_AA = {'status': 400, 'message': "Error, user already authenticated."}
@@ -66,6 +68,8 @@ createReview_400_RT = {'status': 400, 'message': "Error, rating must be a float 
 # vote
 vote_400_ALL = {'status': 400, 'message': "Error, please provide a username, pollTitle, and pollChoiceTitle."}
 
+# getPost
+getPost_400_TP = {'status': 400, 'message': "Error, type must be either 'poll' or 'topic'."}
 
 
 

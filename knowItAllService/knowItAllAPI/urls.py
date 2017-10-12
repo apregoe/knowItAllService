@@ -14,4 +14,5 @@ urlpatterns = [
     url(r'^vote', include('knowItAllAPI.vote.urls')),
 
     url(r'^myPosts', include('knowItAllAPI.myPosts.urls')),
+    url(r'^getPost', include('knowItAllAPI.getPost.urls')),
 ]

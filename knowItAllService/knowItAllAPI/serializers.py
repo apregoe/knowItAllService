@@ -1,6 +1,11 @@
 from rest_framework import serializers
 from .models import *
 
+class TopicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Topic
+        fields = "__all__"
+
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review # b/c you import all the classes, need to specify which model
@@ -11,4 +16,10 @@ class PollSerializer(serializers.ModelSerializer):
         model = Poll
         fields = "__all__"
 
-# https://stackoverflow.com/a/44979954
+class PollChoiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PollChoice
+        fields = "__all__"
+
+
+                # https://stackoverflow.com/a/44979954
