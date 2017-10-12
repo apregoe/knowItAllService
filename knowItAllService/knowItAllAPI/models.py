@@ -64,6 +64,7 @@ class Poll(models.Model):
 class PollChoice(models.Model):
     pollID = models.ForeignKey(Poll, on_delete=models.CASCADE)
     text = models.CharField(max_length=200, default='', unique=True)
+    numVotes = models.IntegerField(default=0)
     def __str__(self):
         return self.pollID.text + " -- " + self.text
 
@@ -71,7 +72,10 @@ class Vote(models.Model):
     userID = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     pollChoiceID = models.ForeignKey(PollChoice, on_delete=models.CASCADE)
     def __str__(self):
-        return self.pollChoiceID.text + " -- User " + self.userID.email
+        return self.pollChoiceID.text + " -- User " + self.userID.username
+    # Vote once on poll choice
+    class Meta:
+        unique_together = (('userID', 'pollChoiceID'))
 
 # notifications
 # Read/unread
