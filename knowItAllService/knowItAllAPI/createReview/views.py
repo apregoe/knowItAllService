@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from .models import UserProfile, Topic, Review
 from django.db import IntegrityError
 from ..constants import *
+from decimal import Decimal
 
 def createReview(request):
     if request.method != "POST":
@@ -29,9 +30,13 @@ def createReview(request):
     # Store poll into db
 
     try:
-        r = Review(userID=UserProfile.objects.get(username=username), topicID=Topic.objects.get(title=topicTitle),
-                   rating=rating, comment=comment)
+        t = Topic.objects.get(title=topicTitle)
+        r = Review(userID=UserProfile.objects.get(username=username), topicID=t, rating=rating, comment=comment)
         r.save()
+        # Update review value
+        t.avRating = ((t.avRating * t.numReviews) + Decimal.from_float(rating))/(t.numReviews+1)
+        t.numReviews += 1
+        t.save()
 
         return JsonResponse({'status': 200,
                          'message': "Successfully created review for topic " + topicTitle + ".",
