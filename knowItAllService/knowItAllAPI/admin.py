@@ -3,6 +3,7 @@ from .models import *
 
 # Display tables on admin page
 admin.site.register(UserProfile)
+admin.site.register(Category)
 admin.site.register(Topic)
 admin.site.register(Review)
 admin.site.register(Poll)

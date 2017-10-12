@@ -5,6 +5,9 @@ username_param = 'username'
 password_param = 'password'
 userVerified_param = 'userVerified'
 
+## Category
+populate_param = 'populate'
+
 ## Topic
 title_param = 'title'
 type_param = 'type'
@@ -51,6 +54,9 @@ DATA_400 = {'status': 400, 'message': "Error: data does not exist."}
 
 ## authenticate
 authenticate_400_AA = {'status': 400, 'message': "Error, user already authenticated."}
+
+## createCategory
+createCategory_400_PO = {'status': 400, 'message': "Error: populate must be set to 'true'."}
 
 ## createTopic
 createTopic_400_ALL = {'status': 400, 'message': "Error: please provide a title and category."}

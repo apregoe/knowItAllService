@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.db import IntegrityError
-from .models import Topic
+from .models import *
 from ..constants import *
 
 # https://stackoverflow.com/a/3711911
@@ -23,12 +23,12 @@ def createTopic(request):
     category = int(category)
 
     # Store data into db
-    t = Topic(title=title,category=category, avRating=0, numReviews=0)
+    t = Topic(title=title,category=Category.objects.get(pk=category), avRating=0, numReviews=0)
     try:
         t.save()
         return JsonResponse({'status': 200,
                          'message': "Successfully created topic.",
-                         'data': {'title': t.title, 'category': CATEGORIES.get(t.category)}}
+                         'data': {'title': t.title, 'category': CATEGORIES.get(category)}}
                         , status=200)
 
     except IntegrityError:

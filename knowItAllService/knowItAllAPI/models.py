@@ -25,9 +25,16 @@ class UserProfile(AbstractUser):
     def __str__(self):
         return self.username +  " -- " + ("Verified" if self.userVerified else "Not Verified")
 
+class Category(models.Model):
+    class Meta:
+        verbose_name_plural = "categories" # Change from 'Categorys' to 'Categories' on admin page
+    title = models.CharField(max_length=200, default='', unique=True) # Academic, Entertainment, Social, Location
+    def __str__(self):
+        return self.title
+
 class Topic(models.Model):
     title = models.CharField(max_length=200, default='', unique=True) # Ex. CSCI 310, Prof. Michael Schindler
-    category = models.CharField(max_length=200, default='') # 1 of the 4: Academic, Entertainment, Social, Location
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
     avRating = models.DecimalField(max_digits=2, decimal_places=1) # Ex. 4.5 stars
     numReviews = models.IntegerField()
     def __str__(self):

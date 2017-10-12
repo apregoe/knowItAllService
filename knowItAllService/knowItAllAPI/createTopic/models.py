@@ -1,2 +1,2 @@
 from django.db import models
-from ..models import Topic
+from ..models import Topic, Category

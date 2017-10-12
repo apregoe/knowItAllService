@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^login', include('knowItAllAPI.login.urls')),
     url(r'^authenticate', include('knowItAllAPI.authenticate.urls')),
 
+    url(r'^createCategory', include('knowItAllAPI.createCategory.urls')),
     url(r'^createPoll', include('knowItAllAPI.createPoll.urls')),
     url(r'^createTopic', include('knowItAllAPI.createTopic.urls')),
     url(r'^createReview', include('knowItAllAPI.createReview.urls')),
