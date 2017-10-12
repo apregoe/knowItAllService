@@ -3,6 +3,7 @@
 ## User
 username_param = 'username'
 password_param = 'password'
+check_param = 'check'
 userVerified_param = 'userVerified'
 
 ## Category

@@ -10,6 +10,7 @@ def authenticate(request):
 
     username = request.GET.get(username_param)
     password = request.GET.get(password_param)
+    check = request.GET.get(check_param)
     user = UserProfile.objects.filter(username=username)
 
     # User has an account
@@ -17,6 +18,12 @@ def authenticate(request):
         user = UserProfile.objects.get(username=username)
         # Password is correct
         if user.password == password:
+            # Only check if user is authenticated but not update values
+            if check is not None and check == 'true':
+                return JsonResponse({'status': 200,
+                         'authenticated': ("true" if user.userVerified else "false") }
+                        , status=200)
+
             # If User already authenticated
             if user.userVerified == True:
                 return JsonResponse(authenticate_400_AA, status=400)
