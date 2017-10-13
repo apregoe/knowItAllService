@@ -73,6 +73,11 @@ createPoll_400_ALL = {'status': 400, 'message': "Error, please provide username,
 createPoll_400_OF = {'status': 400, 'message': "Error, openForever must be either 1 (true) or 0 (false)."}
 createPoll_400_DL = {'status': 400, 'message': "Error, dayLimit must be a value > 0."}
 
+## deletePoll
+deletePoll_400_ALL = {'message': 'Please provide ' + username_param + ', and ' + pollText_param + ' parameters.'}
+deletePoll_400_SUCCESS = {'message': 'Poll deleted successfully'}
+deletePoll_400_UNSUCCESSFUL = {'message': 'No poll deleted. Reason: Not found'}
+
 ## createReview
 createReview_400_ALL = {'status': 400, 'message': "Error, please provide a username, topicTitle, and rating."}
 createReview_400_RT = {'status': 400, 'message': "Error, rating must be a float between 0 and 5."}
