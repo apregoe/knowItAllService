@@ -44,6 +44,8 @@ topicTitle_param = 'topicTitle'
 rating_param = 'rating'
 comment_param = 'comment'
 
+## Search
+query_param = 'query'
 
 
 ### JsonResponse
@@ -81,7 +83,8 @@ vote_400_ALL = {'status': 400, 'message': "Error, please provide a username, pol
 # getPost
 getPost_400_TP = {'status': 400, 'message': "Error, type must be either 'poll' or 'topic'."}
 
-
+# query
+search_400_QY = {'status': 400, 'message': "Error, please provide a query."}
 
 ### Categories
 CATEGORIES = {

@@ -1,6 +1,7 @@
 from django.conf.urls import url, include
 from . import views
 # . means importing from current directory
+# https://stackoverflow.com/a/28316021 = how to use API with CSRF token
 
 urlpatterns = [
     url(r'^$', views.index, name='index'), # This is the base index for .../api/
@@ -18,4 +19,6 @@ urlpatterns = [
 
     url(r'^myPosts', include('knowItAllAPI.myPosts.urls')),
     url(r'^getPost', include('knowItAllAPI.getPost.urls')),
+
+    url(r'^search', include('knowItAllAPI.search.urls')),
 ]
