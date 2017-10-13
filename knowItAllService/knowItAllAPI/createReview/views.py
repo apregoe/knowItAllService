@@ -28,7 +28,6 @@ def createReview(request):
         return JsonResponse(createReview_400_RT, status=400, safe=False)
 
     # Store poll into db
-    print(username)
     try:
         t = Topic.objects.get(title=topicTitle)
         r = Review(userID=UserProfile.objects.get(username=username), topicID=t, rating=rating, comment=comment)

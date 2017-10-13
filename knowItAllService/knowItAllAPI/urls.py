@@ -15,10 +15,12 @@ urlpatterns = [
     url(r'^createPoll', include('knowItAllAPI.createPoll.urls')),
     url(r'^createTopic', include('knowItAllAPI.createTopic.urls')),
     url(r'^createReview', include('knowItAllAPI.createReview.urls')),
+    url(r'^createNotification', include('knowItAllAPI.createNotification.urls')),
     url(r'^vote', include('knowItAllAPI.vote.urls')),
 
     url(r'^myPosts', include('knowItAllAPI.myPosts.urls')),
     url(r'^getPost', include('knowItAllAPI.getPost.urls')),
+    url(r'^myNotifications', include('knowItAllAPI.myNotifications.urls')),
 
     url(r'^search', include('knowItAllAPI.search.urls')),
 ]

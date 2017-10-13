@@ -21,5 +21,9 @@ class PollChoiceSerializer(serializers.ModelSerializer):
         model = PollChoice
         fields = "__all__"
 
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = "__all__"
 
-                # https://stackoverflow.com/a/44979954
+# https://stackoverflow.com/a/44979954
