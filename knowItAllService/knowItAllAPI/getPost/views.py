@@ -13,7 +13,7 @@ class getPost(APIView):
     def get(self, request):
         type = request.GET.get(type_param)
         text = request.GET.get(text_param)
-
+        
         try:
             if type == 'topic':
                 topic = Topic.objects.filter(title=text)
