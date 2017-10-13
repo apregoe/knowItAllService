@@ -175,4 +175,4 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 
-db.sqlite3
+knowItAllService/knowItAllService/db.sqlite3
