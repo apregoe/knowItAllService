@@ -43,10 +43,6 @@ def vote(request):
         pc = PollChoice.objects.get(pollID=p, text=pollChoiceText)
         user = UserProfile.objects.get(username=username)
 
-    # Data already exists
-    except IntegrityError:
-            return JsonResponse(UNIQUE_400, status=400)
-
     # User does not exist
     # Todo this will also be called if pollText does not exists. Fix
     except ObjectDoesNotExist:

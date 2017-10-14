@@ -89,6 +89,9 @@ deletePoll_400_UNSUCCESSFUL = {'message': 'No poll deleted. Reason: Not found'}
 createReview_400_ALL = {'status': 400, 'message': "Error, please provide a username, topicTitle, and rating."}
 createReview_400_RT = {'status': 400, 'message': "Error, rating must be a float between 0 and 5."}
 
+## delete Review
+deleteReview_400_INVALID_PARAMS = {'message': 'Plase provide ' + username_param + ', and ' + topicTitle_param}
+
 ## createNotification
 createNotification_400_ALL = {'status': 400, 'message': "Error, please provide a username, type, and text."}
 

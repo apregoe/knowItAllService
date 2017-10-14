@@ -22,7 +22,7 @@ def deletePoll(request):
     try:
         poll = Poll.objects.filter(text=pollText)
         if poll.exists():
-            poll = Poll.objects.get(text=pollText).delete()
+            Poll.objects.get(text=pollText).delete()
             deletePoll_200_SUCCESS['pollDeleted'] = pollText
             return JsonResponse(deletePoll_200_SUCCESS, status=400, safe=False)
         else:
