@@ -26,4 +26,5 @@ urlpatterns = [
     url(r'^search', include('knowItAllAPI.search.urls')),
 
     url(r'^deletePoll', include('knowItAllAPI.deletePoll.urls')),
+    url(r'^deleteReview', include('knowItAllAPI.deleteReview.urls')),
 ]
