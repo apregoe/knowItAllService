@@ -22,6 +22,7 @@ numReviews_param = 'numReviews'
 ## Poll
 userID_param = 'userID'
 text_param = 'text'
+pollText_param = 'pollText'
 numVotes_param = 'numVotes'
 openForever_param = 'openForever'
 dayLimit_param = 'dayLimit'
@@ -35,8 +36,8 @@ choices_param = 'choices'
 
 ## Vote
 pollChoiceID_param = 'pollChoiceID'
-pollText_param = 'pollText'
 pollChoiceText_param = 'pollChoiceText'
+deleteVoteFlag_param = 'deleteVote'
 # username_param
 
 ## Review
@@ -52,12 +53,17 @@ query_param = 'query'
 GET_400 = {'status': 400, 'message': "Error, please use GET."}
 POST_400 = {'status': 400, 'message': "Error, please use POST."}
 UNIQUE_400 = {'status': 400, 'message': "Error: Data already exists!"}
+def UNIQUE_400_EXISTS(data):
+    return {'message': "Error: " + data + " already exists!"}
 PASSWORD_400 = {'status': 400, 'message': "Error, user password not correct."}
 
 ## general
 USER_400 = {'status': 400, 'message': "Error: user does not exist."}
 DATA_400 = {'status': 400, 'message': "Error: data does not exist."}
+def DATA_400_NOT_EXISTS(data):
+    return {'message': "Error: " + data + " do/does not exist."}
 POLL_400 = {'status': 400, 'message': "Error: poll does not exist."}
+
 
 ## authenticate
 authenticate_400_AA = {'status': 400, 'message': "Error, user already authenticated."}
@@ -76,7 +82,7 @@ createPoll_400_DL = {'status': 400, 'message': "Error, dayLimit must be a value 
 
 ## deletePoll
 deletePoll_400_ALL = {'message': 'Please provide ' + username_param + ', and ' + pollText_param + ' parameters.'}
-deletePoll_400_SUCCESS = {'message': 'Poll deleted successfully'}
+deletePoll_200_SUCCESS = {'message': 'Poll deleted successfully'}
 deletePoll_400_UNSUCCESSFUL = {'message': 'No poll deleted. Reason: Not found'}
 
 ## createReview
@@ -89,6 +95,9 @@ createNotification_400_ALL = {'status': 400, 'message': "Error, please provide a
 
 ## vote
 vote_400_ALL = {'status': 400, 'message': "Error, please provide a username, pollTitle, and pollChoiceTitle."}
+deleteVoteFlag_400_InvalidFlagParam = {'message': deleteVoteFlag_param + ' value should be wither 1 or 0.'}
+def deleteVoteFlag_200_VoteDeleted (username, voteChoice):
+    return  {'message': 'Vote choice: ' + voteChoice + ', from ' + username + ' was successfully deleted'}
 
 ## getPost
 getPost_400_TP = {'status': 400, 'message': "Error, type must be either 'poll' or 'topic'."}

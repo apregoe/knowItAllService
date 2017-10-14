@@ -6,7 +6,7 @@ from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from ..constants import *
 
-
+#/api/
 def deletePoll(request):
 
     if request.method != 'POST':
@@ -22,8 +22,8 @@ def deletePoll(request):
         poll = Poll.objects.filter(text=pollText)
         if poll.exists():
             poll = Poll.objects.get(text=pollText).delete()
-            deletePoll_400_SUCCESS['pollDeleted'] = pollText
-            return JsonResponse(deletePoll_400_SUCCESS, status=400, safe=False)
+            deletePoll_200_SUCCESS['pollDeleted'] = pollText
+            return JsonResponse(deletePoll_200_SUCCESS, status=400, safe=False)
         else:
             return JsonResponse(deletePoll_400_UNSUCCESSFUL, status=400, safe=False)
 
