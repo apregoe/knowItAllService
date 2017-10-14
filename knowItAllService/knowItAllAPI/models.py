@@ -79,13 +79,14 @@ class Vote(models.Model):
     userID = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     pollChoiceID = models.ForeignKey(PollChoice, on_delete=models.CASCADE)
     def __str__(self):
-        return self.pollChoiceID.text + " -- User " + self.userID.username
+        return self.pollChoiceID.pollID.text + " -- " + self.pollChoiceID.text + " -- " + self.userID.username
     # Vote once on poll choice
     class Meta:
         unique_together = (('userID', 'pollChoiceID'))
 
 class Notification(models.Model):
     userID = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    pollID = models.ForeignKey(Poll, on_delete=models.CASCADE)
     type = models.CharField(max_length=200, default='') # review, poll
     text = models.CharField(max_length=200, default='', unique=True)
     # isSeen = models.BooleanField(default=False) # Has user opened it

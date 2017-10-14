@@ -15,9 +15,15 @@ class myNotifications(APIView):
         try:
             user = UserProfile.objects.get(username=username)
             notifications = Notification.objects.filter(userID=user)
+            pollData = {}
+            for n in notifications:
+                p = Poll.objects.get(pk=n.pollID.pk)
+                pollData[p.pk] = p.text
 
             notificationsSerializer = NotificationSerializer(notifications, many=True)
-            return JsonResponse({'notifications': notificationsSerializer.data}, safe=False)
+            n = notificationsSerializer.data
+            # n[]
+            return JsonResponse({'pollID': pollData, 'notifications': notificationsSerializer.data, 'status': 200 }, safe=False)
 
         # Data already exists
         except IntegrityError:

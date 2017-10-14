@@ -54,9 +54,10 @@ POST_400 = {'status': 400, 'message': "Error, please use POST."}
 UNIQUE_400 = {'status': 400, 'message': "Error: Data already exists!"}
 PASSWORD_400 = {'status': 400, 'message': "Error, user password not correct."}
 
-## login
+## general
 USER_400 = {'status': 400, 'message': "Error: user does not exist."}
 DATA_400 = {'status': 400, 'message': "Error: data does not exist."}
+POLL_400 = {'status': 400, 'message': "Error: poll does not exist."}
 
 ## authenticate
 authenticate_400_AA = {'status': 400, 'message': "Error, user already authenticated."}
