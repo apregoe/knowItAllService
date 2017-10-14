@@ -89,7 +89,7 @@ class Notification(models.Model):
     userID = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     pollID = models.ForeignKey(Poll, on_delete=models.CASCADE)
     type = models.CharField(max_length=200, default='') # review, poll
-    text = models.CharField(max_length=200, default='', unique=True)
+    text = models.CharField(max_length=200, default='')
     # isSeen = models.BooleanField(default=False) # Has user opened it
     def __str__(self):
         return self.userID.username + " -- " + self.text

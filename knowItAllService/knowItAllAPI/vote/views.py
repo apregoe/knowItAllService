@@ -62,6 +62,12 @@ def vote(request):
             p.save()
             pc.save()
             v.save()
+
+            # Store a Notification to Poll's owner
+            text = "A user voted on your poll!"
+            n = Notification(userID=p.userID, pollID=p, type="poll", text=text)
+            n.save()
+
         except IntegrityError:
             return JsonResponse(UNIQUE_400_EXISTS("Vote: " + pollChoiceText + " in Poll: " + pollText), status=400)
 
