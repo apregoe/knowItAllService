@@ -1,12 +1,11 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.db import IntegrityError
-from .models import UserProfile, Review, Poll
+from ..models import *
 from ..constants import *
 from ..serializers import *
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 # Lists all posts of user
 class myPosts(APIView):
     # GET request

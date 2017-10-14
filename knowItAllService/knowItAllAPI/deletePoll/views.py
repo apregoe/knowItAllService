@@ -5,8 +5,9 @@ from django.http import JsonResponse
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from ..constants import *
+from django.views.decorators.csrf import csrf_exempt
 
-#/api/
+@csrf_exempt
 def deletePoll(request):
 
     if request.method != 'POST':

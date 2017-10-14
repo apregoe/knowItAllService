@@ -4,7 +4,9 @@ from .models import UserProfile, Topic, Review
 from django.db import IntegrityError
 from ..constants import *
 from decimal import Decimal
+from django.views.decorators.csrf import csrf_exempt
 
+@csrf_exempt
 def createReview(request):
     if request.method != "POST":
         return JsonResponse(POST_400, status=400, safe=False)

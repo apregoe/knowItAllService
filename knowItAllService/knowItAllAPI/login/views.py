@@ -3,7 +3,9 @@ from django.contrib.auth import authenticate, login
 from django.db import IntegrityError
 from .models import UserProfile
 from ..constants import *
+from django.views.decorators.csrf import csrf_exempt
 
+@csrf_exempt
 def login(request):
     if request.method != "POST":
         return JsonResponse(POST_400, status=400)

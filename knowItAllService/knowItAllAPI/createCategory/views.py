@@ -3,7 +3,9 @@ from .models import *
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from ..constants import *
+from django.views.decorators.csrf import csrf_exempt
 
+@csrf_exempt
 def createCategory(request):
     if request.method != "POST":
         return JsonResponse(POST_400, status=400, safe=False)

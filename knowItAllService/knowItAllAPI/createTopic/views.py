@@ -1,9 +1,10 @@
-from django.shortcuts import render
 from django.http import JsonResponse
 from django.db import IntegrityError
 from .models import *
 from ..constants import *
+from django.views.decorators.csrf import csrf_exempt
 
+@csrf_exempt
 # https://stackoverflow.com/a/3711911
 def createTopic(request):
     if request.method != "POST":

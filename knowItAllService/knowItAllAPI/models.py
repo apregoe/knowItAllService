@@ -56,6 +56,7 @@ class Poll(models.Model):
     # def setDeadline(dayLimit):
     #     return datetime.today() + timedelta(days=dayLimit)
     userID = models.ForeignKey(UserProfile, on_delete=models.CASCADE) # who owns the poll
+    categoryID = models.ForeignKey(Category, on_delete=models.CASCADE)
     text = models.CharField(max_length=200, default='', unique=True)
     numVotes = models.IntegerField(default=0)
     openForever = models.BooleanField(default=True) # will the poll be open forever?

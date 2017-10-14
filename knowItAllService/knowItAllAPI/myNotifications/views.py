@@ -6,7 +6,6 @@ from ..constants import *
 from ..serializers import *
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 # Lists all posts of user
 class myNotifications(APIView):
     # GET request

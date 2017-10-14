@@ -2,7 +2,9 @@ from django.http import JsonResponse
 from django.db import IntegrityError
 from .models import UserProfile
 from ..constants import *
+from django.views.decorators.csrf import csrf_exempt
 
+@csrf_exempt
 def register(request):
     if request.method != "POST":
         return JsonResponse(POST_400, status=400)

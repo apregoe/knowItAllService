@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from .models import UserProfile, Poll, PollChoice
+from ..models import *
 from django.db import IntegrityError
 from django.core.exceptions import ObjectDoesNotExist
 from ..constants import *
@@ -10,6 +10,7 @@ def createPoll(request):
 
     # Grab the query parameters; note that .GET must be used to grab parameters from the actual URL
     username = request.GET.get(username_param)
+    category = request.GET.get(category_param)
     text = request.GET.get(text_param)
     choices = request.GET.get(choices_param)
     openForever = request.GET.get(openForever_param)
@@ -18,6 +19,11 @@ def createPoll(request):
     # Check if all parameters provided
     if any(var is None for var in [username, text, choices, openForever]):
         return JsonResponse(createPoll_400_ALL, status=400, safe=False)
+
+    # Check if category is valid
+    if not category.isdigit() or not (1 <= int(category) <= 4):
+        return JsonResponse(createTopic_400_C, status=400)
+    category = int(category)
 
     # Check if openForever is correct
     if not openForever.isdigit():
@@ -36,8 +42,8 @@ def createPoll(request):
 
     # Store poll into db
     try:
-        p = Poll(userID=UserProfile.objects.get(username=username), text=text, numVotes=0, openForever=openForever,
-                 dayLimit=dayLimit)
+        p = Poll(userID=UserProfile.objects.get(username=username), categoryID=Category.objects.get(pk=category),
+                 text=text, numVotes=0, openForever=openForever, dayLimit=dayLimit)
         p.save()
         # Store each choice into db
         cList = choices.split(',')

@@ -1,8 +1,11 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.db import IntegrityError
 from .models import *
 from ..constants import *
+from django.views.decorators.csrf import csrf_exempt
 
+@csrf_exempt
 def editProfile(request):
     if request.method != "POST":
         return JsonResponse(POST_400, status=400)
@@ -22,3 +25,7 @@ def editProfile(request):
 
     except IntegrityError:
         return JsonResponse(UNIQUE_400, status=400)
+
+    # User does not exist
+    except ObjectDoesNotExist:
+        return JsonResponse(USER_400, status=400)
