@@ -21,7 +21,7 @@ class myNotifications(APIView):
 
             notificationsSerializer = NotificationSerializer(notifications, many=True)
             n = notificationsSerializer.data
-            # n[]
+
             return JsonResponse({'pollID': pollData, 'notifications': notificationsSerializer.data, 'status': 200 }, safe=False)
 
         # Data already exists

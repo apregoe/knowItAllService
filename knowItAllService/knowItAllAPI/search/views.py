@@ -22,22 +22,26 @@ def search(request):
         return JsonResponse(search_400_QY, status=400, safe=False)
 
     topics = None
+    polls = None
     categoryData = None
     dataCount = {}
 
-    if CATEGORIES.get(1) in query:
+    if CATEGORIES.get(1).lower() in query:
         query = query.replace(CATEGORIES.get(1), '')
         topics = Topic.objects.filter(category=Category.objects.get(pk=1))
-    elif CATEGORIES.get(2) in query:
+        polls = Poll.objects.filter(categoryID=Category.objects.get(pk=1))
+    elif CATEGORIES.get(2).lower() in query:
         query = query.replace(CATEGORIES.get(2), '')
         topics = Topic.objects.filter(category=Category.objects.get(pk=2))
-    elif CATEGORIES.get(3) in query:
+        polls = Poll.objects.filter(categoryID=Category.objects.get(pk=2))
+    elif CATEGORIES.get(3).lower() in query:
         query = query.replace(CATEGORIES.get(3), '')
         topics = Topic.objects.filter(category=Category.objects.get(pk=3))
-    elif CATEGORIES.get(4) in query:
+        polls = Poll.objects.filter(categoryID=Category.objects.get(pk=3))
+    elif CATEGORIES.get(4).lower() in query:
         query = query.replace(CATEGORIES.get(4), '')
         topics = Topic.objects.filter(category=Category.objects.get(pk=4))
-
+        polls = Poll.objects.filter(categoryID=Category.objects.get(pk=4))
     # Add all topics underneath selected category to dataCount
     if topics is not None:
         topicsSerializer = TopicSerializer(topics, many=True)
@@ -46,6 +50,12 @@ def search(request):
         for topic in topicsSerializer.data:
             topicID = topic['id']
             dataCount['topic'+str(topicID)] = 1 # 'Hit' for the first time
+    # Add all polls underneath selected category to dataCount
+    if polls is not None:
+        pollsSerializer = PollSerializer(polls, many=True)
+        for poll in pollsSerializer.data:
+            pollID = poll['id']
+            dataCount['poll' + str(pollID)] = 1  # 'Hit' for the first time
 
     queryList = query.split(' ')
 

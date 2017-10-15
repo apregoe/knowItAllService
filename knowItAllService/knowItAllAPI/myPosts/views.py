@@ -16,10 +16,22 @@ class myPosts(APIView):
             reviews = Review.objects.filter(userID=u)
             polls = Poll.objects.filter(userID=u)
 
+            topicData = {}
+            for review in reviews:
+                t = Topic.objects.get(pk=review.topicID.pk)
+                topicData[t.pk] = t.title
+
+            pcData = {}
+            for poll in polls:
+                pc = PollChoice.objects.filter(pollID=poll)
+                pcSerializer = PollChoiceSerializer(pc, many=True)
+                pcData[poll.pk] = pcSerializer.data
+
             reviewsSerializer = ReviewSerializer(reviews, many=True)
             pollsSerializer = PollSerializer(polls, many=True)
             response = reviewsSerializer.data + pollsSerializer.data
-            return JsonResponse({'reviews': reviewsSerializer.data, 'polls': pollsSerializer.data }, safe=False)
+            return JsonResponse({'topicID': topicData, 'reviews': reviewsSerializer.data,
+                                 'polls': pollsSerializer.data, 'pc': pcData }, safe=False)
             # response = reviewsSerializer.data + pollsSerializer.data
             # return JsonResponse({'all': response}, safe=False)
 

@@ -20,8 +20,8 @@ def createCategory(request):
     # Store poll into db
     try:
         a = Category(title='Academic'); a.save()
-        e = Category(title='Entertainment'); e.save()
-        s = Category(title='Social'); s.save()
+        e = Category(title='Food'); e.save()
+        s = Category(title='Entertainment'); s.save()
         l = Category(title='Location'); l.save()
 
         return JsonResponse({'status': 200,
