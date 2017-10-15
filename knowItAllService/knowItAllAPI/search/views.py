@@ -11,8 +11,8 @@ from operator import itemgetter
 # __icontains = https://docs.djangoproject.com/en/1.11/ref/models/querysets/#icontains
 
 def search(request):
-    if request.method != "POST":
-        return JsonResponse(POST_400, status=400, safe=False)
+    if request.method != "GET":
+        return JsonResponse(GET_400, status=400, safe=False)
 
     # Grab the query parameters; note that .GET must be used to grab parameters from the actual URL
     query = request.GET.get(query_param)
