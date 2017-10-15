@@ -17,10 +17,16 @@ def deleteReview(request):
         return JsonResponse(deleteReview_400_INVALID_PARAMS, status=400, safe=False)
 
     try:
-        # topicID = Topic.objects.get(title=topicTitle, category=1)
-        userID = UserProfile.objects.get(username=username)
+        topicID_ = Topic.objects.get(title=topicTitle, category=1)
+        userID_ = UserProfile.objects.get(username=username)
 
     except ObjectDoesNotExist:
-        return JsonResponse(DATA_400_NOT_EXISTS(topicTitle + ", or " + username))
+        return JsonResponse(DATA_400_NOT_EXISTS(topicTitle + ", or " + username ))
 
-    return JsonResponse(DATA_400_NOT_EXISTS(topicTitle + ", or " + username))
+    try:
+        Review.objects.get(topicID=topicID_, userID=userID_).delete()
+
+    except ObjectDoesNotExist:
+        return JsonResponse({ 'message': username + ' has no review for ' + topicTitle})
+
+    return JsonResponse(deleteReview_SUCESS(username, topicTitle), status=200, safe=False)

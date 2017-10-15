@@ -91,6 +91,8 @@ createReview_400_RT = {'status': 400, 'message': "Error, rating must be a float 
 
 ## delete Review
 deleteReview_400_INVALID_PARAMS = {'message': 'Plase provide ' + username_param + ', and ' + topicTitle_param}
+def  deleteReview_SUCESS(username, topicTitle):
+    return {'message': 'Review about:' + topicTitle + ' from: ' + username + '. Has been deleted' }
 
 ## createNotification
 createNotification_400_ALL = {'status': 400, 'message': "Error, please provide a username, type, and text."}
