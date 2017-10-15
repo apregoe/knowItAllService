@@ -21,6 +21,7 @@ def search(request):
     if query is None:
         return JsonResponse(search_400_QY, status=400, safe=False)
 
+    query = query.lower()
     topics = None
     polls = None
     categoryData = None
@@ -42,6 +43,7 @@ def search(request):
         query = query.replace(CATEGORIES.get(4), '')
         topics = Topic.objects.filter(category=Category.objects.get(pk=4))
         polls = Poll.objects.filter(categoryID=Category.objects.get(pk=4))
+
     # Add all topics underneath selected category to dataCount
     if topics is not None:
         topicsSerializer = TopicSerializer(topics, many=True)
@@ -50,6 +52,7 @@ def search(request):
         for topic in topicsSerializer.data:
             topicID = topic['id']
             dataCount['topic'+str(topicID)] = 1 # 'Hit' for the first time
+
     # Add all polls underneath selected category to dataCount
     if polls is not None:
         pollsSerializer = PollSerializer(polls, many=True)
