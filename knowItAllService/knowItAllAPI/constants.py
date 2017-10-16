@@ -112,6 +112,11 @@ getPost_400_TP = {'status': 400, 'message': "Error, type must be either 'poll' o
 ## query
 search_400_QY = {'status': 400, 'message': "Error, please provide a query."}
 
+#register
+registerUser_INVALIDPARAMS = {'message': 'Please provide ' + username_param + ' and ' + password_param}
+def register_INVALIDUSER(username):
+    return {'message': username + ' is not valid. It should be a valid USC email (example@usc.edu)'}
+
 ### Categories
 CATEGORIES = {
     1: "Academic",

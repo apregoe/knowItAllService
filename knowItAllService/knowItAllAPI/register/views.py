@@ -13,6 +13,26 @@ def register(request):
     username = request.GET.get(username_param)
     password = request.GET.get(password_param)
 
+    if any(var is None for var in[username, password]):
+        return JsonResponse(registerUser_INVALIDPARAMS, safe=False, status=400)
+
+    #is username valid?
+    #1. check if it's a usc email
+    #   1.1 Contains the usc.edu domain
+    #   1.2 email actually works (PING the email)
+    #2. check if username already exists in database
+
+    #1.1 Contains usc.edu domain
+    uscDomain = "@usc.edu"
+    uscDomainLenght = len(uscDomain)
+    isUserValid = False
+    if username[-uscDomainLenght:] == uscDomain:
+        # 1.2 email actually works (PING the email)
+        isUserValid = True
+    else:
+        #does not contain @usc.edu as the domain
+        return JsonResponse(register_INVALIDUSER(username), status=400, safe=False)
+
     u = UserProfile(username=username, password=password)
     try:
         u.save()
