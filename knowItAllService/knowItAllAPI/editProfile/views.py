@@ -30,8 +30,8 @@ def editProfile(request):
         # 1.1 Contains usc.edu domain
         uscDomain = "@usc.edu"
         uscDomainLength = len(uscDomain)
+        username = username.lower()
         if username[-uscDomainLength:] == uscDomain:
-
             user = None
             try:
                 user = UserProfile.objects.get(username=username)
