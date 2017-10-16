@@ -82,5 +82,7 @@ def vote(request):
 
         p.numVotes -= 1
         pc.numVotes -= 1
-
+        p.save()
+        pc.save()
+        
         return JsonResponse(deleteVoteFlag_200_VoteDeleted(username, pollChoiceText), status=200, safe=False)

@@ -110,7 +110,7 @@ createNotification_400_ALL = {'status': 400, 'message': "Error, please provide a
 
 
 ## vote
-vote_400_ALL = {'status': 400, 'message': "Error, please provide a username, pollTitle, and pollChoiceTitle."}
+vote_400_ALL = {'status': 400, 'message': "Error, please provide a username, pollText, and pollChoiceText."}
 deleteVoteFlag_400_InvalidFlagParam = {'message': deleteVoteFlag_param + ' value should be wither 1 or 0.'}
 def deleteVoteFlag_200_VoteDeleted (username, voteChoice):
     return  {'message': 'Vote choice: ' + voteChoice + ', from ' + username + ' was successfully deleted'}
