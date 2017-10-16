@@ -25,8 +25,8 @@ def register(request):
 
     #1.1 Contains usc.edu domain
     uscDomain = "@usc.edu"
-    uscDomainLenght = len(uscDomain)
-    if username[-uscDomainLenght:] == uscDomain:
+    uscDomainLength = len(uscDomain)
+    if username[-uscDomainLength:] == uscDomain:
 
         u = UserProfile(username=username, password=password)
         try:

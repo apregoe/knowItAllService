@@ -2,12 +2,15 @@
 
 #email certifications
 # knowItAllDomain = "http://127.0.0.1:8000"
-knowItAllDomain = "https://0a79ab09.ngrok.io"
+knowItAllDomain = "https://0a79ab09.ngrok.io/api"
 knowItAllEmail = 'knowitallusc310@gmail.com'
 knowItAllEmailPassword = 'H52-J5K-Wm7-WFb'
 def confirmationMessage(username):
-    return "Hi!\n\n  Thank you for registering to knowItAll! Please confirm your email clicking in the following link:\n " \
-           +knowItAllDomain+"/api/authenticate?username=" + username + "\n\n Thanks!"
+    return "Hi "+username+"!\n\nThank you for registering to knowItAll! Please confirm your email clicking the following link:\n\n " \
+           +knowItAllDomain+"/authenticate?username="+username+"\n\nBest,\nKnowItAll Team"
+def changePassMessage(username, newPassword):
+    return "Hi "+username[:-8].capitalize()+"!\n\nPlease confirm your password change by clicking the following link:\n\n " \
+           +knowItAllDomain+"/editProfile?username="+username+"&newPassword="+newPassword+"\n\nBest,\nKnowItAll Team"
 
 ## User
 username_param = 'username'
@@ -17,6 +20,7 @@ userVerified_param = 'userVerified'
 
 ## Edit Profile
 newPassword_param = 'newPassword'
+forgot_param = 'forgot'
 
 ## Category
 populate_param = 'populate'
