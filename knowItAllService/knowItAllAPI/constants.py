@@ -82,6 +82,8 @@ createPoll_400_DL = {'status': 400, 'message': "Error, dayLimit must be a value 
 
 ## deletePoll
 deletePoll_400_ALL = {'message': 'Please provide ' + username_param + ', and ' + pollText_param + ' parameters.'}
+def deletePoll_USERNAMEISNOTOWNER(username, pollText):
+    return {'message': username + ' is not the owner for the poll: ' + pollText}
 deletePoll_200_SUCCESS = {'message': 'Poll deleted successfully'}
 deletePoll_400_UNSUCCESSFUL = {'message': 'No poll deleted. Reason: Not found'}
 

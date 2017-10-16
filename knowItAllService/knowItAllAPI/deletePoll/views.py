@@ -1,4 +1,4 @@
-from ..models import Poll
+from ..models import Poll, UserProfile
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.http import JsonResponse
@@ -7,6 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from ..constants import *
 from django.views.decorators.csrf import csrf_exempt
 
+#ex call:
 @csrf_exempt
 def deletePoll(request):
 
@@ -20,13 +21,15 @@ def deletePoll(request):
         return JsonResponse(deletePoll_400_ALL, status=400, safe=False)
 
     try:
-        poll = Poll.objects.filter(text=pollText)
-        if poll.exists():
-            Poll.objects.get(text=pollText).delete()
-            deletePoll_200_SUCCESS['pollDeleted'] = pollText
-            return JsonResponse(deletePoll_200_SUCCESS, status=400, safe=False)
+
+        userID = UserProfile.objects.get(username=username)
+        pollID = Poll.objects.get(text=pollText)
+
+        if pollID.userID != userID:
+            return JsonResponse(deletePoll_USERNAMEISNOTOWNER(username, pollText))
         else:
-            return JsonResponse(deletePoll_400_UNSUCCESSFUL, status=400, safe=False)
+            pollID.delete()
+            return JsonResponse(deletePoll_200_SUCCESS, status=400, safe=False)
 
     except ObjectDoesNotExist:
-        JsonResponse(DATA_400, status=400, safe=False)
+        return JsonResponse(DATA_400_NOT_EXISTS(pollText + ' or ' + username), status=400, safe=False)
