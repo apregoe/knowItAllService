@@ -109,6 +109,9 @@ def deleteVoteFlag_200_VoteDeleted (username, voteChoice):
 ## getPost
 getPost_400_TP = {'status': 400, 'message': "Error, type must be either 'poll' or 'topic'."}
 
+## getPost
+getTrending_400_TP = {'status': 400, 'message': "Error, type must be either 'poll', 'topic', or 'all'."}
+
 ## query
 search_400_QY = {'status': 400, 'message': "Error, please provide a query."}
 

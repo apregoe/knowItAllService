@@ -20,9 +20,9 @@ urlpatterns = [
 
     url(r'^myPosts', include('knowItAllAPI.myPosts.urls')),
     url(r'^getPost', include('knowItAllAPI.getPost.urls')),
+    url(r'^getTrending', include('knowItAllAPI.getTrending.urls')),
 
     url(r'^myNotifications', include('knowItAllAPI.myNotifications.urls')),
-
     url(r'^search', include('knowItAllAPI.search.urls')),
 
     url(r'^deletePoll', include('knowItAllAPI.deletePoll.urls')),
