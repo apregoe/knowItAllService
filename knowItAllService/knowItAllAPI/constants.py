@@ -133,6 +133,6 @@ def register_INVALIDUSER(username):
 CATEGORIES = {
     1: "Academic",
     2: "Food",
-    3: "Social",
-    4: "Entertainment"
+    3: "Entertainment",
+    4: "Location"
 }
