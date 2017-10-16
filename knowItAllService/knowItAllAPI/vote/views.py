@@ -20,9 +20,37 @@ def vote(request):
     deleteVoteFlag = request.GET.get(deleteVoteFlag_param)
 
     # Check if all parameters provided
-    if any(var is None for var in [username, pollText, pollChoiceText]):
+    if any(var is None for var in [username, pollText]):
         return JsonResponse(vote_400_ALL, status=400, safe=False)
 
+    # Check if user exists
+    u = None
+    try:
+        u = UserProfile.objects.get(username=username)
+    except ObjectDoesNotExist:
+        return JsonResponse(USER_400, status=400)
+
+    # Check if user voted on poll
+    if pollChoiceText is None:
+        try:
+            p = Poll.objects.get(text=pollText)
+            pcs = PollChoice.objects.filter(pollID=p)
+            v = None
+            for pc in pcs:
+                v = Vote.objects.filter(userID=u, pollChoiceID=pc)
+                if v: break
+
+            if not v:
+                return JsonResponse({'status': 404, 'message': "No votes found for user on poll." } , status=200)
+
+            else:
+                return JsonResponse({'status': 200, 'message': "Vote found for user.", 'pc': v[0].pollChoiceID.text } , status=200)
+
+        # Poll does not exist
+        except ObjectDoesNotExist:
+            return JsonResponse(POLL_400, status=400)
+
+        
     # Store vote into db
     saveVote = False
     if deleteVoteFlag != None:
@@ -41,12 +69,10 @@ def vote(request):
     try:
         p = Poll.objects.get(text=pollText)
         pc = PollChoice.objects.get(pollID=p, text=pollChoiceText)
-        user = UserProfile.objects.get(username=username)
 
-    # User does not exist
-    # Todo this will also be called if pollText does not exists. Fix
+    # Poll does not exist
     except ObjectDoesNotExist:
-            return JsonResponse(USER_400, status=400)
+            return JsonResponse(POLL_400, status=400)
 
     if saveVote == True:
         # if no exceptions in try, then save
@@ -84,5 +110,5 @@ def vote(request):
         pc.numVotes -= 1
         p.save()
         pc.save()
-        
+
         return JsonResponse(deleteVoteFlag_200_VoteDeleted(username, pollChoiceText), status=200, safe=False)
