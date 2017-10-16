@@ -26,7 +26,7 @@ def vote(request):
     # Check if user exists
     u = None
     try:
-        u = UserProfile.objects.get(username=username)
+        user = UserProfile.objects.get(username=username)
     except ObjectDoesNotExist:
         return JsonResponse(USER_400, status=400)
 
@@ -37,7 +37,7 @@ def vote(request):
             pcs = PollChoice.objects.filter(pollID=p)
             v = None
             for pc in pcs:
-                v = Vote.objects.filter(userID=u, pollChoiceID=pc)
+                v = Vote.objects.filter(userID=user, pollChoiceID=pc)
                 if v: break
 
             if not v:
@@ -50,7 +50,7 @@ def vote(request):
         except ObjectDoesNotExist:
             return JsonResponse(POLL_400, status=400)
 
-        
+
     # Store vote into db
     saveVote = False
     if deleteVoteFlag != None:
