@@ -20,14 +20,14 @@ class getPost(APIView):
                 topicSerializer = TopicSerializer(topic, many=True)
                 reviews = Review.objects.filter(topicID=topic)
                 reviewsSerializer = ReviewSerializer(reviews, many=True)
-                return JsonResponse({'topic': topicSerializer.data, 'reviews': reviewsSerializer.data }, safe=False)
+                return JsonResponse({'status': 200, 'topic': topicSerializer.data, 'reviews': reviewsSerializer.data }, safe=False)
 
             elif type == 'poll':
                 poll = Poll.objects.filter(text=text)
                 pollSerializer = PollSerializer(poll, many=True)
                 pc = PollChoice.objects.filter(pollID=poll)
                 pcSerializer = PollChoiceSerializer(pc, many=True)
-                return JsonResponse({'poll': pollSerializer.data, 'pc': pcSerializer.data }, safe=False)
+                return JsonResponse({'status': 200, 'poll': pollSerializer.data, 'pc': pcSerializer.data }, safe=False)
 
             # Type is incorrect
             else:

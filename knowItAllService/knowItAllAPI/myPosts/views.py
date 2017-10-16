@@ -30,7 +30,7 @@ class myPosts(APIView):
             reviewsSerializer = ReviewSerializer(reviews, many=True)
             pollsSerializer = PollSerializer(polls, many=True)
             response = reviewsSerializer.data + pollsSerializer.data
-            return JsonResponse({'topicID': topicData, 'reviews': reviewsSerializer.data,
+            return JsonResponse({'status': 200, 'topicID': topicData, 'reviews': reviewsSerializer.data,
                                  'polls': pollsSerializer.data, 'pc': pcData }, safe=False)
             # response = reviewsSerializer.data + pollsSerializer.data
             # return JsonResponse({'all': response}, safe=False)
