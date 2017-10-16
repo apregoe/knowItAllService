@@ -1,5 +1,12 @@
 ### Classes
 
+#email certifications
+knowItAllEmail = 'knowitallusc310@gmail.com'
+knowItAllEmailPassword = 'H52-J5K-Wm7-WFb'
+def confirmationMessage(username):
+    return "Hi!\n\n  Thank you for registering to knowItAll! Please confirm your email clicking in the following link:\n" \
+           "http://127.0.0.1:8000/api/authenticate?username=" + username + "\n\n Thanks!"
+
 ## User
 username_param = 'username'
 password_param = 'password'
