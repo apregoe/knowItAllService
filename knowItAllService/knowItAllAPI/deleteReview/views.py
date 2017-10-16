@@ -10,6 +10,7 @@ def deleteReview(request):
     if request.method != 'POST':
         return JsonResponse(POST_400, status=400, safe=False)
 
+    #get the params
     username = request.GET.get(username_param)
     topicTitle = request.GET.get(topicTitle_param)
 
@@ -17,6 +18,7 @@ def deleteReview(request):
         return JsonResponse(deleteReview_400_INVALID_PARAMS, status=400, safe=False)
 
     try:
+        #retreived the topic and user ids from db
         topicID_ = Topic.objects.get(title=topicTitle, category=1)
         userID_ = UserProfile.objects.get(username=username)
 
@@ -24,6 +26,7 @@ def deleteReview(request):
         return JsonResponse(DATA_400_NOT_EXISTS(topicTitle + ", or " + username ))
 
     try:
+        #review pulled and deleted using the topic and user ids from db
         Review.objects.get(topicID=topicID_, userID=userID_).delete()
 
     except ObjectDoesNotExist:
