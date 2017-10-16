@@ -19,12 +19,12 @@ def getTrending(request):
         if type == 'topic':
             topic = Topic.objects.all()
             topicSerializer = TopicSerializer(topic, many=True)
-            return JsonResponse({'topic': topicSerializer.data}, safe=False)
+            return JsonResponse({'status': 200, 'data': topicSerializer.data}, safe=False)
 
         elif type == 'poll':
             poll = Poll.objects.all()
             pollSerializer = PollSerializer(poll, many=True)
-            return JsonResponse({'poll': pollSerializer.data}, safe=False)
+            return JsonResponse({'status': 200, 'data': pollSerializer.data}, safe=False)
 
 
         elif type == 'all':
@@ -32,7 +32,7 @@ def getTrending(request):
             topicSerializer = TopicSerializer(topic, many=True)
             poll = Poll.objects.all()
             pollSerializer = PollSerializer(poll, many=True)
-            return JsonResponse({'all': topicSerializer.data + pollSerializer.data}, safe=False)
+            return JsonResponse({'status': 200, 'data': topicSerializer.data + pollSerializer.data}, safe=False)
 
         # Type is incorrect
         else:
