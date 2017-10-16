@@ -1,5 +1,12 @@
 ### Classes
 
+#email certifications
+knowItAllEmail = 'knowitallusc310@gmail.com'
+knowItAllEmailPassword = 'H52-J5K-Wm7-WFb'
+def confirmationMessage(username):
+    return "Hi!\n\n  Thank you for registering to knowItAll! Please confirm your email clicking in the following link:\n" \
+           "http://127.0.0.1:8000/api/authenticate?username=" + username + "\n\n Thanks!"
+
 ## User
 username_param = 'username'
 password_param = 'password'
@@ -114,6 +121,11 @@ getTrending_400_TP = {'status': 400, 'message': "Error, type must be either 'pol
 
 ## query
 search_400_QY = {'status': 400, 'message': "Error, please provide a query."}
+
+#register
+registerUser_INVALIDPARAMS = {'message': 'Please provide ' + username_param + ' and ' + password_param}
+def register_INVALIDUSER(username):
+    return {'message': username + ' is not valid. It should be a valid USC email (example@usc.edu)'}
 
 ### Categories
 CATEGORIES = {
