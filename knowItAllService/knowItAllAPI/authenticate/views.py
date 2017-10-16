@@ -18,8 +18,17 @@ def authenticate(request):
     # User has an account
     if user.exists():
         user = UserProfile.objects.get(username=username)
-        # # Password is correct
-        # if user.password == password:
+
+        # Check if password is correct
+        if password is not None:
+            if user.password == password:
+                return JsonResponse({'status': 200,
+                         'message': "User logged in successfully.",
+                         'data': {'username': username, 'password': password }}
+                        , status=200)
+            else:
+                return JsonResponse(PASSWORD_400, status=400)
+
         #     # Only check if user is authenticated but not update values
         if check is not None and check == 'true':
             return JsonResponse({'status': 200,
