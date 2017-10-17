@@ -20,12 +20,12 @@ def createCategory(request):
     # Store poll into db
     try:
         a = Category(title='Academic'); a.save()
-        e = Category(title='Food'); e.save()
-        s = Category(title='Entertainment'); s.save()
+        f = Category(title='Food'); f.save()
+        e = Category(title='Entertainment'); e.save()
         l = Category(title='Location'); l.save()
 
         return JsonResponse({'status': 200,
-                         'message': "Successfully created categories Academic, Entertainment, Social, and Location." }
+                         'message': "Successfully created categories Academic, Food, Entertainment, and Location." }
                         , status=200)
     # Data already exists
     except IntegrityError:
