@@ -6,7 +6,7 @@ knowItAllDomain = "https://0a79ab09.ngrok.io/api"
 knowItAllEmail = 'knowitallusc310@gmail.com'
 knowItAllEmailPassword = 'H52-J5K-Wm7-WFb'
 def confirmationMessage(username):
-    return "Hi "+username[:-8].capitalize()+"!\n\nThank you for registering to knowItAll! Please confirm your email clicking the following link:\n\n " \
+    return "Hi "+username[:-8].capitalize()+"!\n\nThank you for signing up for KnowItAll! Please confirm your email clicking the following link:\n\n " \
            +knowItAllDomain+"/authenticate?username="+username+"\n\nBest,\nKnowItAll Team"
 def changePassMessage(username, newPassword):
     return "Hi "+username[:-8].capitalize()+"!\n\nPlease confirm your password change by clicking the following link:\n\n " \

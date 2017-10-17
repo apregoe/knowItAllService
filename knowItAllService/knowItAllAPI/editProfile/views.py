@@ -85,7 +85,6 @@ def sendEmail(to, from_, from_password, subject, content):
     mail.close()
 
 class ChangePassword(FormView):
-    print("hi")
     def post(self, request):
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
