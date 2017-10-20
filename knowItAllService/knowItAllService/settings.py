@@ -28,6 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     '0a79ab09.ngrok.io',
     '127.0.0.1',
+    'knowItAllLive-dev.us-west-1.elasticbeanstalk.com'
 ]
 
 
