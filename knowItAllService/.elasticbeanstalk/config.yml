@@ -1,0 +1,18 @@
+branch-defaults:
+  default:
+    environment: knowItAllLive-dev
+    group_suffix: null
+global:
+  application_name: knowItAllLive
+  branch: null
+  default_ec2_keyname: knowItAll
+  default_platform: Python 2.7
+  default_region: us-west-1
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: eb-cli
+  repository: null
+  sc: null
+  workspace_type: Application
