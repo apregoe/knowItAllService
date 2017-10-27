@@ -1,9 +1,9 @@
 ### Classes
 
 #email certifications
-# knowItAllDomain = "http://127.0.0.1:8000"
+knowItAllDomain = "http://127.0.0.1:8000/api"
 # knowItAllDomain = "https://0a79ab09.ngrok.io/api"
-knowItAllDomain = "knowItAllLive-dev.us-west-1.elasticbeanstalk.com"
+# knowItAllDomain = "knowItAllLive-dev.us-west-1.elasticbeanstalk.com/api"
 knowItAllEmail = 'knowitallusc310@gmail.com'
 knowItAllEmailPassword = 'H52-J5K-Wm7-WFb'
 def confirmationMessage(username):
@@ -64,19 +64,25 @@ query_param = 'query'
 
 
 ### JsonResponse
-GET_400 = {'status': 400, 'message': "Error, please use GET."}
-POST_400 = {'status': 400, 'message': "Error, please use POST."}
-UNIQUE_400 = {'status': 400, 'message': "Error: Data already exists!"}
+GET_400m = "Error, please use GET."
+GET_400 = {'status': 400, 'message': GET_400m}
+POST_400m = "Error, please use POST."
+POST_400 = {'status': 400, 'message': POST_400m}
+UNIQUE_400m = "Error: Data already exists!"
+UNIQUE_400 = {'status': 400, 'message': UNIQUE_400m}
 def UNIQUE_400_EXISTS(data):
-    return {'message': "Error: " + data + " already exists!"}
+    return {'status': 400, 'message': "Error: " + data + " already exists!"}
 PASSWORD_400 = {'status': 400, 'message': "Error, user password not correct."}
 
 ## general
-USER_400 = {'status': 400, 'message': "Error: user does not exist."}
-DATA_400 = {'status': 400, 'message': "Error: data does not exist."}
+USER_400m = "Error: user does not exist."
+USER_400 = {'status': 400, 'message': USER_400m }
+DATA_400m = "Error: data does not exist."
+DATA_400 = {'status': 400, 'message': DATA_400m }
 def DATA_400_NOT_EXISTS(data):
     return {'message': "Error: " + data + " do/does not exist."}
-POLL_400 = {'status': 400, 'message': "Error: poll does not exist."}
+POLL_400m = "Error: poll does not exist."
+POLL_400 = {'status': 400, 'message': POLL_400m}
 
 
 ## authenticate
@@ -115,10 +121,21 @@ createNotification_400_ALL = {'status': 400, 'message': "Error, please provide a
 
 
 ## vote
-vote_400_ALL = {'status': 400, 'message': "Error, please provide a username, pollText, and pollChoiceText."}
-deleteVoteFlag_400_InvalidFlagParam = {'message': deleteVoteFlag_param + ' value should be wither 1 or 0.'}
+vote_USERm = "A user voted on your poll!"
+vote_200_ADDm = "Successfully added vote for poll choice!"
+vote_200_FDm = "Vote found for user."
+vote_400_ALLm = "Error, please provide a username, pollText, and pollChoiceText."
+vote_404m = "No votes found for user on poll."
+deleteVote_200m = "Vote was successfully deleted!"
+deleteVoteFlag_400_InvalidFlagParamm = deleteVoteFlag_param + " should be either 1 or 0."
+vote_404 = {'status': 404, 'message': vote_404m }
+vote_400_ALL = {'status': 400, 'message': vote_400_ALLm }
+deleteVoteFlag_400_InvalidFlagParam = {'message': deleteVoteFlag_400_InvalidFlagParamm }
+def vote_200_ADD(poll, pc):
+    return {'status': 200, 'message': vote_200_ADDm, 'data': {'poll': poll, 'pc': pc}}
+def vote_200_FD (pc): return {'status': 200, 'message': vote_200_FDm, 'pc': pc}
 def deleteVoteFlag_200_VoteDeleted (username, voteChoice):
-    return  {'message': 'Vote choice: ' + voteChoice + ', from ' + username + ' was successfully deleted'}
+    return {'status': 200, 'message': deleteVote_200m, 'data': {'username': username, 'vote': voteChoice}}
 
 ## getPost
 getPost_400_TP = {'status': 400, 'message': "Error, type must be either 'poll' or 'topic'."}
@@ -130,9 +147,16 @@ getTrending_400_TP = {'status': 400, 'message': "Error, type must be either 'pol
 search_400_QY = {'status': 400, 'message': "Error, please provide a query."}
 
 #register
-registerUser_INVALIDPARAMS = {'message': 'Please provide ' + username_param + ' and ' + password_param}
-def register_INVALIDUSER(username):
-    return {'message': username + ' is not valid. It should be a valid USC email (Ex. tommy.trojan@usc.edu)'}
+register_400_EXm = "Error, user already exists."
+register_400_EX = {'status': 400, 'message': register_400_EXm}
+register_400_UPm = "Please provide a username and password."
+register_400_UP = {'status': 400, 'message': register_400_UPm}
+register_400_INVm = "Error, username should be a valid USC email (Ex. tommy.trojan@usc.edu)."
+register_400_INV = {'status': 400, 'message': register_400_INVm}
+register_200m = "Successfully created user."
+def register_200(username,password):
+    return {'status': 200, 'message': register_200m,
+            'data': {'username': username, 'password': password}}
 
 ### Categories
 CATEGORIES = {

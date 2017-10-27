@@ -15,49 +15,48 @@ def register(request):
     password = request.GET.get(password_param)
 
     if any(var is None for var in[username, password]):
-        return JsonResponse(registerUser_INVALIDPARAMS, safe=False, status=400)
+        return JsonResponse(register_400_UP, safe=False, status=400)
 
-    #is username valid?
-    #1. check if it's a usc email
-    #   1.1 Contains the usc.edu domain
-    #   1.2 email actually works (PING the email)
-    #2. check if username already exists in database
-
-    #1.1 Contains usc.edu domain
+    '''
+        Is username valid?
+        1. check if it's a usc email
+            1.1 Contains the usc.edu domain
+            1.2 email actually works (PING the email)
+        2. check if username already exists in database
+    '''
     uscDomain = "@usc.edu"
     uscDomainLength = len(uscDomain)
+    # 1.1
     if username[-uscDomainLength:] == uscDomain:
 
         u = UserProfile(username=username, password=password)
         try:
             userFiltered = UserProfile.objects.filter(username=username)
             if userFiltered.exists():
-                return JsonResponse({'message': 'We could not add the user because it already exists.'})
+                return JsonResponse(register_400_EX, status=400)
             else:
                 u.save()
-                #1.2 send email
+                # 1.2
                 sendEmail(username, knowItAllEmail, knowItAllEmailPassword, 'Know It All Email confirmation',
                           confirmationMessage(username))
 
-                return JsonResponse({'status': 200,
-                                     'message': "Successfully created user.",
-                                     'data': {'username': u.username, 'password': password}}
-                                   , status=200)
+                return JsonResponse(register_200(u.username, password), status=200)
 
         except IntegrityError:
             return JsonResponse(UNIQUE_400, status=400)
 
     else:
-        #does not contain @usc.edu as the domain
-        return JsonResponse(register_INVALIDUSER(username), status=400, safe=False)
+        # doesn't contain @usc.edu
+        return JsonResponse(register_400_INV, status=400, safe=False)
 
 #sends email
 #TODO figure put how to put a subject
 def sendEmail(to, from_, from_password, subject, content):
-    mail = smtplib.SMTP('smtp.gmail.com', 587)
-    mail.ehlo()
-    mail.starttls()
-    mail.login(from_, from_password)
-    print(content)
-    mail.sendmail(from_, to, content)
-    mail.close()
+    # mail = smtplib.SMTP('smtp.gmail.com', 587)
+    # mail.ehlo()
+    # mail.starttls()
+    # mail.login(from_, from_password)
+    # print(content)
+    # mail.sendmail(from_, to, content)
+    # mail.close()
+    return

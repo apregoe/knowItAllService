@@ -55,7 +55,7 @@ def editProfile(request):
 
         else:
             # does not contain @usc.edu as the domain
-            return JsonResponse(register_INVALIDUSER(username), status=400, safe=False)
+            return JsonResponse(register_400_INV, status=400, safe=False)
 
     try:
         u = UserProfile.objects.get(username=username)

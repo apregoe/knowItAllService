@@ -41,31 +41,26 @@ def vote(request):
                 if v: break
 
             if not v:
-                return JsonResponse({'status': 404, 'message': "No votes found for user on poll." } , status=200)
+                return JsonResponse(vote_404, status=404)
 
             else:
-                return JsonResponse({'status': 200, 'message': "Vote found for user.", 'pc': v[0].pollChoiceID.text } , status=200)
+                return JsonResponse(vote_200_FD(v[0].pollChoiceID.text), status=200)
 
         # Poll does not exist
         except ObjectDoesNotExist:
             return JsonResponse(POLL_400, status=400)
 
+    saveVote = True
 
-    # Store vote into db
-    saveVote = False
-    if deleteVoteFlag != None:
+    # deleteVoteFlag is optional but it has to be value 1 or 0
+    if deleteVoteFlag is not None:
         if deleteVoteFlag.isdigit():
             if deleteVoteFlag == '1':
-                #delete vote flag
                 saveVote = False
-            elif deleteVoteFlag == '0':
-                # save the vote (do nothing)
-                saveVote = True
-            else:
-                # deleteVoteFlag is optional but it has to be value 1 or 0
-                return JsonResponse (deleteVoteFlag_400_InvalidFlagParam, status= 400, safe = False)
+        else:
+            return JsonResponse (deleteVoteFlag_400_InvalidFlagParam, status=400, safe=False)
 
-    #retreiving poll and pollchoice from db
+    # Retrieving poll and pc from db
     try:
         p = Poll.objects.get(text=pollText)
         pc = PollChoice.objects.get(pollID=p, text=pollChoiceText)
@@ -74,7 +69,7 @@ def vote(request):
     except ObjectDoesNotExist:
             return JsonResponse(POLL_400, status=400)
 
-    if saveVote == True:
+    if saveVote:
         # if no exceptions in try, then save
         v = Vote(userID=user, pollChoiceID=pc)
 
@@ -86,25 +81,23 @@ def vote(request):
             v.save()
 
             # Store a Notification to Poll's owner
-            text = "A user voted on your poll!"
+            text = vote_USERm
             n = Notification(userID=p.userID, pollID=p, type="poll", text=text)
             n.save()
 
         except IntegrityError:
-            return JsonResponse(UNIQUE_400_EXISTS("Vote: " + pollChoiceText + " in Poll: " + pollText), status=400)
+            return JsonResponse(UNIQUE_400, status=400)
 
-        return JsonResponse({'status': 200,
-                             'message': "Successfully added vote for poll choice \'" + pollChoiceText + "\'.",
-                             'data': {'poll': pollText}}
-                            , status=200)
+        return JsonResponse(vote_200_ADD(pollText, pollChoiceText), status=200)
+
+    # Delete vote
     else:
-        #delete vote
         try:
             voteToDelete = Vote.objects.get(userID=user, pollChoiceID=pc)
             voteToDelete.delete()
 
         except ObjectDoesNotExist:
-            return JsonResponse(DATA_400_NOT_EXISTS("Vote: " + pollChoiceText + " in Poll: " + pollText), status=400)
+            return JsonResponse(DATA_400, status=400)
 
         p.numVotes -= 1
         pc.numVotes -= 1

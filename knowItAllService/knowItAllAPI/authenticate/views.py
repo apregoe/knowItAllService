@@ -7,6 +7,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def authenticate(request):
+    for key, value in request.GET.items():
+        print ("%s %s" % (key, value))
     # if request.method != "POST":
     #     return JsonResponse(POST_400, status=400)
 
