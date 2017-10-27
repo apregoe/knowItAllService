@@ -47,16 +47,15 @@ def register(request):
 
     else:
         # doesn't contain @usc.edu
-        return JsonResponse(register_400_INV, status=400, safe=False)
+        return JsonResponse(register_400_INV(username), status=400, safe=False)
 
 #sends email
 #TODO figure put how to put a subject
 def sendEmail(to, from_, from_password, subject, content):
-    # mail = smtplib.SMTP('smtp.gmail.com', 587)
-    # mail.ehlo()
-    # mail.starttls()
-    # mail.login(from_, from_password)
-    # print(content)
-    # mail.sendmail(from_, to, content)
-    # mail.close()
-    return
+    mail = smtplib.SMTP('smtp.gmail.com', 587)
+    mail.ehlo()
+    mail.starttls()
+    mail.login(from_, from_password)
+    print(content)
+    mail.sendmail(from_, to, content)
+    mail.close()
