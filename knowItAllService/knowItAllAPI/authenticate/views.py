@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.contrib.auth import authenticate, login
 from django.db import IntegrityError
 from .models import UserProfile
@@ -43,10 +43,12 @@ def authenticate(request):
 
         user.userVerified = True
         user.save()
-        return JsonResponse({'status': 200,
-                     'message': "User authenticated successfully.",
-                     'data': {'username': username}}
-                    , status=200)
+        # return JsonResponse({'status': 200,
+        #              'message': "User authenticated successfully.",
+        #              'data': {'username': username}}
+        #             , status=200)
+        return HttpResponse("<h1>Authentication Success!</h1>"
+                            "<h2>Your email \'"+username+"\' has been authenticated. Please login on your device.</h2>")
 
         # return JsonResponse(PASSWORD_400, status=400)
     else:
