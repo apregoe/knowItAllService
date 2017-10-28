@@ -76,9 +76,9 @@ def vote(request):
         p.numVotes += 1
         pc.numVotes += 1
         try:
+            v.save()
             p.save()
             pc.save()
-            v.save()
 
             # Store a Notification to Poll's owner
             text = vote_USERm
