@@ -423,6 +423,48 @@ class CreateTopicTest(TestCase):
         response = self.client.post('/api/createTopic?title='+self.title+'&category='+self.category)
         self.assertEqual(response.json(), UNIQUE_400)
 
+class DeletePollTest(TestCase):
+    def setUp(self):
+        self.username = 'test@usc.edu'
+        self.username2 = 'test2@usc.edu'
+        self.pollText = "Best backend Framework?"
+        self.client.post('/api/createCategory?populate=true')
+
+        u = UserProfile.objects.create(username=self.username, password='test')
+        UserProfile.objects.create(username=self.username2, password='test')
+
+        c1 = Category.objects.get(pk=1)
+        p = Poll.objects.create(userID=u, categoryID=c1, text=self.pollText, numVotes=0,
+                                openForever=True, dayLimit=0)
+        PollChoice.objects.create(pollID=p, text='Django')
+        PollChoice.objects.create(pollID=p, text='Ruby on Rails')
+        PollChoice.objects.create(pollID=p, text='Spring')
+
+    def test_deletePoll(self):
+        #not a get request
+        response = self.client.get('/api/deletePoll')
+        self.assertEqual(response.json(), POST_400)
+
+        #no attributes
+        response = self.client.post('/api/deletePoll')
+        self.assertEqual(response.json(), deletePoll_400_ALL)
+
+        #user not the owner
+        response = self.client.post('/api/deletePoll?username='+self.username2+
+                                    '&pollText='+self.pollText)
+        self.assertEqual(response.json(), deletePoll_USERNAMEISNOTOWNER(self.username2, self.pollText))
+
+        #poll deleted success
+        response = self.client.post('/api/deletePoll?username='+self.username+
+                                '&pollText='+self.pollText)
+        self.assertEqual(response.json(), deletePoll_200_SUCCESS)
+
+        #poll or user that does not exists
+        self.pollText = "Not existing poll"
+        response = self.client.post('/api/deletePoll?username='+self.username+
+                                '&pollText='+self.pollText)
+        self.assertEqual(response.json(), DATA_400_NOT_EXISTS(self.pollText + ' or ' + self.username))
+
 
 
 

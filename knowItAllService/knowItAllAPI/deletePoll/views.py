@@ -21,7 +21,6 @@ def deletePoll(request):
         return JsonResponse(deletePoll_400_ALL, status=400, safe=False)
 
     try:
-
         userID = UserProfile.objects.get(username=username)
         pollID = Poll.objects.get(text=pollText)
 
