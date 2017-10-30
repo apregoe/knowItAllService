@@ -169,3 +169,51 @@ class AuthenticateTest(TestCase):
         #user does not exists
         response = self.client.get('/api/authenticate?username=notExisting@user.com')
         self.assertEqual(response.json(), USER_400)
+
+
+class SearchTest(TestCase):
+    def setUp(self):
+        self.username = 'test@usc.edu'
+        u = UserProfile.objects.create(username=self.username, password='test')
+        #populate database for searching
+        self.client.post('/api/createCategory?populate=true')
+        c1 = Category.objects.get(pk=1)
+        c2 = Category.objects.get(pk=2)
+        c3 = Category.objects.get(pk=3)
+        c4 = Category.objects.get(pk=4)
+        p = Poll.objects.create(userID=u, categoryID=c1, text="Best backend Framework?", numVotes=0,
+                                openForever=True, dayLimit=0)
+        PollChoice.objects.create(pollID=p, text='Django')
+        PollChoice.objects.create(pollID=p, text='Ruby on Rails')
+        PollChoice.objects.create(pollID=p, text='Spring')
+
+        Topic.objects.create(title="Five Guys", category=c2, avRating=0, numReviews=0)
+        Topic.objects.create(title="Da Row", category=c3, avRating=0, numReviews=0)
+        Topic.objects.create(title="McCarthy Quad", category=c4, avRating=0, numReviews=0)
+
+    def test_Search(self):
+        # not using GET -> 400
+        response = self.client.post('/api/search?query=backend')
+        self.assertEqual(response.json(), GET_400)
+
+        # no query provided
+        response = self.client.get('/api/search')
+        self.assertEqual(response.json(), search_400_QY)
+
+        # category 1 search
+        response = self.client.get('/api/search?query=backend academic')
+        self.assertEqual(str(response.json()['data'][0]['text']), "Best backend Framework?")
+
+        # category 2 search
+        response = self.client.get('/api/search?query=five guys food')
+        self.assertEqual(str(response.json()['data'][0]['title']), "Five Guys")
+
+        #category 3 search
+        response = self.client.get('/api/search?query=row entertainment')
+        self.assertEqual(str(response.json()['data'][0]['title']), "Da Row")
+
+        #category 4 search
+        response = self.client.get('/api/search?query= mccarthy location')
+        self.assertEqual(str(response.json()['data'][0]['title']), "McCarthy Quad")
+
+
