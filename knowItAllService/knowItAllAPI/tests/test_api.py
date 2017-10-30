@@ -512,3 +512,73 @@ class DeleteReview(TestCase):
                                     '&topicTitle=' + self.topicTitle)
         self.assertEqual(response.json(), deletePoll_USERNAMEISNOTOWNER(self.username2, self.topicTitle))
 
+class editProfile(TestCase):
+    def setUp(self):
+        user = UserProfile.objects.create(username='test@usc.edu', password='test')
+
+    def test_editProfile(self):
+        # Login not using POST -> 400
+        response = self.client.get('/api/login?username=test@usc.edu&password=test')
+        self.assertEqual(str(response.json()['message']), POST_400m)
+
+        # Successful login case -> 200
+        response = self.client.post('/api/login?username=test@usc.edu&password=test')
+        self.assertEqual(str(response.json()['message']), login_200m)
+
+        # Incorrect password -> 400
+        response = self.client.post('/api/login?username=test@usc.edu')
+        self.assertEqual(str(response.json()['message']), login_400_UPm)
+
+        # Non-USC email -> 400
+        response = self.client.post('/api/login?username=test@test.com&password=test')
+        self.assertEqual(str(response.json()['message']), login_400_INVm)
+
+class getPost(TestCase):
+    def setUp(self):
+        user = UserProfile.objects.create(username='test@usc.edu', password='test')
+        category = Category.objects.create(title='category1')
+        poll = Poll.objects.create(userID=user, categoryID=category, text="pt", numVotes=0,
+                                openForever=True, dayLimit=0)
+        PollChoice.objects.create(pollID=poll, text='poll_choice1')
+        PollChoice.objects.create(pollID=poll, text='poll_choice2')
+        PollChoice.objects.create(pollID=poll, text='poll_choice3')
+
+    def test_getPost(self):
+        # Check poll
+        response = self.client.get('/api/getPost?username=test@usc.edu&password=test')
+
+class getTrending(TestCase):
+    def setUp(self):
+        user = UserProfile.objects.create(username='test@usc.edu', password='test')
+        category = Category.objects.create(title='category1')
+        poll = Poll.objects.create(userID=user, categoryID=category, text="pt", numVotes=0,
+                                   openForever=True, dayLimit=0)
+        PollChoice.objects.create(pollID=poll, text='poll_choice1')
+        PollChoice.objects.create(pollID=poll, text='poll_choice2')
+        PollChoice.objects.create(pollID=poll, text='poll_choice3')
+
+    def test_getTrending(self):
+        # Check trending
+        response = self.client.get('/api/getPost?username=test@usc.edu&password=test')
+
+class Login(TestCase):
+    def setUp(self):
+        user = UserProfile.objects.create(username='test@usc.edu', password='test')
+
+    def test_login(self):
+        # Login not using POST -> 400
+        response = self.client.get('/api/login?username=test@usc.edu&password=test')
+        self.assertEqual(str(response.json()['message']), POST_400m)
+
+        # Successful login case -> 200
+        response = self.client.post('/api/login?username=test@usc.edu&password=test')
+        self.assertEqual(str(response.json()['message']), login_200m)
+
+        # Incorrect password -> 400
+        response = self.client.post('/api/login?username=test@usc.edu')
+        self.assertEqual(str(response.json()['message']), login_400_UPm)
+
+        # Non-USC email -> 400
+        response = self.client.post('/api/login?username=test@test.com&password=test')
+        self.assertEqual(str(response.json()['message']), login_400_INVm)
+

@@ -140,6 +140,26 @@ def createNotification_SUCCESS(username, type, text):
             'message': "Successfully created notification for user " + username + ".",
             'data': {'type': type, 'text': text }}
 
+## editProfile
+
+## getTrending
+getTrending_400_TP = {'status': 400, 'message': "Error, type must be either 'poll', 'topic', or 'all'."}
+
+## getPost
+getPost_400_TP = {'status': 400, 'message': "Error, type must be either 'poll' or 'topic'."}
+
+## login
+login_400_EXm = "Error, user already exists."
+login_400_EX = {'status': 400, 'message': login_400_EXm}
+login_400_UPm = "Error, user password not correct."
+login_400_UP = {'status': 400, 'message': login_400_UPm}
+login_400_INVm = "Error: user does not exist."
+login_400_INV = {'status': 400, 'message': login_400_INVm}
+login_200m = "User logged in successfully."
+def login_200(username,password):
+    return {'status': 200, 'message': register_200m,
+            'data': {'username': username, 'password': password}}
+
 ## vote
 vote_USERm = "A user voted on your poll!"
 vote_200_ADDm = "Successfully added vote for poll choice!"
@@ -156,12 +176,6 @@ def vote_200_ADD(poll, pc):
 def vote_200_FD (pc): return {'status': 200, 'message': vote_200_FDm, 'pc': pc}
 def deleteVoteFlag_200_VoteDeleted (username, voteChoice):
     return {'status': 200, 'message': deleteVote_200m, 'data': {'username': username, 'vote': voteChoice}}
-
-## getPost
-getPost_400_TP = {'status': 400, 'message': "Error, type must be either 'poll' or 'topic'."}
-
-## getPost
-getTrending_400_TP = {'status': 400, 'message': "Error, type must be either 'poll', 'topic', or 'all'."}
 
 ## query
 search_400_QY = {'status': 400, 'message': "Error, please provide a query."}
