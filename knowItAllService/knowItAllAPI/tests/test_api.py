@@ -138,3 +138,15 @@ class VoteTests(TestCase):
         response = self.client.post('/api/vote?username=test@usc.edu&pollText=pt'
                                     '&pollChoiceText=pc1&deleteVote=string')
         self.assertEqual(str(response.json()['message']), deleteVoteFlag_400_InvalidFlagParamm)
+
+class AuthenticateTest(TestCase):
+    def setUp(self):
+        u = UserProfile.objects.create(username='test@usc.edu', password='test')
+
+    def test_authenticate(self):
+        # not using GET
+        response = self.client.post('/api/authenticate?username=test@usc.edu')
+        self.assertEqual(str(response.json()['message']), GET_400m)
+
+        response = self.client.get('/api/authenticate?username=test@usc.edu')
+        self.assertEqual()
