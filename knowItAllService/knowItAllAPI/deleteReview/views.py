@@ -19,7 +19,7 @@ def deleteReview(request):
 
     try:
         #retreived the topic and user ids from db
-        topicID_ = Topic.objects.get(title=topicTitle, category=1)
+        topicID_ = Topic.objects.get(title=topicTitle)
         userID_ = UserProfile.objects.get(username=username)
 
     except ObjectDoesNotExist:
@@ -30,6 +30,6 @@ def deleteReview(request):
         Review.objects.get(topicID=topicID_, userID=userID_).delete()
 
     except ObjectDoesNotExist:
-        return JsonResponse({ 'message': username + ' has no review for ' + topicTitle})
+        return JsonResponse(deletePoll_USERNAMEISNOTOWNER(username, topicTitle))
 
     return JsonResponse(deleteReview_SUCESS(username, topicTitle), status=200, safe=False)

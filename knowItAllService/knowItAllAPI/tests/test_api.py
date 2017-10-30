@@ -466,21 +466,49 @@ class DeletePollTest(TestCase):
         self.assertEqual(response.json(), DATA_400_NOT_EXISTS(self.pollText + ' or ' + self.username))
 
 
+class DeleteReview(TestCase):
+    def setUp(self):
+        self.username = 'test@usc.edu'
+        self.username2 = 'test2@usc.edu'
+        self.topicTitle = "Five Guys"
+        self.rating = '4'
+        self.category = '2'
+        self.comment = "Good but nothing like in n out"
+        self.client.post('/api/createCategory?populate=true')
+
+        userId = UserProfile.objects.create(username=self.username, password='test')
+        UserProfile.objects.create(username=self.username2, password='test')
+        c2 = Category.objects.get(pk=2)
+        topicId = Topic.objects.create(title=self.topicTitle, category=c2, avRating=0, numReviews=0)
+
+        # self.client.post('/api/createTopic?title='+self.topicTitle+'&category='+self.category)
+        self.client.post('/api/createReview?username='+self.username+'&topicTitle='+self.topicTitle+
+                         '&rating='+self.rating+'&comment='+self.comment)
 
 
+    def test_deleteReview(self):
+        #not a get request
+        response = self.client.get('/api/deleteReview')
+        self.assertEqual(response.json(), POST_400)
 
+        #no attributes
+        response = self.client.post('/api/deleteReview')
+        self.assertEqual(response.json(), deleteReview_400_INVALID_PARAMS)
 
+        # review deleted success
+        response = self.client.post('/api/deleteReview?username=' + self.username +
+                                    '&topicTitle=' + self.topicTitle)
+        self.assertEqual(response.json(), deleteReview_SUCESS(self.username, self.topicTitle))
 
+        #review or user that does not exists
+        self.topicTitle= "Not existing topic"
+        response = self.client.post('/api/deleteReview?username='+self.username+
+                                '&topicTitle='+self.topicTitle)
+        self.assertEqual(response.json(), DATA_400_NOT_EXISTS(self.topicTitle + ', or ' + self.username))
 
-
-
-
-
-
-
-
-
-
-
-
+        #user has no review in this topic
+        self.topicTitle = "Five Guys"
+        response = self.client.post('/api/deleteReview?username=' + self.username2 +
+                                    '&topicTitle=' + self.topicTitle)
+        self.assertEqual(response.json(), deletePoll_USERNAMEISNOTOWNER(self.username2, self.topicTitle))
 

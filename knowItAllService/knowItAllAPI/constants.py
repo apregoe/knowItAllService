@@ -130,6 +130,8 @@ def createReview_SUCCESS(topicTitle, rating, comment):
 deleteReview_400_INVALID_PARAMS = {'message': 'Plase provide ' + username_param + ', and ' + topicTitle_param}
 def  deleteReview_SUCESS(username, topicTitle):
     return {'message': 'Review about:' + topicTitle + ' from: ' + username + '. Has been deleted' }
+def deleteReview_USERHASNOREVIEWONTHISTOPIC(username, topicTitle):
+    return {'message': username + ' has no review for ' + topicTitle}
 
 ## createNotification
 createNotification_400_ALL = {'status': 400, 'message': "Error, please provide a username, type, and text."}
