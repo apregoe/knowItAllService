@@ -234,6 +234,3 @@ class CreateCategoryTest(TestCase):
         #integrity error, data already exists!
         response = self.client.post('/api/createCategory?populate=true')
         self.assertEqual(response.json(), UNIQUE_400)
-g
-
-

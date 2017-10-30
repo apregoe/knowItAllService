@@ -47,7 +47,7 @@ def register(request):
 
     else:
         # doesn't contain @usc.edu
-        return JsonResponse(register_400_INV(username), status=400, safe=False)
+        return JsonResponse(register_400_INV, status=400, safe=False)
 
 #sends email
 #TODO figure put how to put a subject
