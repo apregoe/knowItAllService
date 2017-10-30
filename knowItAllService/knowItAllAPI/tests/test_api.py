@@ -217,3 +217,23 @@ class SearchTest(TestCase):
         self.assertEqual(str(response.json()['data'][0]['title']), "McCarthy Quad")
 
 
+class CreateCategoryTest(TestCase):
+    def test_createCategory(self):
+        # not using POST-> 400
+        response = self.client.get('/api/createCategory')
+        self.assertEqual(response.json(), POST_400)
+
+        # populate is None or != true
+        response = self.client.post('/api/createCategory')
+        self.assertEqual(response.json(), createCategory_400_PO)
+
+        # base case, populate = true
+        response = self.client.post('/api/createCategory?populate=true')
+        self.assertEqual(response.json(), createCategory_SUCCESS)
+
+        #integrity error, data already exists!
+        response = self.client.post('/api/createCategory?populate=true')
+        self.assertEqual(response.json(), UNIQUE_400)
+g
+
+

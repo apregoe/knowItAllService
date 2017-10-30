@@ -90,6 +90,9 @@ authenticate_400_AA = {'status': 400, 'message': "Error, user already authentica
 
 ## createCategory
 createCategory_400_PO = {'status': 400, 'message': "Error: populate must be set to 'true'."}
+createCategory_SUCCESS = {'status': 200,
+                      'message': "Successfully created categories Academic, Food, Entertainment, and Location." }
+
 
 ## createTopic
 createTopic_400_ALL = {'status': 400, 'message': "Error: please provide a title and category."}
