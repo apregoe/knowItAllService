@@ -347,3 +347,78 @@ class CreatePollTest(TestCase):
         # self.assertEqual(response.json(), USER_400)
 
 
+class CreateReviewTest(TestCase):
+    def setUp(self):
+        self.username = 'test@usc.edu'
+        self.topicTitle = "Five Guys"
+        self.rating = '4'
+        self.comment = "Good but nothing like in n out"
+        self.client.post('/api/createCategory?populate=true')
+        c2 = Category.objects.get(pk=2)#food
+        UserProfile.objects.create(username=self.username, password='test')
+        Topic.objects.create(title=self.topicTitle, category=c2, avRating=0, numReviews=0)
+
+    def test_createReview(self):
+        #not a GET request
+        response = self.client.get('/api/createReview')
+        self.assertEqual(response.json(), POST_400)
+
+        #no attributes
+        response = self.client.post('/api/createReview')
+        self.assertEqual(response.json(), createReview_400_ALL)
+
+        #rating is not float
+        self.rating = 'notFloat'
+        response = self.client.post('/api/createReview?username='+self.username+'&topicTitle='+
+                                    self.topicTitle+'&rating='+self.rating+'&comment='+self.comment)
+        self.rating = '4'
+
+        #Create review success
+        response = self.client.post('/api/createReview?username='+self.username+'&topicTitle='+
+                                    self.topicTitle+'&rating='+self.rating+'&comment='+self.comment)
+
+        #integrity error, data exists
+        response = self.client.post('/api/createReview?username='+self.username+'&topicTitle='+
+                                    self.topicTitle+'&rating='+self.rating+'&comment='+self.comment)
+        self.assertEqual(response.json(), UNIQUE_400)
+
+        #user object does not exists
+        #TODO this gives me an error:
+        #TODO django.db.transaction.TransactionManagementError: An error occurred in the current transaction. You can't
+        #TODO execute queries until the end of the 'atomic' block.
+        # self.username = "notExistingUser"
+        # response = self.client.post('/api/createReview?username='+self.username+'&topicTitle='+
+        #                                     self.topicTitle+'&rating='+self.rating+'&comment='+self.comment)
+        # self.assertEqual(response.json(), USER_400)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

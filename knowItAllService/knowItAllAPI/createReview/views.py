@@ -32,16 +32,15 @@ def createReview(request):
     # Store poll into db
     try:
         t = Topic.objects.get(title=topicTitle)
-        r = Review(userID=UserProfile.objects.get(username=username), topicID=t, rating=rating, comment=comment)
+        userId=UserProfile.objects.get(username=username)
+        r = Review(userID=userId, topicID=t, rating=rating, comment=comment)
         r.save()
         # Update review value
         t.avRating = ((t.avRating * t.numReviews) + Decimal.from_float(rating))/(t.numReviews+1)
         t.numReviews += 1
         t.save()
 
-        return JsonResponse({'status': 200,
-                         'message': "Successfully created review for topic " + topicTitle + ".",
-                         'data': {'rating': rating, 'comment': comment }}
+        return JsonResponse(createReview_SUCCESS(topicTitle, rating, comment)
                         , status=200)
     # Data already exists
     except IntegrityError:
