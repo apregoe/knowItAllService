@@ -139,16 +139,33 @@ class VoteTests(TestCase):
                                     '&pollChoiceText=pc1&deleteVote=string')
         self.assertEqual(str(response.json()['message']), deleteVoteFlag_400_InvalidFlagParamm)
 
+#TODO do we need to test for the password?
 class AuthenticateTest(TestCase):
     def setUp(self):
         self.username = 'test@usc.edu'
         u = UserProfile.objects.create(username=self.username, password='test')
 
     def test_authenticate(self):
-        # not using GET
+        # not using GET -> 400
         response = self.client.post('/api/authenticate?username='+self.username)
         self.assertEqual(response.json(), GET_400)
 
-        response = self.client.get('/api/authenticate?username='+self.username)
-        print(response.json(), authenticate_UserAuthenticated(self.username))
+        # authenticate user check false -> 400
+        response = self.client.get('/api/authenticate?username='+self.username+'&check=true')
+        self.assertEqual(response.json() ,authenticate_UserCheck("false", self.username))
 
+        # authenticate user base case -> 200
+        response = self.client.get('/api/authenticate?username='+self.username)
+        self.assertEqual(response.json(), authenticate_UserAuthenticated(self.username))
+
+        # authenticate user check true -> 200
+        response = self.client.get('/api/authenticate?username=' + self.username + '&check=true')
+        self.assertEqual(response.json(), authenticate_UserCheck("true", self.username))
+
+        #user already verified -> 400
+        response = self.client.get('/api/authenticate?username='+self.username)
+        self.assertEqual(response.json(), authenticate_400_AA)
+
+        #user does not exists
+        response = self.client.get('/api/authenticate?username=notExisting@user.com')
+        self.assertEqual(response.json(), USER_400)

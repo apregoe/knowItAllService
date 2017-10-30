@@ -37,9 +37,7 @@ def authenticate(request):
                 isVerified="true"
             else:
                 isVerified="false"
-            return JsonResponse({'status': 200,
-                     'authenticated': (isVerified) }
-                    , status=200)
+            return JsonResponse(authenticate_UserCheck(isVerified, username), status=200)
 
         # If User already authenticated
         if user.userVerified == True:
@@ -51,7 +49,7 @@ def authenticate(request):
                     , status=200)
         #using json is easier for testing
         # return HttpResponse("<h1>Authentication Success!</h1>"
-        #                     "<h2>Your email \'"+username+"\' has been authenticated. Please login on your device.</h2>")
+        #                   "<h2>Your email \'"+username+"\' has been authenticated. Please login on your device.</h2>")
 
         # return JsonResponse(PASSWORD_400, status=400)
     else:
