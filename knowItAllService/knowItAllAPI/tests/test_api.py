@@ -274,4 +274,76 @@ class CreateNotificationTest(TestCase):
         response = self.client.post('/api/createNotification?username=unexisting@user.com'+
                                     '&type='+self.type+'&text='+self.text+'&title='+self.title)
         self.assertEqual(response.json(), USER_400)
-        self.assertEqual(response.json(), USER_400)
+
+class CreatePollTest(TestCase):
+    def setUp(self):
+        self.username = 'test@usc.edu'
+        self.category = "1"
+        self.text = "Best backend Framework?"
+        self.choices = "Django,Ruby on Rails,Spring"
+        self.openForever = '1'
+        self.dayLimit = '10'
+        self.client.post('/api/createCategory?populate=true')
+        UserProfile.objects.create(username=self.username, password='test')
+
+    def test_createPoll(self):
+        #no GET
+        response = self.client.get('/api/createPoll')
+        self.assertEqual(response.json(), POST_400)
+
+        #missing attributes
+        response = self.client.post('/api/createPoll')
+        self.assertEqual(response.json(), createPoll_400_ALL)
+
+        #category not valid
+        response = self.client.post('/api/createPoll?username='+self.username+'&category=notValidCategory'
+                                    '&text='+self.text+'&choices='+self.choices+'&openForever='+self.openForever+
+                                    '&dayLimit='+self.dayLimit)
+        self.assertEqual(response.json(), createTopic_400_C)
+
+        #open forever not digit
+        response = self.client.post('/api/createPoll?username='+self.username+'&category='+self.category+
+                                    '&text='+self.text+'&choices='+self.choices+'&openForever=notDigit'+
+                                    '&dayLimit='+self.dayLimit)
+        self.assertEqual(response.json(), createPoll_400_OF)
+
+        #openForever is digit but not a valid one
+        self.openForever = '3'
+        response = self.client.post('/api/createPoll?username=' + self.username + '&category=' + self.category +
+                                    '&text=' + self.text + '&choices=' + self.choices + '&openForever='+self.openForever +
+                                    '&dayLimit=' + self.dayLimit)
+        self.assertEqual(response.json(), createPoll_400_OF)
+
+        #dayLimit < 0
+        self.openForever = "0"
+        self.dayLimit = "-1"
+        response = self.client.post('/api/createPoll?username=' + self.username + '&category=' + self.category +
+                                    '&text=' + self.text + '&choices=' + self.choices + '&openForever='+self.openForever +
+                                    '&dayLimit=' + self.dayLimit)
+        self.assertEqual(response.json(), createPoll_400_DL)
+
+        #base case to create poll
+        self.openForever = "1"
+        self.dayLimit = "0"
+        response = self.client.post('/api/createPoll?username=' + self.username + '&category=' + self.category +
+                                    '&text=' + self.text + '&choices=' + self.choices + '&openForever='+self.openForever
+                                     + '&dayLimit=' + self.dayLimit)
+        self.assertEqual(response.json(), createPoll_SUCCESS(self.text, self.choices.split(',')))
+
+        #data already exists
+        response = self.client.post('/api/createPoll?username=' + self.username + '&category=' + self.category +
+                                    '&text=' + self.text + '&choices=' + self.choices + '&openForever='+self.openForever
+                                    + '&dayLimit=' + self.dayLimit)
+        self.assertEqual(response.json(), UNIQUE_400)
+
+        # #user does not exists
+        #TODO this gives me an error:
+        #TODO django.db.transaction.TransactionManagementError: An error occurred in the current transaction. You can't
+        #TODO execute queries until the end of the 'atomic' block.
+        # self.username = "notExistingUser"
+        # response = self.client.post('/api/createPoll?username=' + self.username + '&category=' + self.category +
+        #                             '&text=' + self.text + '&choices=' + self.choices + '&openForever='+self.openForever
+        #                             + '&dayLimit=' + self.dayLimit)
+        # self.assertEqual(response.json(), USER_400)
+
+

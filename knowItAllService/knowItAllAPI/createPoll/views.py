@@ -44,7 +44,8 @@ def createPoll(request):
 
     # Store poll into db
     try:
-        p = Poll(userID=UserProfile.objects.get(username=username), categoryID=Category.objects.get(pk=category),
+        userId = UserProfile.objects.get(username=username)
+        p = Poll(userID=userId, categoryID=Category.objects.get(pk=category),
                  text=text, numVotes=0, openForever=openForever, dayLimit=dayLimit)
         p.save()
         # Store each choice into db
@@ -53,10 +54,7 @@ def createPoll(request):
             c = PollChoice(pollID=p, text=choice)
             c.save()
 
-        return JsonResponse({'status': 200,
-                         'message': "Successfully created poll.",
-                         'data': {'Poll': p.text, 'choices': cList }}
-                        , status=200)
+        return JsonResponse(createPoll_SUCCESS(p.text, cList) , status=200)
     # Data already exists
     except IntegrityError:
             return JsonResponse(UNIQUE_400, status=400)
