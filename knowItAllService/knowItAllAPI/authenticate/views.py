@@ -7,10 +7,11 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 def authenticate(request):
-    for key, value in request.GET.items():
-        print ("%s %s" % (key, value))
-    # if request.method != "POST":
-    #     return JsonResponse(POST_400, status=400)
+    # for key, value in request.GET.items():
+    #     print ("%s %s" % (key, value))
+
+    if request.method != "GET":
+        return JsonResponse(GET_400, status=400)
 
     username = request.GET.get(username_param)
     password = request.GET.get(password_param)
@@ -24,17 +25,20 @@ def authenticate(request):
         # Check if password is correct
         if password is not None:
             if user.password == password:
-                return JsonResponse({'status': 200,
-                         'message': "User logged in successfully.",
-                         'data': {'username': username, 'password': password }}
+                return JsonResponse(authenticate_UserLoggedIn(username=username, password=password)
                         , status=200)
             else:
                 return JsonResponse(PASSWORD_400, status=400)
 
         #     # Only check if user is authenticated but not update values
         if check is not None and check == 'true':
+            isVerified = ""
+            if user.userVerified:
+                isVerified="true"
+            else:
+                isVerified="false"
             return JsonResponse({'status': 200,
-                     'authenticated': ("true" if user.userVerified else "false") }
+                     'authenticated': (isVerified) }
                     , status=200)
 
         # If User already authenticated
@@ -43,12 +47,11 @@ def authenticate(request):
 
         user.userVerified = True
         user.save()
-        # return JsonResponse({'status': 200,
-        #              'message': "User authenticated successfully.",
-        #              'data': {'username': username}}
-        #             , status=200)
-        return HttpResponse("<h1>Authentication Success!</h1>"
-                            "<h2>Your email \'"+username+"\' has been authenticated. Please login on your device.</h2>")
+        return JsonResponse(authenticate_UserAuthenticated(username)
+                    , status=200)
+        #using json is easier for testing
+        # return HttpResponse("<h1>Authentication Success!</h1>"
+        #                     "<h2>Your email \'"+username+"\' has been authenticated. Please login on your device.</h2>")
 
         # return JsonResponse(PASSWORD_400, status=400)
     else:

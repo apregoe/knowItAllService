@@ -158,6 +158,17 @@ def register_200(username,password):
     return {'status': 200, 'message': register_200m,
             'data': {'username': username, 'password': password}}
 
+#authenticate
+def authenticate_UserLoggedIn(username, password):
+    return {'status': 200,
+            'message': "User logged in successfully.",
+            'data': {'username': username, 'password': password }}
+
+def authenticate_UserAuthenticated(username):
+    return {'status': 200,
+            'message': "User authenticated successfully.",
+            'data': {'username': username}}
+
 ### Categories
 CATEGORIES = {
     1: "Academic",
