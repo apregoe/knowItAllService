@@ -47,9 +47,7 @@ def authenticate(request):
 
         user.userVerified = True
         user.save()
-        return JsonResponse({'status': 200,
-                     'message': "User authenticated successfully.",
-                     'data': {'username': username}}
+        return JsonResponse(authenticate_UserAuthenticated(username)
                     , status=200)
         #using json is easier for testing
         # return HttpResponse("<h1>Authentication Success!</h1>"

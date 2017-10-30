@@ -164,6 +164,11 @@ def authenticate_UserLoggedIn(username, password):
             'message': "User logged in successfully.",
             'data': {'username': username, 'password': password }}
 
+def authenticate_UserAuthenticated(username):
+    return {'status': 200,
+            'message': "User authenticated successfully.",
+            'data': {'username': username}}
+
 ### Categories
 CATEGORIES = {
     1: "Academic",

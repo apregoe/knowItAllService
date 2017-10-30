@@ -141,12 +141,13 @@ class VoteTests(TestCase):
 
 class AuthenticateTest(TestCase):
     def setUp(self):
-        u = UserProfile.objects.create(username='test@usc.edu', password='test')
+        self.username = 'test@usc.edu'
+        u = UserProfile.objects.create(username=self.username, password='test')
 
     def test_authenticate(self):
         # not using GET
-        response = self.client.post('/api/authenticate?username=test@usc.edu')
-        self.assertEqual(str(response.json()['message']), GET_400m)
+        response = self.client.post('/api/authenticate?username='+self.username)
+        self.assertEqual(response.json(), GET_400)
 
-        response = self.client.get('/api/authenticate?username=test@usc.edu')
-        self.assertEqual()
+        response = self.client.get('/api/authenticate?username='+self.username)
+        print(response.json(), authenticate_UserAuthenticated(self.username))
