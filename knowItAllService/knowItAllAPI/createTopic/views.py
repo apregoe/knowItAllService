@@ -27,9 +27,7 @@ def createTopic(request):
     t = Topic(title=title,category=Category.objects.get(pk=category), avRating=0, numReviews=0)
     try:
         t.save()
-        return JsonResponse({'status': 200,
-                         'message': "Successfully created topic.",
-                         'data': {'title': t.title, 'category': CATEGORIES.get(category)}}
+        return JsonResponse(createTopic_SUCCESS(t.title, CATEGORIES.get(category))
                         , status=200)
 
     except IntegrityError:

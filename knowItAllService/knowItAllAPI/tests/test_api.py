@@ -376,6 +376,7 @@ class CreateReviewTest(TestCase):
         #Create review success
         response = self.client.post('/api/createReview?username='+self.username+'&topicTitle='+
                                     self.topicTitle+'&rating='+self.rating+'&comment='+self.comment)
+        self.assertEqual(response.json(), createReview_SUCCESS(self.topicTitle, float(self.rating), self.comment))
 
         #integrity error, data exists
         response = self.client.post('/api/createReview?username='+self.username+'&topicTitle='+
@@ -393,15 +394,34 @@ class CreateReviewTest(TestCase):
 
 
 
+class CreateTopicTest(TestCase):
+    def setUp(self):
+        self.title = "Five Guys"
+        self.category = '1'
+        self.client.post('/api/createCategory?populate=true')
 
+    def test_createTopic(self):
+        #no a GET request
+        response = self.client.get('/api/createTopic')
+        self.assertEqual(response.json(), POST_400)
 
+        #no attributes
+        response = self.client.post('/api/createTopic')
+        self.assertEqual(response.json(), createTopic_400_ALL)
 
+        #category not valid
+        self.category="notValidCategory"
+        response = self.client.post('/api/createTopic?title='+self.title+'&category='+self.category)
+        self.assertEqual(response.json(), createTopic_400_C)
+        self.category = '1'
 
+        #success case
+        response = self.client.post('/api/createTopic?title='+self.title+'&category='+self.category)
+        self.assertEqual(response.json(), createTopic_SUCCESS(self.title, CATEGORIES.get(int(self.category))))
 
-
-
-
-
+        #topic already exists
+        response = self.client.post('/api/createTopic?title='+self.title+'&category='+self.category)
+        self.assertEqual(response.json(), UNIQUE_400)
 
 
 

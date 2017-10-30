@@ -97,6 +97,10 @@ createCategory_SUCCESS = {'status': 200,
 ## createTopic
 createTopic_400_ALL = {'status': 400, 'message': "Error: please provide a title and category."}
 createTopic_400_C = {'status': 400, 'message': "Error: category must be an int 1-4."}
+def createTopic_SUCCESS(title, category):
+    return {'status': 200,
+     'message': "Successfully created topic.",
+     'data': {'title': title, 'category': category}}
 
 ## createPoll
 createPoll_400_ALL = {'status': 400, 'message': "Error, please provide username, text, choices, and openForever."}
