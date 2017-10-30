@@ -138,3 +138,8 @@ class VoteTests(TestCase):
         response = self.client.post('/api/vote?username=test@usc.edu&pollText=pt'
                                     '&pollChoiceText=pc1&deleteVote=string')
         self.assertEqual(str(response.json()['message']), deleteVoteFlag_400_InvalidFlagParamm)
+
+class TestingTest(TestCase):
+    def setUp(self):
+
+    def test_vote(self):
