@@ -17,7 +17,7 @@ def createNotification(request):
     text = request.GET.get(text_param)
 
     # Check if all parameters provided
-    if any(var is None for var in [username, type, text]):
+    if any(var is None for var in [username, type, text, title]):
         return JsonResponse(createNotification_400_ALL, status=400, safe=False)
 
 
@@ -33,14 +33,12 @@ def createNotification(request):
         n = Notification(userID=u, pollID=p, type=type, text=text)
         n.save()
 
-        return JsonResponse({'status': 200,
-                         'message': "Successfully created notification for user " + username + ".",
-                         'data': {'type': type, 'text': text }}
+        return JsonResponse(createNotification_SUCCESS(username, type, text)
                         , status=200)
 
     # Data already exists
-    except IntegrityError:
-            return JsonResponse(UNIQUE_400, status=400)
+    # except IntegrityError:
+    #         return JsonResponse(UNIQUE_400_EXISTS(text), status=400)
 
     # User does not exist
     except ObjectDoesNotExist:

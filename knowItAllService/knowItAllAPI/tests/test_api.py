@@ -234,3 +234,44 @@ class CreateCategoryTest(TestCase):
         #integrity error, data already exists!
         response = self.client.post('/api/createCategory?populate=true')
         self.assertEqual(response.json(), UNIQUE_400)
+
+
+class CreateNotificationTest(TestCase):
+    def setUp(self):
+        self.username = 'test@usc.edu'
+        self.client.post('/api/createCategory?populate=true')
+        self.type = "poll"
+        self.text = "Someone voted on a poll you created."
+        self.title = "Best backend Framework?"
+        c1 = Category.objects.get(pk=1)
+        u = UserProfile.objects.create(username=self.username, password='test')
+        p = Poll.objects.create(userID=u, categoryID=c1, text=self.title, numVotes=0,
+                                openForever=True, dayLimit=0)
+        PollChoice.objects.create(pollID=p, text='Django')
+        PollChoice.objects.create(pollID=p, text='Ruby on Rails')
+        PollChoice.objects.create(pollID=p, text='Spring')
+
+    def test_createNotification(self):
+        #no GET
+        response = self.client.get('/api/createNotification')
+        self.assertEqual(response.json(), POST_400)
+
+        #missing attributes
+        response = self.client.post('/api/createNotification')
+        self.assertEqual(response.json(), createNotification_400_ALL)
+
+        #poll does not exists
+        response = self.client.post('/api/createNotification?username='+self.username
+                                    +'&type=anything&text=Notification message&title=unexisting Poll')
+        self.assertEqual(response.json(), POLL_400)
+
+        #notificatino created
+        response = self.client.post('/api/createNotification?username='+self.username
+                                    +'&type='+self.type+'&text='+self.text+'&title='+self.title)
+        self.assertEqual(response.json(), createNotification_SUCCESS(self.username, self.type, self.text))
+
+        #Username does not exists
+        response = self.client.post('/api/createNotification?username=unexisting@user.com'+
+                                    '&type='+self.type+'&text='+self.text+'&title='+self.title)
+        self.assertEqual(response.json(), USER_400)
+        self.assertEqual(response.json(), USER_400)

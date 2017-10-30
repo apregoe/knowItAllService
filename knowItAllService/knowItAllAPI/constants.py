@@ -121,7 +121,10 @@ def  deleteReview_SUCESS(username, topicTitle):
 
 ## createNotification
 createNotification_400_ALL = {'status': 400, 'message': "Error, please provide a username, type, and text."}
-
+def createNotification_SUCCESS(username, type, text):
+    return {'status': 200,
+            'message': "Successfully created notification for user " + username + ".",
+            'data': {'type': type, 'text': text }}
 
 ## vote
 vote_USERm = "A user voted on your poll!"
@@ -184,3 +187,4 @@ CATEGORIES = {
     3: "Entertainment",
     4: "Location"
 }
+
