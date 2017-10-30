@@ -141,6 +141,16 @@ def createNotification_SUCCESS(username, type, text):
             'data': {'type': type, 'text': text }}
 
 ## editProfile
+editProfile_400_EXm = "Error, user already exists."
+editProfile_400_EX = {'status': 400, 'message': editProfile_400_EXm}
+editProfile_400_UPm = "Error, user password not correct."
+editProfile_400_UP = {'status': 400, 'message': editProfile_400_UPm}
+editProfile_400_INVm = "Error: user does not exist."
+editProfile_400_INV = {'status': 400, 'message': editProfile_400_INVm}
+editProfile_200m = "User logged in successfully."
+def login_200(username,password):
+    return {'status': 200, 'message': register_200m,
+            'data': {'username': username, 'password': password}}
 
 ## getTrending
 getTrending_400_TP = {'status': 400, 'message': "Error, type must be either 'poll', 'topic', or 'all'."}
