@@ -7,7 +7,7 @@ from ..serializers import *
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-# Lists all posts of user
+# Get specific poll or topic
 class getPost(APIView):
     # GET request
     def get(self, request):

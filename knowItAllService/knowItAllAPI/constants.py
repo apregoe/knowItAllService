@@ -64,25 +64,19 @@ query_param = 'query'
 
 
 ### JsonResponse
-GET_400m = "Error, please use GET."
-GET_400 = {'status': 400, 'message': GET_400m}
-POST_400m = "Error, please use POST."
-POST_400 = {'status': 400, 'message': POST_400m}
-UNIQUE_400m = "Error: Data already exists!"
-UNIQUE_400 = {'status': 400, 'message': UNIQUE_400m}
+GET_400 = {'status': 400, 'message': "Error, please use GET."}
+POST_400 = {'status': 400, 'message': "Error, please use POST." }
+UNIQUE_400 = {'status': 400, 'message': "Error: Data already exists!" }
 def UNIQUE_400_EXISTS(data):
     return {'status': 400, 'message': "Error: " + data + " already exists!"}
 PASSWORD_400 = {'status': 400, 'message': "Error, user password not correct."}
 
 ## general
-USER_400m = "Error: user does not exist."
-USER_400 = {'status': 400, 'message': USER_400m }
-DATA_400m = "Error: data does not exist."
-DATA_400 = {'status': 400, 'message': DATA_400m }
+USER_400 = {'status': 400, 'message': "Error: user does not exist." }
+DATA_400 = {'status': 400, 'message': "Error: data does not exist." }
 def DATA_400_NOT_EXISTS(data):
     return {'message': "Error: " + data + " do/does not exist."}
-POLL_400m = "Error: poll does not exist."
-POLL_400 = {'status': 400, 'message': POLL_400m}
+POLL_400 = {'status': 400, 'message': "Error: poll does not exist." }
 
 
 ## authenticate
@@ -141,16 +135,15 @@ def createNotification_SUCCESS(username, type, text):
             'data': {'type': type, 'text': text }}
 
 ## editProfile
-editProfile_400_EXm = "Error, user already exists."
-editProfile_400_EX = {'status': 400, 'message': editProfile_400_EXm}
-editProfile_400_UPm = "Error, user password not correct."
-editProfile_400_UP = {'status': 400, 'message': editProfile_400_UPm}
-editProfile_400_INVm = "Error: user does not exist."
-editProfile_400_INV = {'status': 400, 'message': editProfile_400_INVm}
-editProfile_200m = "User logged in successfully."
-def login_200(username,password):
-    return {'status': 200, 'message': register_200m,
-            'data': {'username': username, 'password': password}}
+editProfile_400_EX = {'status': 400, 'message': "Error, user already exists." }
+editProfile_400_UP = {'status': 400, 'message': "Error, user password not correct." }
+editProfile_400_INV = {'status': 400, 'message': "Error: user does not exist." }
+def editProfile_200_UPD(username, newPassword):
+    return {'status': 200, 'message': "Successfully saved new password for user " + username,
+            'data': {'newPassword': newPassword} }
+def editProfile_200_EM(username, newPassword):
+    return {'status': 200, 'message': "Successfully sent email confirmation to update password.",
+            'data': {'username': username, 'newPassword': newPassword}}
 
 ## getTrending
 getTrending_400_TP = {'status': 400, 'message': "Error, type must be either 'poll', 'topic', or 'all'."}
@@ -165,25 +158,19 @@ login_400_UPm = "Error, user password not correct."
 login_400_UP = {'status': 400, 'message': login_400_UPm}
 login_400_INVm = "Error: user does not exist."
 login_400_INV = {'status': 400, 'message': login_400_INVm}
-login_200m = "User logged in successfully."
 def login_200(username,password):
-    return {'status': 200, 'message': register_200m,
+    return {'status': 200, 'message': "User logged in successfully.",
             'data': {'username': username, 'password': password}}
 
 ## vote
 vote_USERm = "A user voted on your poll!"
-vote_200_ADDm = "Successfully added vote for poll choice!"
-vote_200_FDm = "Vote found for user."
-vote_400_ALLm = "Error, please provide a username, pollText, and pollChoiceText."
-vote_404m = "No votes found for user on poll."
-deleteVote_200m = "Vote was successfully deleted!"
-deleteVoteFlag_400_InvalidFlagParamm = deleteVoteFlag_param + " should be either 1 or 0."
-vote_404 = {'status': 404, 'message': vote_404m }
-vote_400_ALL = {'status': 400, 'message': vote_400_ALLm }
-deleteVoteFlag_400_InvalidFlagParam = {'message': deleteVoteFlag_400_InvalidFlagParamm }
+vote_404 = {'status': 404, 'message': "No votes found for user on poll." }
+vote_400_ALL = {'status': 400, 'message': "Error, please provide a username, pollText, and pollChoiceText." }
+deleteVoteFlag_400_InvalidFlagParam = {'message': deleteVoteFlag_param + " should be either 1 or 0." }
 def vote_200_ADD(poll, pc):
-    return {'status': 200, 'message': vote_200_ADDm, 'data': {'poll': poll, 'pc': pc}}
-def vote_200_FD (pc): return {'status': 200, 'message': vote_200_FDm, 'pc': pc}
+    return {'status': 200, 'message': "Successfully added vote for poll choice!", 'data': {'poll': poll, 'pc': pc} }
+deleteVote_200m = "Vote was successfully deleted!"
+def vote_200_FD (pc): return {'status': 200, 'message': "Vote found for user.", 'pc': pc}
 def deleteVoteFlag_200_VoteDeleted (username, voteChoice):
     return {'status': 200, 'message': deleteVote_200m, 'data': {'username': username, 'vote': voteChoice}}
 
@@ -191,12 +178,9 @@ def deleteVoteFlag_200_VoteDeleted (username, voteChoice):
 search_400_QY = {'status': 400, 'message': "Error, please provide a query."}
 
 #register
-register_400_EXm = "Error, user already exists."
-register_400_EX = {'status': 400, 'message': register_400_EXm}
-register_400_UPm = "Please provide a username and password."
-register_400_UP = {'status': 400, 'message': register_400_UPm}
-register_400_INVm = "Error, username should be a valid USC email (Ex. tommy.trojan@usc.edu)."
-register_400_INV = {'status': 400, 'message': register_400_INVm}
+register_400_EX = {'status': 400, 'message': "Error, user already exists."}
+register_400_UP = {'status': 400, 'message': "Please provide a username and password."}
+register_400_INV = {'status': 400, 'message': "Error, username should be a valid USC email (Ex. tommy.trojan@usc.edu)."}
 register_200m = "Successfully created user."
 def register_200(username,password):
     return {'status': 200, 'message': register_200m,

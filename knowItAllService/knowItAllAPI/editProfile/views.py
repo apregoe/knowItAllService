@@ -14,6 +14,8 @@ import smtplib
 
 @csrf_exempt
 def editProfile(request):
+    if request.method != 'POST':
+        return JsonResponse(POST_400, status=400, safe=False)
 
     # Grab the query parameters; note that .GET must be used to grab parameters from the actual URL
     username = request.GET.get(username_param)
@@ -40,17 +42,10 @@ def editProfile(request):
                 sendEmail(username, knowItAllEmail, knowItAllEmailPassword, 'Know It All Email confirmation',
                           changePassMessage(username, newPassword))
 
-                return JsonResponse({'status': 200,
-                                     'message': "Successfully sent email confirmation to update password.",
-                                     'data': {'username': user.username, 'newPassword': newPassword}}
-                                    , status=200)
+                return JsonResponse(editProfile_200_EM(user.username, newPassword), status=200)
 
             # User does not exist
             except ObjectDoesNotExist:
-                return JsonResponse(USER_400, status=400)
-
-            # User doesn't exist
-            except IntegrityError:
                 return JsonResponse(USER_400, status=400)
 
         else:
@@ -61,15 +56,8 @@ def editProfile(request):
         u = UserProfile.objects.get(username=username)
         u.password = newPassword
         u.save()
-        return JsonResponse({'status': 200,
-                         'message': "Successfully saved new password for user " + username,
-                         'data': {'newPassword': newPassword }}
-                        , status=200)
+        return JsonResponse(editProfile_200_UPD(username, newPassword), status=200)
 
-    except IntegrityError:
-        return JsonResponse(UNIQUE_400, status=400)
-
-    # User does not exist
     except ObjectDoesNotExist:
         return JsonResponse(USER_400, status=400)
 

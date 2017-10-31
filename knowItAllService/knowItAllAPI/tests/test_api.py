@@ -19,7 +19,7 @@ class MyNotificationsTests(TestCase):
     def test_myNotifications(self):
         # Not using GET -> 400
         response = self.client.post('/api/myNotifications?username=test@usc.edu')
-        self.assertEqual(str(response.json()['message']), GET_400m)
+        self.assertEqual(response.json(), GET_400)
 
         # Base case not empty -> 200
         response = self.client.get('/api/myNotifications?username=test@usc.edu')
@@ -31,7 +31,7 @@ class MyNotificationsTests(TestCase):
 
         # User doesn't exist
         response = self.client.get('/api/myNotifications?username=a@usc.edu')
-        self.assertEqual(str(response.json()['message']), USER_400m)
+        self.assertEqual(response.json(), USER_400)
 
 
 class MyPostsTests(TestCase):
@@ -48,7 +48,7 @@ class MyPostsTests(TestCase):
     def test_myPosts(self):
         # Not using GET -> 400
         response = self.client.post('/api/myPosts?username=test2@usc.edu')
-        self.assertEqual(str(response.json()['message']), GET_400m)
+        self.assertEqual(response.json(), GET_400)
 
         # Base case not empty -> 200
         response = self.client.get('/api/myPosts?username=test@usc.edu')
@@ -60,33 +60,33 @@ class MyPostsTests(TestCase):
 
         # User doesn't exist
         response = self.client.get('/api/myPosts?username=a@usc.edu')
-        self.assertEqual(str(response.json()['message']), USER_400m)
+        self.assertEqual(response.json(), USER_400)
 
 
 class RegisterTests(TestCase):
     def setUp(self):
-        u = UserProfile.objects.create(username='test@usc.edu', password='test')
+        UserProfile.objects.create(username='test@usc.edu', password='test')
 
     def test_register(self):
         # Not using POST -> 400
         response = self.client.get('/api/register?username=test2@usc.edu&password=')
-        self.assertEqual(str(response.json()['message']), POST_400m)
+        self.assertEqual(response.json(), POST_400)
 
         # Base case -> 200
         response = self.client.post('/api/register?username=test2@usc.edu&password=')
-        self.assertEqual(str(response.json()['message']), register_200m)
+        self.assertEqual(response.json()['message'], register_200m)
 
         # Not all parameters provided -> 400
         response = self.client.post('/api/register?username=test@usc.edu')
-        self.assertEqual(str(response.json()['message']), register_400_UPm)
+        self.assertEqual(response.json(), register_400_UP)
 
         # Non-USC email -> 400
         response = self.client.post('/api/register?username=test@test.com&password=')
-        self.assertEqual(str(response.json()['message']), register_400_INVm)
+        self.assertEqual(response.json(), register_400_INV)
 
         # User already exists -> 400
         response = self.client.post('/api/register?username=test@usc.edu&password=')
-        self.assertEqual(str(response.json()['message']), register_400_EXm)
+        self.assertEqual(response.json(), register_400_EX)
 
 
 class VoteTests(TestCase):
@@ -105,39 +105,40 @@ class VoteTests(TestCase):
         # Not using POST -> 400
         response = self.client.get('/api/vote?username=test@usc.edu&pollText=pt'
                                     '&pollChoiceText=pc1')
-        self.assertEqual(str(response.json()['message']), POST_400m)
+        self.assertEqual(response.json(), POST_400)
 
         # Base case -> 200
         response = self.client.post('/api/vote?username=test@usc.edu&pollText=pt'
                                     '&pollChoiceText=pc1')
-        self.assertEqual(str(response.json()['message']), vote_200_ADDm)
+        self.assertEqual(response.json(), vote_200_ADD('pt','pc1'))
 
         # Not all parameters provided -> 400
         response = self.client.post('/api/vote?username=test@usc.edu')
-        self.assertEqual(str(response.json()['message']), vote_400_ALLm)
+        self.assertEqual(response.json(), vote_400_ALL)
 
         # User doesn't exist -> 400
         response = self.client.post('/api/vote?username=a@usc.edu&pollText=pt'
                                     '&pollChoiceText=pc1')
-        self.assertEqual(str(response.json()['message']), USER_400m)
+        self.assertEqual(response.json(), USER_400)
 
         # User did vote on this poll -> 200
         response = self.client.post('/api/vote?username=test@usc.edu&pollText=pt')
-        self.assertEqual(str(response.json()['message']), vote_200_FDm)
+        self.assertEqual(response.json(), vote_200_FD('pc1'))
 
         # User did not vote on this poll -> 404
         response = self.client.post('/api/vote?username=test2@usc.edu&pollText=pt')
-        self.assertEqual(str(response.json()['message']), vote_404m)
+        self.assertEqual(response.json(), vote_404)
 
         # Delete flag is true -> 200
         response = self.client.post('/api/vote?username=test@usc.edu&pollText=pt'
                                     '&pollChoiceText=pc1&deleteVote=1')
-        self.assertEqual(str(response.json()['message']), deleteVote_200m)
+        self.assertEqual(response.json()['message'], deleteVote_200m)
 
         # Delete flag is not a digit -> 400
         response = self.client.post('/api/vote?username=test@usc.edu&pollText=pt'
                                     '&pollChoiceText=pc1&deleteVote=string')
-        self.assertEqual(str(response.json()['message']), deleteVoteFlag_400_InvalidFlagParamm)
+        self.assertEqual(response.json(), deleteVoteFlag_400_InvalidFlagParam)
+
 
 #TODO do we need to test for the password?
 class AuthenticateTest(TestCase):
@@ -275,6 +276,7 @@ class CreateNotificationTest(TestCase):
                                     '&type='+self.type+'&text='+self.text+'&title='+self.title)
         self.assertEqual(response.json(), USER_400)
 
+
 class CreatePollTest(TestCase):
     def setUp(self):
         self.username = 'test@usc.edu'
@@ -391,7 +393,6 @@ class CreateReviewTest(TestCase):
         # response = self.client.post('/api/createReview?username='+self.username+'&topicTitle='+
         #                                     self.topicTitle+'&rating='+self.rating+'&comment='+self.comment)
         # self.assertEqual(response.json(), USER_400)
-
 
 
 class CreateTopicTest(TestCase):
@@ -512,73 +513,97 @@ class DeleteReview(TestCase):
                                     '&topicTitle=' + self.topicTitle)
         self.assertEqual(response.json(), deletePoll_USERNAMEISNOTOWNER(self.username2, self.topicTitle))
 
+
 class editProfile(TestCase):
     def setUp(self):
-        user = UserProfile.objects.create(username='test@usc.edu', password='test')
+        UserProfile.objects.create(username='test@usc.edu', password='test')
 
     def test_editProfile(self):
-        # Login not using POST -> 400
-        response = self.client.get('/api/editProfile?username=test@usc.edu&password=test')
-        self.assertEqual(str(response.json()['message']), POST_400m)
+        # Not using POST -> 400
+        response = self.client.get('/api/editProfile?username=test@usc.edu&newPassword=test')
+        self.assertEqual(response.json(), POST_400)
 
-        # Successful login case -> 200
-        response = self.client.post('/api/editProfile?username=test@usc.edu&password=test')
-        self.assertEqual(str(response.json()['message']), editProfile_200m)
+        # Base case -> 200
+        response = self.client.post('/api/editProfile?username=test@usc.edu&newPassword=test')
+        self.assertEqual(response.json(), editProfile_200_UPD('test@usc.edu', 'test'))
 
-        # Incorrect password -> 400
-        response = self.client.post('/api/editProfile?username=test@usc.edu')
-        self.assertEqual(str(response.json()['message']), editProfile_400_UPm)
+        # User doesn't exist -> 400
+        response = self.client.post('/api/editProfile?username=test2@usc.edu&newPassword=test')
+        self.assertEqual(response.json(), USER_400)
+
+        # # Successfully sent password change email -> 200
+        # response = self.client.post('/api/editProfile?username=test@usc.edu&newPassword=test2&forgot=1')
+        # self.assertEqual(response.json(), editProfile_200_EM('test@usc.edu', 'test2'))
 
         # Non-USC email -> 400
-        response = self.client.post('/api/editProfile?username=test@test.com&password=test')
-        self.assertEqual(str(response.json()['message']), login_400_INVm)
+        response = self.client.post('/api/editProfile?username=test@test.com&newPassword=test&forgot=1')
+        self.assertEqual(response.json(), register_400_INV)
+
 
 class getPost(TestCase):
     def setUp(self):
-        user = UserProfile.objects.create(username='test@usc.edu', password='test')
-        category = Category.objects.create(title='category1')
-        poll = Poll.objects.create(userID=user, categoryID=category, text="pt", numVotes=0,
-                                openForever=True, dayLimit=0)
-        PollChoice.objects.create(pollID=poll, text='poll_choice1')
-        PollChoice.objects.create(pollID=poll, text='poll_choice2')
-        PollChoice.objects.create(pollID=poll, text='poll_choice3')
+        u = UserProfile.objects.create(username='test@usc.edu', password='test')
+        c = Category.objects.create(title='c1')
+        Topic.objects.create(title='test_topic', category=c, avRating=0, numReviews=0)
+        poll = Poll.objects.create(userID=u, categoryID=c, text="pt", numVotes=0,
+                                   openForever=True, dayLimit=0)
+        PollChoice.objects.create(pollID=poll, text='pc1')
+        PollChoice.objects.create(pollID=poll, text='pc2')
+        PollChoice.objects.create(pollID=poll, text='pc3')
 
     def test_getPost(self):
-        # Check poll
-        response = self.client.get('/api/getPost?username=test@usc.edu&password=test')
+        # Not using GET -> 400
+        response = self.client.post('/api/getPost?type=topic&text=test_topic')
+        self.assertEqual(response.json(), GET_400)
+
+        # Base case getTopic -> 200
+        response = self.client.get('/api/getPost?type=topic&text=test_topic')
+        self.assertNotEqual(response.json()['topic'], [])
+
+        # Base case getPoll -> 200
+        response = self.client.get('/api/getPost?type=poll&text=pt')
+        self.assertNotEqual(response.json()['poll'], [])
+
+        # Incorrect type -> 400
+        response = self.client.get('/api/getPost?type=test&text=test_topic')
+        self.assertEqual(response.json(), getPost_400_TP)
+
+        # Data doesn't exist -> 400
+        response = self.client.get('/api/getPost?type=poll&text=test')
+        self.assertNotEqual(response.json(), DATA_400)
+
 
 class getTrending(TestCase):
     def setUp(self):
-        user = UserProfile.objects.create(username='test@usc.edu', password='test')
-        category = Category.objects.create(title='category1')
-        poll = Poll.objects.create(userID=user, categoryID=category, text="pt", numVotes=0,
+        u = UserProfile.objects.create(username='test@usc.edu', password='test')
+        c = Category.objects.create(title='c1')
+        self.t = Topic.objects.create(title='test_topic', category=c, avRating=0, numReviews=0)
+        poll = Poll.objects.create(userID=u, categoryID=c, text="pt", numVotes=0,
                                    openForever=True, dayLimit=0)
-        PollChoice.objects.create(pollID=poll, text='poll_choice1')
-        PollChoice.objects.create(pollID=poll, text='poll_choice2')
-        PollChoice.objects.create(pollID=poll, text='poll_choice3')
+        PollChoice.objects.create(pollID=poll, text='pc1')
 
     def test_getTrending(self):
-        # Check trending
-        response = self.client.get('/api/getTrending?username=test@usc.edu&password=test')
+        # Not using GET -> 400
+        response = self.client.post('/api/getTrending?type=all')
+        self.assertEqual(response.json(), GET_400)
 
-class Login(TestCase):
-    def setUp(self):
-        user = UserProfile.objects.create(username='test@usc.edu', password='test')
+        # Base case ALL -> 200
+        response = self.client.get('/api/getTrending?type=all')
+        self.assertNotEqual(response.json()['data'], [])
 
-    def test_login(self):
-        # Login not using POST -> 400
-        response = self.client.get('/api/login?username=test@usc.edu&password=test')
-        self.assertEqual(str(response.json()['message']), POST_400m)
+        # Base case topic -> 200
+        response = self.client.get('/api/getTrending?type=topic')
+        self.assertNotEqual(response.json()['data'], [])
 
-        # Successful login case -> 200
-        response = self.client.post('/api/login?username=test@usc.edu&password=test')
-        self.assertEqual(str(response.json()['message']), login_200m)
+        # Base case poll -> 200
+        response = self.client.get('/api/getTrending?type=poll')
+        self.assertNotEqual(response.json()['data'], [])
 
-        # Incorrect password -> 400
-        response = self.client.post('/api/login?username=test@usc.edu')
-        self.assertEqual(str(response.json()['message']), login_400_UPm)
+        # Incorrect type -> 400
+        response = self.client.get('/api/getTrending?type=test')
+        self.assertEqual(response.json(), getTrending_400_TP)
 
-        # Non-USC email -> 400
-        response = self.client.post('/api/login?username=test@test.com&password=test')
-        self.assertEqual(str(response.json()['message']), login_400_INVm)
-
+        # Data doesn't exist -> 200
+        self.t.delete()
+        response = self.client.get('/api/getTrending?type=topic')
+        self.assertEqual(response.json()['data'], [])
