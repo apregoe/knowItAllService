@@ -1,7 +1,6 @@
 from django.test import TestCase
 from ..constants import *
 from ..models import *
-import json
 
 '''
     In terminal, cd to 'knowItAllAPI' directory, then call 'python ../manage.py test'
@@ -531,9 +530,9 @@ class editProfile(TestCase):
         response = self.client.post('/api/editProfile?username=test2@usc.edu&newPassword=test')
         self.assertEqual(response.json(), USER_400)
 
-        # # Successfully sent password change email -> 200
-        # response = self.client.post('/api/editProfile?username=test@usc.edu&newPassword=test2&forgot=1')
-        # self.assertEqual(response.json(), editProfile_200_EM('test@usc.edu', 'test2'))
+        # Successfully sent password change email -> 200
+        response = self.client.post('/api/editProfile?username=test@usc.edu&newPassword=test2&forgot=1')
+        self.assertEqual(response.json(), editProfile_200_EM('test@usc.edu', 'test2'))
 
         # Non-USC email -> 400
         response = self.client.post('/api/editProfile?username=test@test.com&newPassword=test&forgot=1')
