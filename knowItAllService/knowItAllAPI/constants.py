@@ -145,6 +145,13 @@ def editProfile_200_EM(username, newPassword):
     return {'status': 200, 'message': "Successfully sent email confirmation to update password.",
             'data': {'username': username, 'newPassword': newPassword}}
 
+## editPost
+editPost_400_TP = {'status': 400, 'message': "Error, type must be either 'poll' or 'review'."}
+editPost_400_RV = {'status': 400, 'message': "Error, please provide a rating and comment."}
+def editPost_200_RV(username, rating, comment):
+    return {'status': 200, 'message': "Successfully updated review for user "+username+'!',
+            'data': {'newRating': rating, 'newComment': comment } }
+
 ## getTrending
 getTrending_400_TP = {'status': 400, 'message': "Error, type must be either 'poll', 'topic', or 'all'."}
 

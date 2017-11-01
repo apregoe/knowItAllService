@@ -19,6 +19,7 @@ urlpatterns = [
 
     url(r'^myPosts', include('knowItAllAPI.myPosts.urls')),
     url(r'^getPost', include('knowItAllAPI.getPost.urls')),
+    url(r'^editPost', include('knowItAllAPI.editPost.urls')),
     url(r'^getTrending', include('knowItAllAPI.getTrending.urls')),
 
     url(r'^myNotifications', include('knowItAllAPI.myNotifications.urls')),
