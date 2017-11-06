@@ -16,40 +16,41 @@ def search(request):
 
     # Grab the query parameters; note that .GET must be used to grab parameters from the actual URL
     query = request.GET.get(query_param)
-    searchByTag = (searchByTag_param)
+    searchByTag = request.GET.get(searchByTag_param)
 
     # Check if query provided
     if query is None:
         return JsonResponse(search_400_QY, status=400, safe=False)
 
     query = query.lower()
-    topics = None
-    polls = None
+    topics = []
+    polls = []
     dataCount = {}
     searchByTagFlag = False
 
     #if tag flag is set then search by tag
-    # if not(searchByTag is None):
-    #     if searchByTag.isdigit() and 0 <= int(searchByTag) <= 1:
-    #         searchByTag = int(searchByTag)
-    #         if searchByTag == 1:
-    #             searchByTagFlag = True
-    #             #get tagId
-    #             tagId = None
-    #             try:
-    #                 tagId = Tag.objects.get(title=query)
-    #             except ObjectDoesNotExist:
-    #                 return JsonResponse(searchByTag_400_TagDoesNotExists(query), status=400, safe=False)
-    #             #get all tag linkers with the value of tagId
-    #             allTagLinkers = TagLinker.objects.filter(tagID=tagId)
-    #             if not (allTagLinkers == None):
-    #                 for tagLinker in allTagLinkers:
-    #                     if(tagLinker.type == 'topic'):
-    #                         topic = Topic.object.get(tagLinker.topicID)
-    #                         topics.append(topic)
-    #                     else:
-    #                         poll = Poll.object.get(tagLinker.pollID)
-    #                         polls.append(poll)
+    if not(searchByTag is None):
+        if searchByTag.isdigit() and 0 <= int(searchByTag) <= 1:
+            searchByTag = int(searchByTag)
+            if searchByTag == 1:
+                searchByTagFlag = True
+                #get tagId
+                tagId = None
+                try:
+                    tagId = Tag.objects.get(title=query)
+                except ObjectDoesNotExist:
+                    return JsonResponse(searchByTag_400_TagDoesNotExists(query), status=400, safe=False)
+                #get all tag linkers with the value of tagId
+                allTagLinkers = TagLinker.objects.filter(tagID=tagId)
+                if not (allTagLinkers == None):
+                    for tagLinker in allTagLinkers:
+                        print(tagLinker)
+                        if(tagLinker.type == 'topic'):
+                            topic = Topic.objects.get(pk=tagLinker.topicID.pk)
+                            topics.append(topic)
+                        else:
+                            poll = Poll.objects.get(pk=tagLinker.pollID.pk)
+                            polls.append(poll)
 
     if not searchByTagFlag:
         if CATEGORIES.get(1).lower() in query:
