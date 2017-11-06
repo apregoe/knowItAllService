@@ -36,10 +36,12 @@ def createReview(request):
     anonymous = bool(anonymous)
 
     # Store poll into db
+    if anonymous == 1:
+        username = ""
     try:
         t = Topic.objects.get(title=topicTitle)
         userId=UserProfile.objects.get(username=username)
-        r = Review(userID=userId, topicID=t, rating=rating, comment=comment, anonymous=anonymous)
+        r = Review(userID=userId, topicID=t, rating=rating, comment=comment, username=username)
         r.save()
         # Update review value
         t.avRating = ((t.avRating * t.numReviews) + Decimal.from_float(rating))/(t.numReviews+1)

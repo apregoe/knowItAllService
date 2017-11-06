@@ -47,7 +47,7 @@ class Review(models.Model):
     rating = models.DecimalField(max_digits=2, decimal_places=1)
     comment = models.CharField(max_length=200, default='', null=True)
     dateCreated = models.DateTimeField(auto_now_add=True, null=True)
-    anonymous = models.BooleanField(default=False)
+    username = models.CharField(max_length=300, default='', unique=False)#if empty then it means anonymous
     def __str__(self):
         return self.topicID.title + " -- " + str(self.rating) + " brains"
     # User can only create one review per topic
