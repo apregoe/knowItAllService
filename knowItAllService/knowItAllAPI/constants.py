@@ -181,10 +181,10 @@ def vote_200_FD (pc): return {'status': 200, 'message': "Vote found for user.", 
 def deleteVoteFlag_200_VoteDeleted (username, voteChoice):
     return {'status': 200, 'message': deleteVote_200m, 'data': {'username': username, 'vote': voteChoice}}
 
-## query
+# query
 search_400_QY = {'status': 400, 'message': "Error, please provide a query."}
 
-#register
+# register
 register_400_EX = {'status': 400, 'message': "Error, user already exists."}
 register_400_UP = {'status': 400, 'message': "Please provide a username and password."}
 register_400_INV = {'status': 400, 'message': "Error, username should be a valid USC email (Ex. tommy.trojan@usc.edu)."}
@@ -193,7 +193,7 @@ def register_200(username,password):
     return {'status': 200, 'message': register_200m,
             'data': {'username': username, 'password': password}}
 
-#authenticate
+# authenticate
 def authenticate_UserLoggedIn(username, password):
     return {'status': 200,
             'message': "User logged in successfully.",
@@ -209,7 +209,11 @@ def authenticate_UserCheck(isVerified, username):
             'username': username,
             'authenticated': str(isVerified)}
 
-### Categories
+# createTags
+createTags_400_ALL = {'status': 400, 'message': "Error: please provide one or more tag titles."}
+createTags_200_ALL = {'status': 200, 'message': "Tag successfully stored in DB."}
+
+# Categories
 CATEGORIES = {
     1: "Academic",
     2: "Food",

@@ -94,3 +94,11 @@ class Notification(models.Model):
     def __str__(self):
         return self.userID.username + " -- " + self.text
 # Read/unread
+
+class Tag(models.Model):
+    title = models.CharField(max_length=200, default='')
+
+class AllTags(models.Model):
+    tagID = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    pollID = models.ForeignKey(Poll, on_delete=models.CASCADE)
+    topicID = models.ForeignKey(Topic, on_delete=models.CASCADE)
