@@ -16,9 +16,10 @@ def createReview(request):
     topicTitle = request.GET.get(topicTitle_param)
     rating = request.GET.get(rating_param)
     comment = request.GET.get(comment_param)
+    anonymous = request.GET.get(anonymous_param)
 
     # Check if all parameters provided
-    if any(var is None for var in [username, topicTitle, rating]):
+    if any(var is None for var in [username, topicTitle, rating, anonymous]):
         return JsonResponse(createReview_400_ALL, status=400, safe=False)
 
     # Check if rating is float
@@ -29,11 +30,16 @@ def createReview(request):
     if not (0 <= rating <= 5):
         return JsonResponse(createReview_400_RT, status=400, safe=False)
 
+    #check anonymous value is 1 or 0
+    if not anonymous.isdigit() or not (0 <= int(anonymous) <= 1):
+        return JsonResponse(createReview_400_ANONYMOUS_INVALID, status=400)
+    anonymous = bool(anonymous)
+
     # Store poll into db
     try:
         t = Topic.objects.get(title=topicTitle)
         userId=UserProfile.objects.get(username=username)
-        r = Review(userID=userId, topicID=t, rating=rating, comment=comment)
+        r = Review(userID=userId, topicID=t, rating=rating, comment=comment, anonymous=anonymous)
         r.save()
         # Update review value
         t.avRating = ((t.avRating * t.numReviews) + Decimal.from_float(rating))/(t.numReviews+1)

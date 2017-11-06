@@ -93,8 +93,9 @@ createCategory_SUCCESS = {'status': 200,
 
 
 ## createTopic
-createTopic_400_ALL = {'status': 400, 'message': "Error: please provide a title and category."}
+createTopic_400_ALL = {'status': 400, 'message': "Error: please provide a title, anonymous, and category."}
 createTopic_400_C = {'status': 400, 'message': "Error: category must be an int 1-4."}
+createTopic_400_ANONYMOUS_INVALID = {'status' : 400, 'message:' : 'Error, anonymous variable should be either 1 or 0'}
 def createTopic_SUCCESS(title, category, tags):
     return {'status': 200,
      'message': "Successfully created topic.",
@@ -119,12 +120,13 @@ deletePoll_200_SUCCESS = {'message': 'Poll deleted successfully'}
 deletePoll_400_UNSUCCESSFUL = {'message': 'No poll deleted. Reason: Not found'}
 
 ## createReview
-createReview_400_ALL = {'status': 400, 'message': "Error, please provide a username, topicTitle, and rating."}
+createReview_400_ALL = {'status': 400, 'message': "Error, please provide a username, topicTitle, anonymous, and rating."}
 createReview_400_RT = {'status': 400, 'message': "Error, rating must be a float between 0 and 5."}
 def createReview_SUCCESS(topicTitle, rating, comment):
     return {'status': 200,
      'message': "Successfully created review for topic " + topicTitle + ".",
      'data': {'rating': rating, 'comment': comment}}
+createReview_400_ANONYMOUS_INVALID = {'status' : 400, 'message:' : 'Error, anonymous variable should be either 1 or 0'}
 
 ## delete Review
 deleteReview_400_INVALID_PARAMS = {'message': 'Plase provide ' + username_param + ', and ' + topicTitle_param}
@@ -132,6 +134,7 @@ def  deleteReview_SUCESS(username, topicTitle):
     return {'message': 'Review about:' + topicTitle + ' from: ' + username + '. Has been deleted' }
 def deleteReview_USERHASNOREVIEWONTHISTOPIC(username, topicTitle):
     return {'message': username + ' has no review for ' + topicTitle}
+
 
 ## createNotification
 createNotification_400_ALL = {'status': 400, 'message': "Error, please provide a username, type, and text."}
