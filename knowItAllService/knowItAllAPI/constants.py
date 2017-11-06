@@ -62,6 +62,9 @@ comment_param = 'comment'
 ## Search
 query_param = 'query'
 
+## Tag
+tags_param = 'tags'
+
 
 ### JsonResponse
 GET_400 = {'status': 400, 'message': "Error, please use GET."}
@@ -91,19 +94,19 @@ createCategory_SUCCESS = {'status': 200,
 ## createTopic
 createTopic_400_ALL = {'status': 400, 'message': "Error: please provide a title and category."}
 createTopic_400_C = {'status': 400, 'message': "Error: category must be an int 1-4."}
-def createTopic_SUCCESS(title, category):
+def createTopic_SUCCESS(title, category, tags):
     return {'status': 200,
      'message': "Successfully created topic.",
-     'data': {'title': title, 'category': category}}
+     'data': {'title': title, 'category': category, 'tags': tags }}
 
 ## createPoll
 createPoll_400_ALL = {'status': 400, 'message': "Error, please provide username, text, choices, and openForever."}
 createPoll_400_OF = {'status': 400, 'message': "Error, openForever must be either 1 (true) or 0 (false)."}
 createPoll_400_DL = {'status': 400, 'message': "Error, dayLimit must be a value > 0."}
-def createPoll_SUCCESS(pollTitle, options):
+def createPoll_SUCCESS(pollTitle, choices, tags):
     return {'status': 200,
             'message': "Successfully created poll.",
-            'data': {'Poll': pollTitle, 'choices': options }}
+            'data': {'Poll': pollTitle, 'choices': choices, 'tags': tags }}
 
 ## deletePoll
 deletePoll_400_ALL = {'message': 'Please provide ' + username_param + ', and ' + pollText_param + ' parameters.'}
