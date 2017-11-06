@@ -31,7 +31,7 @@ def createPoll(request):
     #check anonymous value is 1 or 0
     if not anonymous.isdigit() or not (0 <= int(anonymous) <= 1):
         return JsonResponse(createPoll_400_Anonymous, status=400)
-    anonymous = bool(anonymous)
+    anonymous = int(anonymous)
 
     # Check if openForever is correct
     if not openForever.isdigit():
@@ -49,10 +49,12 @@ def createPoll(request):
         openForever = True if (openForever == 1) else False
 
     # Store poll into db
+    if anonymous == 1:
+        username = ""
     try:
         userId = UserProfile.objects.get(username=username)
         p = Poll(userID=userId, categoryID=Category.objects.get(pk=category),
-                 text=text, numVotes=0, openForever=openForever, dayLimit=dayLimit, anonymous= anonymous)
+                 text=text, numVotes=0, openForever=openForever, dayLimit=dayLimit, username=username)
         p.save()
         # Store each choice into db
         cList = choices.split(',')
