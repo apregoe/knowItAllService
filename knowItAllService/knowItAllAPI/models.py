@@ -100,10 +100,10 @@ class Tag(models.Model):
     def __str__(self):
         return self.title
 
-class AllTags(models.Model):
+class TagLinker(models.Model):
     tagID = models.ForeignKey(Tag, on_delete=models.CASCADE)
     type = models.CharField(max_length=200, default='') # topic, poll
     pollID = models.ForeignKey(Poll, on_delete=models.CASCADE)
     topicID = models.ForeignKey(Topic, on_delete=models.CASCADE)
     def __str__(self):
-        return self.type + " -- " + self.tagID.title
+        return self.tagID.title + " -- " + self.type

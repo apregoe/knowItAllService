@@ -92,7 +92,7 @@ createCategory_SUCCESS = {'status': 200,
 
 
 ## createTopic
-createTopic_400_ALL = {'status': 400, 'message': "Error: please provide a title and category."}
+createTopic_400_ALL = {'status': 400, 'message': "Error: please provide a title, category, and tags."}
 createTopic_400_C = {'status': 400, 'message': "Error: category must be an int 1-4."}
 def createTopic_SUCCESS(title, category, tags):
     return {'status': 200,
@@ -100,7 +100,7 @@ def createTopic_SUCCESS(title, category, tags):
      'data': {'title': title, 'category': category, 'tags': tags }}
 
 ## createPoll
-createPoll_400_ALL = {'status': 400, 'message': "Error, please provide username, text, choices, and openForever."}
+createPoll_400_ALL = {'status': 400, 'message': "Error, please provide username, text, choices, openForever, and tags."}
 createPoll_400_OF = {'status': 400, 'message': "Error, openForever must be either 1 (true) or 0 (false)."}
 createPoll_400_DL = {'status': 400, 'message': "Error, dayLimit must be a value > 0."}
 def createPoll_SUCCESS(pollTitle, choices, tags):

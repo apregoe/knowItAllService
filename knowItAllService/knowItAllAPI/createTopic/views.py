@@ -16,7 +16,7 @@ def createTopic(request):
     tags = request.GET.get(tags_param)
 
     # Check if all parameters provided
-    if title is None or category is None:
+    if any(var is None for var in [title, category, tags]):
         return JsonResponse(createTopic_400_ALL, status=400)
 
     # Check if category is valid
@@ -25,7 +25,7 @@ def createTopic(request):
     category = int(category)
 
     # Store data into db
-    topic = Topic(title=title,category=Category.objects.get(pk=category), avRating=0, numReviews=0)
+    topic = Topic(title=title, category=Category.objects.get(pk=category), avRating=0, numReviews=0)
     try:
         topic.save()
 
