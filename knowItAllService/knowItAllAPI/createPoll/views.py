@@ -18,7 +18,7 @@ def createPoll(request):
     openForever = request.GET.get(openForever_param)
     dayLimit = request.GET.get(dayLimit_param)
     anonymous = request.GET.get(anonymous_param)
-
+    tags = request.GET.get(tags_param)
     # Check if all parameters provided
     if any(var is None for var in [username, text, choices, openForever, anonymous_param]):
         return JsonResponse(createPoll_400_ALL, status=400, safe=False)
@@ -42,11 +42,11 @@ def createPoll(request):
         return JsonResponse(createPoll_400_OF, status=400, safe=False)
 
     # Check if dayLimit is filled out correctly
-    elif openForever == 0 and (dayLimit == None or not dayLimit.isdigit() or int(dayLimit) < 1):
+    elif openForever == 0 and (dayLimit is None or not dayLimit.isdigit() or int(dayLimit) < 1):
         return JsonResponse(createPoll_400_DL, status=400, safe=False)
     else:
         dayLimit = 0
-        openForever = True if openForever==1 else False
+        openForever = True if (openForever == 1) else False
 
     # Store poll into db
     try:
@@ -60,7 +60,22 @@ def createPoll(request):
             c = PollChoice(pollID=p, text=choice)
             c.save()
 
-        return JsonResponse(createPoll_SUCCESS(p.text, cList) , status=200)
+        # Store each tag into db
+        tList = tags.split(',')
+        for tag in tList:
+            t = Tag.objects.filter(title=tag)
+            # Tag doesn't exist in db yet
+            if len(t) == 0:
+                t = Tag(title=tag)
+                t.save()
+            else:
+                t = t.first()
+
+            at = AllTags(tagID=t, type='poll', pollID=p)
+            at.save()
+
+        return JsonResponse(createPoll_SUCCESS(p.text, cList, tList), status=200)
+
     # Data already exists
     except IntegrityError:
             return JsonResponse(UNIQUE_400, status=400)

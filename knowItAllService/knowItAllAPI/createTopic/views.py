@@ -1,6 +1,6 @@
 from django.http import JsonResponse
 from django.db import IntegrityError
-from .models import *
+from ..models import *
 from ..constants import *
 from django.views.decorators.csrf import csrf_exempt
 
@@ -13,9 +13,10 @@ def createTopic(request):
     # Grab the query parameters; note that .GET must be used to grab parameters from the actual URL
     title = request.GET.get(title_param)
     category = request.GET.get(category_param)
+    tags = request.GET.get(tags_param)
 
     # Check if all parameters provided
-    if (title==None or category==None):
+    if title is None or category is None:
         return JsonResponse(createTopic_400_ALL, status=400)
 
     # Check if category is valid
@@ -24,11 +25,25 @@ def createTopic(request):
     category = int(category)
 
     # Store data into db
-    t = Topic(title=title,category=Category.objects.get(pk=category), avRating=0, numReviews=0)
+    topic = Topic(title=title,category=Category.objects.get(pk=category), avRating=0, numReviews=0)
     try:
-        t.save()
-        return JsonResponse(createTopic_SUCCESS(t.title, CATEGORIES.get(category))
-                        , status=200)
+        topic.save()
+
+        # Store each tag into db
+        tList = tags.split(',')
+        for tag in tList:
+            t = Tag.objects.filter(title=tag)
+            # Tag doesn't exist in db yet
+            if len(t) == 0:
+                t = Tag(title=tag)
+                t.save()
+            else:
+                t = t.first()
+
+            at = AllTags(tagID=t, type='topic', topicID=topic)
+            at.save()
+
+        return JsonResponse(createTopic_SUCCESS(t.title, CATEGORIES.get(category), tList), status=200)
 
     except IntegrityError:
         return JsonResponse(UNIQUE_400, status=400)

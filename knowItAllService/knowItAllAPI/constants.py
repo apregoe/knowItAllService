@@ -62,8 +62,13 @@ comment_param = 'comment'
 ## Search
 query_param = 'query'
 
+<<<<<<< HEAD
 ## anonymous
 anonymous_param = 'anonymous'
+=======
+## Tag
+tags_param = 'tags'
+>>>>>>> 730426eb9a3f3f5b263363e84a97013ea75d2348
 
 
 ### JsonResponse
@@ -94,20 +99,20 @@ createCategory_SUCCESS = {'status': 200,
 ## createTopic
 createTopic_400_ALL = {'status': 400, 'message': "Error: please provide a title and category."}
 createTopic_400_C = {'status': 400, 'message': "Error: category must be an int 1-4."}
-def createTopic_SUCCESS(title, category):
+def createTopic_SUCCESS(title, category, tags):
     return {'status': 200,
      'message': "Successfully created topic.",
-     'data': {'title': title, 'category': category}}
+     'data': {'title': title, 'category': category, 'tags': tags }}
 
 ## createPoll
 createPoll_400_ALL = {'status': 400, 'message': "Error, please provide username, text, choices, anonymous, and openForever."}
 createPoll_400_OF = {'status': 400, 'message': "Error, openForever must be either 1 (true) or 0 (false)."}
 createPoll_400_DL = {'status': 400, 'message': "Error, dayLimit must be a value > 0."}
 createPoll_400_Anonymous = {'status' : 400, 'message:' : 'Error, anonymous variable should be either 1 or 0'}
-def createPoll_SUCCESS(pollTitle, options):
+def createPoll_SUCCESS(pollTitle, choices, tags):
     return {'status': 200,
             'message': "Successfully created poll.",
-            'data': {'Poll': pollTitle, 'choices': options }}
+            'data': {'Poll': pollTitle, 'choices': choices, 'tags': tags }}
 
 
 ## deletePoll
