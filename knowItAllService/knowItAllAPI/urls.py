@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^createTopic', include('knowItAllAPI.createTopic.urls')),
     url(r'^createReview', include('knowItAllAPI.createReview.urls')),
     url(r'^createNotification', include('knowItAllAPI.createNotification.urls')),
+    url(r'^createTags', include('knowItAllAPI.createTags.urls')),
     url(r'^vote', include('knowItAllAPI.vote.urls')),
 
     url(r'^myPosts', include('knowItAllAPI.myPosts.urls')),

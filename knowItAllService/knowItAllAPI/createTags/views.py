@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
 # https://stackoverflow.com/a/3711911
-def createTag(request):
+def createTags(request):
     if request.method != "POST":
         return JsonResponse(POST_400, status=400)
 
@@ -14,7 +14,7 @@ def createTag(request):
     title = request.GET.get(title_param)
 
     # Check if all parameters provided
-    if (title==None):
+    if (title is None):
         return JsonResponse(createTags_400_ALL, status=400)
 
     # Splitting string into the individual tags

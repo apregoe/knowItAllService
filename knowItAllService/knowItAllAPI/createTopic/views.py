@@ -17,7 +17,7 @@ def createTopic(request):
     anonymous = request.GET.get(anonymous_param)
 
     # Check if all parameters provided
-    if title is None or category is None or anonymous is None:
+    if any(var is None for var in [title, category, tags, anonymous]):
         return JsonResponse(createTopic_400_ALL, status=400)
 
     # Check if category is valid
@@ -34,7 +34,7 @@ def createTopic(request):
     topic = Topic(title=title,category=Category.objects.get(pk=category), avRating=0, numReviews=0, anonymous=anonymous)
     try:
         topic.save()
-
+        
         # Store each tag into db
         tList = tags.split(',')
         for tag in tList:
@@ -46,8 +46,13 @@ def createTopic(request):
             else:
                 t = t.first()
 
-            at = AllTags(tagID=t, type='topic', topicID=topic)
-            at.save()
+            tl = TagLinker.objects.filter(tagID=t, type='topic', topicID=topic)
+            if len(tl) == 0:
+                tl = TagLinker(tagID=t, type='topic', topicID=topic)
+                tl.save()
+            else:
+                tl = tl.first()
+            tl.save()
 
         return JsonResponse(createTopic_SUCCESS(t.title, CATEGORIES.get(category), tList), status=200)
 

@@ -20,7 +20,7 @@ def createPoll(request):
     anonymous = request.GET.get(anonymous_param)
     tags = request.GET.get(tags_param)
     # Check if all parameters provided
-    if any(var is None for var in [username, text, choices, openForever, anonymous_param]):
+    if any(var is None for var in [username, text, choices, openForever, anonymous_param, tags]):
         return JsonResponse(createPoll_400_ALL, status=400, safe=False)
 
     # Check if category is valid
