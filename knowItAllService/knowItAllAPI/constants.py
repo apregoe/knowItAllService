@@ -62,14 +62,10 @@ comment_param = 'comment'
 ## Search
 query_param = 'query'
 
-<<<<<<< HEAD
 ## anonymous
 anonymous_param = 'anonymous'
-=======
 ## Tag
 tags_param = 'tags'
->>>>>>> 730426eb9a3f3f5b263363e84a97013ea75d2348
-
 
 ### JsonResponse
 GET_400 = {'status': 400, 'message': "Error, please use GET."}
