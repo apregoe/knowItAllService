@@ -40,8 +40,13 @@ def createTopic(request):
             else:
                 t = t.first()
 
-            at = AllTags(tagID=t, type='topic', topicID=topic)
-            at.save()
+            tl = TagLinker.objects.filter(tagID=t, type='topic', topicID=topic)
+            if len(tl) == 0:
+                tl = TagLinker(tagID=t, type='topic', topicID=topic)
+                tl.save()
+            else:
+                tl = tl.first()
+            tl.save()
 
         return JsonResponse(createTopic_SUCCESS(t.title, CATEGORIES.get(category), tList), status=200)
 
