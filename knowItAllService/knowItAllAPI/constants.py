@@ -61,6 +61,7 @@ comment_param = 'comment'
 
 ## Search
 query_param = 'query'
+searchByTag_param = 'searchByTag'
 
 ## anonymous
 anonymous_param = 'anonymous'
@@ -93,7 +94,7 @@ createCategory_SUCCESS = {'status': 200,
 
 
 ## createTopic
-createTopic_400_ALL = {'status': 400, 'message': "Error: please provide a title, category, anonymous, and tags."}
+createTopic_400_ALL = {'status': 400, 'message': "Error: please provide a title, category, username, and tags."}
 createTopic_400_C = {'status': 400, 'message': "Error: category must be an int 1-4."}
 createTopic_400_ANONYMOUS_INVALID = {'status' : 400, 'message:' : 'Error, anonymous variable should be either 1 or 0'}
 def createTopic_SUCCESS(title, category, tags):

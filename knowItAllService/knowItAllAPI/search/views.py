@@ -16,6 +16,7 @@ def search(request):
 
     # Grab the query parameters; note that .GET must be used to grab parameters from the actual URL
     query = request.GET.get(query_param)
+    searchByTag = (searchByTag_param)
 
     # Check if query provided
     if query is None:
@@ -24,8 +25,16 @@ def search(request):
     query = query.lower()
     topics = None
     polls = None
-    categoryData = None
     dataCount = {}
+
+    #if tag flag is set then search by tag
+    if not(searchByTag is None):
+        if searchByTag.isdigit() and 0 <= int(searchByTag) <= 1:
+            searchByTag = int(searchByTag)
+            if searchByTag == 1:
+                return JsonResponse(search_400_QY, status=400, safe=False)
+
+
 
     if CATEGORIES.get(1).lower() in query:
         query = query.replace(CATEGORIES.get(1), '')
@@ -110,3 +119,6 @@ def search(request):
 
     return JsonResponse({'status': 200,
                          'data': dataList}, status=200)
+
+def searchByTag(tag):
+    return "Bro"

@@ -37,7 +37,7 @@ class Topic(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     avRating = models.DecimalField(max_digits=2, decimal_places=1) # Ex. 4.5 stars
     numReviews = models.IntegerField()
-    anonymous = models.BooleanField(default=False)
+    username = models.CharField(max_length=50, default='', unique=False)
     def __str__(self):
         return self.title
 

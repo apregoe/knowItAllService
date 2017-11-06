@@ -15,9 +15,10 @@ def createTopic(request):
     category = request.GET.get(category_param)
     tags = request.GET.get(tags_param)
     anonymous = request.GET.get(anonymous_param)
+    username = request.GET.get(username_param)
 
     # Check if all parameters provided
-    if any(var is None for var in [title, category, tags, anonymous]):
+    if any(var is None for var in [title, category, tags, anonymous, username]):
         return JsonResponse(createTopic_400_ALL, status=400)
 
     # Check if category is valid
@@ -28,10 +29,13 @@ def createTopic(request):
     # check anonymous value is 1 or 0
     if not anonymous.isdigit() or not (0 <= int(anonymous) <= 1):
         return JsonResponse(createTopic_400_ANONYMOUS_INVALID, status=400)
-    anonymous = bool(anonymous)
+    anonymous = int(anonymous)
+
+    if anonymous == True:
+        username = ""
 
     # Store data into db
-    topic = Topic(title=title,category=Category.objects.get(pk=category), avRating=0, numReviews=0, anonymous=anonymous)
+    topic = Topic(title=title,category=Category.objects.get(pk=category), avRating=0, numReviews=0, username=username)
     try:
         topic.save()
         
