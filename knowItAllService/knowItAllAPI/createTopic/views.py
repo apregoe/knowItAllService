@@ -28,35 +28,24 @@ def createTopic(request):
     topic = Topic(title=title, category=Category.objects.get(pk=category), avRating=0, numReviews=0)
     try:
         topic.save()
-        print(1)
+        
         # Store each tag into db
         tList = tags.split(',')
         for tag in tList:
             t = Tag.objects.filter(title=tag)
-            print(2)
-
             # Tag doesn't exist in db yet
             if len(t) == 0:
                 t = Tag(title=tag)
-                print(3)
-
                 t.save()
             else:
                 t = t.first()
-                print(4)
 
             tl = TagLinker.objects.filter(tagID=t, type='topic', topicID=topic)
-            print(5)
-
             if len(tl) == 0:
-                tl = TagLinker(tagID=t, type='topic', topicID=topic, pollID=None)
+                tl = TagLinker(tagID=t, type='topic', topicID=topic)
                 tl.save()
-                print(6)
-
             else:
                 tl = tl.first()
-                print(7)
-
             tl.save()
 
         return JsonResponse(createTopic_SUCCESS(t.title, CATEGORIES.get(category), tList), status=200)
