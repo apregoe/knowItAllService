@@ -37,6 +37,7 @@ class Topic(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     avRating = models.DecimalField(max_digits=2, decimal_places=1) # Ex. 4.5 stars
     numReviews = models.IntegerField()
+    anonymous = models.BooleanField(default=False)
     def __str__(self):
         return self.title
 
@@ -46,6 +47,7 @@ class Review(models.Model):
     rating = models.DecimalField(max_digits=2, decimal_places=1)
     comment = models.CharField(max_length=200, default='', null=True)
     dateCreated = models.DateTimeField(auto_now_add=True, null=True)
+    anonymous = models.BooleanField(default=False)
     def __str__(self):
         return self.topicID.title + " -- " + str(self.rating) + " brains"
     # User can only create one review per topic
@@ -63,6 +65,7 @@ class Poll(models.Model):
     dayLimit = models.IntegerField(default=0) # if False, many days will the poll be open for?
     dateCreated = models.DateTimeField(auto_now_add=True, null=True)
     startTimeStamp = models.DateTimeField(auto_now_add=True, null=True)
+    anonymous = models.BooleanField(default=False)
     # endTimeStamp = models.DateTimeField(default=setDeadline(numDays)) if endTime else None
     # https://stackoverflow.com/a/15289461
     def __str__(self):

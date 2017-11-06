@@ -3,15 +3,15 @@
 #email certifications
 # knowItAllDomain = "http://127.0.0.1:8000/api"
 # knowItAllDomain = "https://0a79ab09.ngrok.io/api"
-knowItAllDomain = "knowItAllLive-dev.us-west-1.elasticbeanstalk.com/api"
+knowItAllDomain = "knowItAllLive-dev.us-west-1.elasticbeanstalk.com"
 knowItAllEmail = 'knowitallusc310@gmail.com'
 knowItAllEmailPassword = 'H52-J5K-Wm7-WFb'
 def confirmationMessage(username):
     return "Hi "+username[:-8].capitalize()+"!\n\nThank you for signing up for KnowItAll! Please confirm your email clicking the following link:\n\n " \
-           +knowItAllDomain+"/authenticate?username="+username+"\n\nBest,\nKnowItAll Team"
+           +knowItAllDomain+"/api/authenticate?username="+username+"\n\nBest,\nKnowItAll Team"
 def changePassMessage(username, newPassword):
     return "Hi "+username[:-8].capitalize()+"!\n\nPlease confirm your password change by clicking the following link:\n\n " \
-           +knowItAllDomain+"/editProfile?username="+username+"&newPassword="+newPassword+"\n\nBest,\nKnowItAll Team"
+           +knowItAllDomain+"/api/editProfile?username="+username+"&newPassword="+newPassword+"\n\nBest,\nKnowItAll Team"
 
 ## User
 username_param = 'username'
@@ -62,9 +62,10 @@ comment_param = 'comment'
 ## Search
 query_param = 'query'
 
+## anonymous
+anonymous_param = 'anonymous'
 ## Tag
 tags_param = 'tags'
-
 
 ### JsonResponse
 GET_400 = {'status': 400, 'message': "Error, please use GET."}
@@ -100,13 +101,15 @@ def createTopic_SUCCESS(title, category, tags):
      'data': {'title': title, 'category': category, 'tags': tags }}
 
 ## createPoll
-createPoll_400_ALL = {'status': 400, 'message': "Error, please provide username, text, choices, openForever, and tags."}
+createPoll_400_ALL = {'status': 400, 'message': "Error, please provide username, text, choices, anonymous, openForever, and tags."}
 createPoll_400_OF = {'status': 400, 'message': "Error, openForever must be either 1 (true) or 0 (false)."}
 createPoll_400_DL = {'status': 400, 'message': "Error, dayLimit must be a value > 0."}
+createPoll_400_Anonymous = {'status' : 400, 'message:' : 'Error, anonymous variable should be either 1 or 0'}
 def createPoll_SUCCESS(pollTitle, choices, tags):
     return {'status': 200,
             'message': "Successfully created poll.",
             'data': {'Poll': pollTitle, 'choices': choices, 'tags': tags }}
+
 
 ## deletePoll
 deletePoll_400_ALL = {'message': 'Please provide ' + username_param + ', and ' + pollText_param + ' parameters.'}

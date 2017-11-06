@@ -17,16 +17,21 @@ def createPoll(request):
     choices = request.GET.get(choices_param)
     openForever = request.GET.get(openForever_param)
     dayLimit = request.GET.get(dayLimit_param)
+    anonymous = request.GET.get(anonymous_param)
     tags = request.GET.get(tags_param)
-
     # Check if all parameters provided
-    if any(var is None for var in [username, text, choices, openForever, tags]):
+    if any(var is None for var in [username, text, choices, openForever, anonymous_param, tags]):
         return JsonResponse(createPoll_400_ALL, status=400, safe=False)
 
     # Check if category is valid
     if not category.isdigit() or not (1 <= int(category) <= 4):
         return JsonResponse(createTopic_400_C, status=400)
     category = int(category)
+
+    #check anonymous value is 1 or 0
+    if not anonymous.isdigit() or not (0 <= int(anonymous) <= 1):
+        return JsonResponse(createPoll_400_Anonymous, status=400)
+    anonymous = bool(anonymous)
 
     # Check if openForever is correct
     if not openForever.isdigit():
@@ -47,7 +52,7 @@ def createPoll(request):
     try:
         userId = UserProfile.objects.get(username=username)
         p = Poll(userID=userId, categoryID=Category.objects.get(pk=category),
-                 text=text, numVotes=0, openForever=openForever, dayLimit=dayLimit)
+                 text=text, numVotes=0, openForever=openForever, dayLimit=dayLimit, anonymous= anonymous)
         p.save()
         # Store each choice into db
         cList = choices.split(',')
