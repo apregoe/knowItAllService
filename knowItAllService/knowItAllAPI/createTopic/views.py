@@ -30,15 +30,15 @@ def createTopic(request):
     if not anonymous.isdigit() or not (0 <= int(anonymous) <= 1):
         return JsonResponse(createTopic_400_ANONYMOUS_INVALID, status=400)
     anonymous = int(anonymous)
-
-    if anonymous == True:
-        username = ""
+    anonymousToStore = False
+    if anonymous == 1:
+        anonymousToStore = True
 
     # Store data into db
-    topic = Topic(title=title,category=Category.objects.get(pk=category), avRating=0, numReviews=0, username=username)
+    topic = Topic(title=title,category=Category.objects.get(pk=category), avRating=0, numReviews=0, username=username, anonymous=anonymousToStore)
     try:
         topic.save()
-        
+
         # Store each tag into db
         tList = tags.split(',')
         for tag in tList:

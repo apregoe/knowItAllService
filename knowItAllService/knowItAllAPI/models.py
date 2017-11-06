@@ -37,7 +37,9 @@ class Topic(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     avRating = models.DecimalField(max_digits=2, decimal_places=1) # Ex. 4.5 stars
     numReviews = models.IntegerField()
-    username = models.CharField(max_length=50, default='', unique=False)#if empty then it means anonymous
+    username = models.CharField(max_length=50, default='', unique=False)
+    anonymous = models.BooleanField(default=True)
+
     def __str__(self):
         return self.title
 
@@ -47,7 +49,8 @@ class Review(models.Model):
     rating = models.DecimalField(max_digits=2, decimal_places=1)
     comment = models.CharField(max_length=200, default='', null=True)
     dateCreated = models.DateTimeField(auto_now_add=True, null=True)
-    username = models.CharField(max_length=300, default='', unique=False)#if empty then it means anonymous
+    username = models.CharField(max_length=300, default='', unique=False)
+    anonymous = models.BooleanField(default=True)
     def __str__(self):
         return self.topicID.title + " -- " + str(self.rating) + " brains"
     # User can only create one review per topic
@@ -65,7 +68,8 @@ class Poll(models.Model):
     dayLimit = models.IntegerField(default=0) # if False, many days will the poll be open for?
     dateCreated = models.DateTimeField(auto_now_add=True, null=True)
     startTimeStamp = models.DateTimeField(auto_now_add=True, null=True)
-    username = models.CharField(max_length=300, default='', unique=False)#if empty then it means anonymous
+    username = models.CharField(max_length=300, default='', unique=False)
+    anonymous = models.BooleanField(default=True)
     # endTimeStamp = models.DateTimeField(default=setDeadline(numDays)) if endTime else None
     # https://stackoverflow.com/a/15289461
     def __str__(self):
@@ -74,7 +78,7 @@ class Poll(models.Model):
 # https://docs.djangoproject.com/en/1.11/intro/tutorial02/
 class PollChoice(models.Model):
     pollID = models.ForeignKey(Poll, on_delete=models.CASCADE)
-    text = models.CharField(max_length=200, default='', unique=True)
+    text = models.CharField(max_length=200, default='')
     numVotes = models.IntegerField(default=0)
     def __str__(self):
         return self.pollID.text + " -- " + self.text
@@ -99,7 +103,7 @@ class Notification(models.Model):
 # Read/unread
 
 class Tag(models.Model):
-    title = models.CharField(max_length=200, default='')
+    title = models.CharField(max_length=200, default='', unique=True)
     def __str__(self):
         return self.title
 

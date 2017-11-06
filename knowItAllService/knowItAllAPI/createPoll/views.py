@@ -28,11 +28,6 @@ def createPoll(request):
         return JsonResponse(createTopic_400_C, status=400)
     category = int(category)
 
-    #check anonymous value is 1 or 0
-    if not anonymous.isdigit() or not (0 <= int(anonymous) <= 1):
-        return JsonResponse(createPoll_400_Anonymous, status=400)
-    anonymous = int(anonymous)
-
     # Check if openForever is correct
     if not openForever.isdigit():
         return JsonResponse(createPoll_400_OF, status=400, safe=False)
@@ -48,13 +43,18 @@ def createPoll(request):
         dayLimit = 0
         openForever = True if (openForever == 1) else False
 
+    # check anonymous value is 1 or 0
+    if not anonymous.isdigit() or not (0 <= int(anonymous) <= 1):
+        return JsonResponse(createPoll_400_Anonymous, status=400)
+    anonymous = int(anonymous)
+    anonymousToStore = False
     # Store poll into db
     if anonymous == 1:
-        username = ""
+        anonymousToStore = True
     try:
         userId = UserProfile.objects.get(username=username)
         p = Poll(userID=userId, categoryID=Category.objects.get(pk=category),
-                 text=text, numVotes=0, openForever=openForever, dayLimit=dayLimit, username=username)
+                 text=text, numVotes=0, openForever=openForever, dayLimit=dayLimit, username=username, anonymous=anonymousToStore)
         p.save()
         # Store each choice into db
         cList = choices.split(',')
@@ -73,7 +73,7 @@ def createPoll(request):
             else:
                 t = t.first()
 
-            at = AllTags(tagID=t, type='poll', pollID=p)
+            at = TagLinker(tagID=t, type='poll', pollID=p)
             at.save()
 
         return JsonResponse(createPoll_SUCCESS(p.text, cList, tList), status=200)

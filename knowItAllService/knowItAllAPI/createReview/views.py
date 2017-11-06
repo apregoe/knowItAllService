@@ -33,15 +33,16 @@ def createReview(request):
     #check anonymous value is 1 or 0
     if not anonymous.isdigit() or not (0 <= int(anonymous) <= 1):
         return JsonResponse(createReview_400_ANONYMOUS_INVALID, status=400)
-    anonymous = bool(anonymous)
+    anonymous = int(anonymous)
 
+    anonymousToStore = False
     # Store poll into db
     if anonymous == 1:
-        username = ""
+        anonymousToStore = True
     try:
         t = Topic.objects.get(title=topicTitle)
         userId=UserProfile.objects.get(username=username)
-        r = Review(userID=userId, topicID=t, rating=rating, comment=comment, username=username)
+        r = Review(userID=userId, topicID=t, rating=rating, comment=comment, username=username, anonymous=anonymousToStore)
         r.save()
         # Update review value
         t.avRating = ((t.avRating * t.numReviews) + Decimal.from_float(rating))/(t.numReviews+1)

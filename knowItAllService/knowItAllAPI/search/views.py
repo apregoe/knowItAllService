@@ -26,32 +26,48 @@ def search(request):
     topics = None
     polls = None
     dataCount = {}
+    searchByTagFlag = False
 
     #if tag flag is set then search by tag
-    if not(searchByTag is None):
-        if searchByTag.isdigit() and 0 <= int(searchByTag) <= 1:
-            searchByTag = int(searchByTag)
-            if searchByTag == 1:
-                return JsonResponse(search_400_QY, status=400, safe=False)
+    # if not(searchByTag is None):
+    #     if searchByTag.isdigit() and 0 <= int(searchByTag) <= 1:
+    #         searchByTag = int(searchByTag)
+    #         if searchByTag == 1:
+    #             searchByTagFlag = True
+    #             #get tagId
+    #             tagId = None
+    #             try:
+    #                 tagId = Tag.objects.get(title=query)
+    #             except ObjectDoesNotExist:
+    #                 return JsonResponse(searchByTag_400_TagDoesNotExists(query), status=400, safe=False)
+    #             #get all tag linkers with the value of tagId
+    #             allTagLinkers = TagLinker.objects.filter(tagID=tagId)
+    #             if not (allTagLinkers == None):
+    #                 for tagLinker in allTagLinkers:
+    #                     if(tagLinker.type == 'topic'):
+    #                         topic = Topic.object.get(tagLinker.topicID)
+    #                         topics.append(topic)
+    #                     else:
+    #                         poll = Poll.object.get(tagLinker.pollID)
+    #                         polls.append(poll)
 
-
-
-    if CATEGORIES.get(1).lower() in query:
-        query = query.replace(CATEGORIES.get(1), '')
-        topics = Topic.objects.filter(category=Category.objects.get(pk=1))
-        polls = Poll.objects.filter(categoryID=Category.objects.get(pk=1))
-    elif CATEGORIES.get(2).lower() in query:
-        query = query.replace(CATEGORIES.get(2), '')
-        topics = Topic.objects.filter(category=Category.objects.get(pk=2))
-        polls = Poll.objects.filter(categoryID=Category.objects.get(pk=2))
-    elif CATEGORIES.get(3).lower() in query:
-        query = query.replace(CATEGORIES.get(3), '')
-        topics = Topic.objects.filter(category=Category.objects.get(pk=3))
-        polls = Poll.objects.filter(categoryID=Category.objects.get(pk=3))
-    elif CATEGORIES.get(4).lower() in query:
-        query = query.replace(CATEGORIES.get(4), '')
-        topics = Topic.objects.filter(category=Category.objects.get(pk=4))
-        polls = Poll.objects.filter(categoryID=Category.objects.get(pk=4))
+    if not searchByTagFlag:
+        if CATEGORIES.get(1).lower() in query:
+            query = query.replace(CATEGORIES.get(1), '')
+            topics = Topic.objects.filter(category=Category.objects.get(pk=1))
+            polls = Poll.objects.filter(categoryID=Category.objects.get(pk=1))
+        elif CATEGORIES.get(2).lower() in query:
+            query = query.replace(CATEGORIES.get(2), '')
+            topics = Topic.objects.filter(category=Category.objects.get(pk=2))
+            polls = Poll.objects.filter(categoryID=Category.objects.get(pk=2))
+        elif CATEGORIES.get(3).lower() in query:
+            query = query.replace(CATEGORIES.get(3), '')
+            topics = Topic.objects.filter(category=Category.objects.get(pk=3))
+            polls = Poll.objects.filter(categoryID=Category.objects.get(pk=3))
+        elif CATEGORIES.get(4).lower() in query:
+            query = query.replace(CATEGORIES.get(4), '')
+            topics = Topic.objects.filter(category=Category.objects.get(pk=4))
+            polls = Poll.objects.filter(categoryID=Category.objects.get(pk=4))
 
     # Add all topics underneath selected category to dataCount
     if topics is not None:
@@ -69,31 +85,31 @@ def search(request):
             pollID = poll['id']
             dataCount['poll' + str(pollID)] = 1  # 'Hit' for the first time
 
-    queryList = query.split(' ')
+    if not searchByTagFlag:
+        queryList = query.split(' ')
+        for query in queryList:
+            if query == '':
+                continue
 
-    for query in queryList:
-        if query == '':
-            continue
+            # Query through all topics
+            topics = Topic.objects.filter(title__icontains=query)
+            topicsSerializer = TopicSerializer(topics, many=True)
+            for topic in topicsSerializer.data:
+                topicID = 'topic' + str(topic['id'])
+                if topicID not in dataCount:
+                    dataCount[topicID] = 1 # 'Hit' for the first time
+                else:
+                    dataCount[topicID] += 1
 
-        # Query through all topics
-        topics = Topic.objects.filter(title__icontains=query)
-        topicsSerializer = TopicSerializer(topics, many=True)
-        for topic in topicsSerializer.data:
-            topicID = 'topic' + str(topic['id'])
-            if topicID not in dataCount:
-                dataCount[topicID] = 1 # 'Hit' for the first time
-            else:
-                dataCount[topicID] += 1
-
-        # Query through all polls
-        polls = Poll.objects.filter(text__icontains=query)
-        pollsSerializer = PollSerializer(polls, many=True)
-        for poll in pollsSerializer.data:
-            pollID = 'poll' + str(poll['id'])
-            if pollID not in dataCount:
-                dataCount[pollID] = 1 # 'Hit' for the first time
-            else:
-                dataCount[pollID] += 1
+            # Query through all polls
+            polls = Poll.objects.filter(text__icontains=query)
+            pollsSerializer = PollSerializer(polls, many=True)
+            for poll in pollsSerializer.data:
+                pollID = 'poll' + str(poll['id'])
+                if pollID not in dataCount:
+                    dataCount[pollID] = 1 # 'Hit' for the first time
+                else:
+                    dataCount[pollID] += 1
 
     '''
         At this point, dataCount stores all 'hits' of a review/poll.

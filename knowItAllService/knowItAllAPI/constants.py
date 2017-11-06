@@ -193,6 +193,8 @@ def deleteVoteFlag_200_VoteDeleted (username, voteChoice):
 
 # query
 search_400_QY = {'status': 400, 'message': "Error, please provide a query."}
+def searchByTag_400_TagDoesNotExists(tag):
+    return {'status': 400, 'message': "Tag: " + tag + ", does not exists"}
 
 # register
 register_400_EX = {'status': 400, 'message': "Error, user already exists."}
