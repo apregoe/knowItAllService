@@ -33,24 +33,37 @@ def search(request):
         if searchByTag.isdigit() and 0 <= int(searchByTag) <= 1:
             searchByTag = int(searchByTag)
             if searchByTag == 1:
+                tagList = query.split(',')
                 searchByTagFlag = True
-                #get tagId
-                tagId = None
-                try:
-                    tagId = Tag.objects.get(title=query)
-                except ObjectDoesNotExist:
-                    return JsonResponse(searchByTag_400_TagDoesNotExists(query), status=400, safe=False)
-                #get all tag linkers with the value of tagId
-                allTagLinkers = TagLinker.objects.filter(tagID=tagId)
-                if not (allTagLinkers == None):
-                    for tagLinker in allTagLinkers:
-                        print(tagLinker)
-                        if(tagLinker.type == 'topic'):
-                            topic = Topic.objects.get(pk=tagLinker.topicID.pk)
-                            topics.append(topic)
+                for index, tag in enumerate(tagList):
+                    #get tagId
+                    tagId = None
+                    try:
+                        tagId = Tag.objects.get(title=tag)
+                    except ObjectDoesNotExist:
+                        #If the tag does not exist and it's the last tag in the tag list, and there has not been
+                        # any match, then return error saying there is no match for that tag
+                        if (index == (len(tagList)-1)) and (len(topics) == 0) and (len(polls) == 0):
+                            return JsonResponse(searchByTag_400_NoMatchForTags(tagList), status=400, safe=False)
                         else:
-                            poll = Poll.objects.get(pk=tagLinker.pollID.pk)
-                            polls.append(poll)
+                            continue
+                    #get all tag linkers with the value of tagId
+                    allTagLinkers = TagLinker.objects.filter(tagID=tagId)
+                    if not (allTagLinkers == None):
+                        for tagLinker in allTagLinkers:
+                            print(tagLinker)
+                            if(tagLinker.type == 'topic'):
+                                topic = Topic.objects.get(pk=tagLinker.topicID.pk)
+                                #since we are allowing multiple tags, it means that the same result could be added twice
+                                #this prevents that
+                                if not(topic in topics):
+                                    topics.append(topic)
+                            else:
+                                poll = Poll.objects.get(pk=tagLinker.pollID.pk)
+                                # since we are allowing multiple tags, it means that the same result could be added twice
+                                # this prevents that
+                                if not(poll in polls):
+                                    polls.append(poll)
 
     if not searchByTagFlag:
         if CATEGORIES.get(1).lower() in query:
