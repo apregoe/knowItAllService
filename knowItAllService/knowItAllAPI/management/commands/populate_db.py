@@ -14,8 +14,8 @@ class Command(BaseCommand):
         self.setUp()
         self.createCategories()
         self.createUsers()
-        # self.createPolls()
-        # self.createTopics()
+        self.createTopics()
+        self.createPolls()
 
     def setUp(self):
         # removing the database
@@ -28,6 +28,7 @@ class Command(BaseCommand):
         os.system("python manage.py makemigrations")
         os.system("python manage.py migrate")
         # creating superuser
+        print("Creating superuser")
         os.system("python manage.py createsuperuser")
 
     def createCategories(self):
@@ -74,28 +75,28 @@ class Command(BaseCommand):
         t = Topic(title="SAL", category=Category.objects.get(pk=4), avRating=0, numReviews=0); t.save()
 
     def createPolls(self):
-        p = Poll(userID=UserProfile.objects.get(username="shenjona@usc.edu"), categoryID=Category.objects.get(pk=1),
-                 text="Who is the best teammate?", numVotes=0, openForever=True, dayLimit=0,
-                 username="shuzawa", anonymous=False)
-        p = Poll(userID=UserProfile.objects.get(username="shenjona@usc.edu"), categoryID=Category.objects.get(pk=1),
-                 text="Who is the best teammate?", numVotes=0, openForever=True, dayLimit=0,
-                 username="shuzawa", anonymous=False)
-        p = Poll(userID=UserProfile.objects.get(username="shenjona@usc.edu"), categoryID=Category.objects.get(pk=1),
-                 text="Who is the best teammate?", numVotes=0, openForever=True, dayLimit=0,
-                 username="shuzawa", anonymous=False)
-        p = Poll(userID=UserProfile.objects.get(username="shenjona@usc.edu"), categoryID=Category.objects.get(pk=1),
-                 text="Who is the best teammate?", numVotes=0, openForever=True, dayLimit=0,
-                 username="shuzawa", anonymous=False)
+        self.createPoll(username="shuzawa@usc.edu", text="Best backend Framework?", choices="Django,Ruby on Rails,Spring"
+                   , category="1", openForever="1", dayLimit="0", anonymous="0", tags="coding,hack,programmer,cs")
 
-        p.save()
-        # Store each choice into db
-        cList = choices.split(',')
-        for choice in cList:
-            c = PollChoice(pollID=p, text=choice)
-            c.save()
+        self.createPoll(username="prego@usc.edu", text="Best Burger Place",
+                   choices="Five guys,in n out,fatburger,jack in the box"
+                   , category="2", openForever="1", dayLimit="0", anonymous="1", tags="burger,fat,delicious")
+
+        self.createPoll(username="shenjona@usc.edu", text="Who is the best footballer?", choices="sam,adory,messi",
+                        category="3", openForever="0", dayLimit="3", anonymous="0", tags="usc,football,athletic")
+
+        self.createPoll(username="filipsan@usc.edu", text="Best college bar at usc?", choices="tommy,901,banditos,bacaro",
+                        category="4", openForever="1", dayLimit="0", anonymous="0", tags="usc,bars,drink,nightlife")
+
 
     #creates and authenticates user
     def createUser(self, username, password):
         s = UserProfile(username=username, password=password); s.save()
         r = requests.get(self.hostname + "authenticate?username=" + username)
         print(r.text)
+
+    def createPoll(self, username, category, text, choices, openForever, dayLimit, anonymous, tags):
+        response = requests.post(self.hostname + 'createPoll?username=' + username + '&category=' + category +
+                                 '&text=' + text + '&choices=' + choices + '&openForever=' + openForever
+                                 + '&dayLimit=' + dayLimit + "&anonymous=" + anonymous + "&tags=" + tags)
+        print(response.text)
