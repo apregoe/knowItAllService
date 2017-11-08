@@ -9,8 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 def authenticate(request):
     # for key, value in request.GET.items():
     #     print ("%s %s" % (key, value))
-    if request.method != "POST":
-        return JsonResponse(POST_400, status=400)
+    if request.method != "GET":
+        return JsonResponse(GET_400, status=400)
 
     username = request.GET.get(username_param)
     password = request.GET.get(password_param)
