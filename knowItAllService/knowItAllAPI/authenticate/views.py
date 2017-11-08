@@ -29,14 +29,14 @@ def authenticate(request):
             else:
                 return JsonResponse(PASSWORD_400, status=400)
 
-        #     # Only check if user is authenticated but not update values
+        # Only check if user is authenticated but not update values
         if check is not None and check == 'true':
             isVerified = ""
             if user.userVerified:
                 isVerified="true"
             else:
                 isVerified="false"
-            return JsonResponse(authenticate_UserCheck(isVerified, username), status=200)
+            return JsonResponse(authenticate_UserCheck(isVerified, username, user.password), status=200)
 
         # If User already authenticated
         if user.userVerified == True:
