@@ -1,28 +1,46 @@
 from django.core.management.base import BaseCommand
+import requests
+import os
 from ...models import *
 
 class Command(BaseCommand):
     # > python manage.py help populate_db
     help = 'This is the help string'
+    # hostname = "http://knowitalllive-dev.us-west-1.elasticbeanstalk.com/api/"
+    hostname = "http://127.0.0.1:8000/api/"
 
     # 'main' function
     def handle(self, *args, **options):
+        self.setUp()
         self.createCategories()
         self.createUsers()
-        self.createTopics()
-        self.createPolls()
+        # self.createPolls()
+        # self.createTopics()
+
+    def setUp(self):
+        # removing the database
+        os.system("rm db.sqlite3")
+        # removing migration files and creating __init__.py
+        os.system("rm -rf knowItAllAPI/migrations/*")
+        # We cannot delete __init__.py
+        os.system("git checkout knowItAllAPI/migrations/__init__.py")
+        # makemigrations and migrate
+        os.system("python manage.py makemigrations")
+        os.system("python manage.py migrate")
+        # creating superuser
+        os.system("python manage.py createsuperuser")
 
     def createCategories(self):
-        a = Category(title='Academic'); a.save()
-        f = Category(title='Food'); f.save()
-        e = Category(title='Entertainment'); e.save()
-        l = Category(title='Location'); l.save()
+        # create categories
+        print("Creating categories...")
+        response = requests.post(self.hostname + "createCategory?populate=true")
+        print(response.text)
 
     def createUsers(self):
-        s = UserProfile(username="shuzawa@usc.edu", password="12345"); s.save()
-        s = UserProfile(username="filipsan@usc.edu", password="12345"); s.save()
-        s = UserProfile(username="aprego@usc.edu", password="12345"); s.save()
-        s = UserProfile(username="shenjona@usc.edu", password="12345"); s.save()
+        self.createUser("shuzawa@usc.edu", "12345")
+        self.createUser("filipsan@usc.edu", "12345")
+        self.createUser("prego@usc.edu", "12345")
+        self.createUser("shenjona@usc.edu", "12345")
 
     def createTopics(self):
         t = Topic(title="EE 109", category=Category.objects.get(pk=1), avRating=0, numReviews=0); t.save()
@@ -75,3 +93,9 @@ class Command(BaseCommand):
         for choice in cList:
             c = PollChoice(pollID=p, text=choice)
             c.save()
+
+    #creates and authenticates user
+    def createUser(self, username, password):
+        s = UserProfile(username=username, password=password); s.save()
+        r = requests.get(self.hostname + "authenticate?username=" + username)
+        print(r.text)
