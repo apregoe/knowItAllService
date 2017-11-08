@@ -37,8 +37,6 @@ class Topic(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     avRating = models.DecimalField(max_digits=2, decimal_places=1) # Ex. 4.5 stars
     numReviews = models.IntegerField()
-    username = models.CharField(max_length=50, default='', unique=False)
-    anonymous = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title
@@ -49,7 +47,7 @@ class Review(models.Model):
     rating = models.DecimalField(max_digits=2, decimal_places=1)
     comment = models.CharField(max_length=200, default='', null=True)
     dateCreated = models.DateTimeField(auto_now_add=True, null=True)
-    username = models.CharField(max_length=300, default='', unique=False)
+    username = models.CharField(max_length=200, default='', unique=False)
     anonymous = models.BooleanField(default=True)
     def __str__(self):
         return self.topicID.title + " -- " + str(self.rating) + " brains"
