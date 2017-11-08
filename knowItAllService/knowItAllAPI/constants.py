@@ -216,9 +216,10 @@ def authenticate_UserAuthenticated(username):
             'message': "User authenticated successfully.",
             'data': {'username': username}}
 
-def authenticate_UserCheck(isVerified, username):
+def authenticate_UserCheck(isVerified, username, password):
     return {'status': 200,
             'username': username,
+            'password': password,
             'authenticated': str(isVerified)}
 
 # createTags
