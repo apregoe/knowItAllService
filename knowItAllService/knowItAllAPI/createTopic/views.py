@@ -24,15 +24,6 @@ def createTopic(request):
         return JsonResponse(createTopic_400_C, status=400)
     category = int(category)
 
-    # Reviews, not topics, are anonymous
-    # check anonymous value is 1 or 0
-    # if not anonymous.isdigit() or not (0 <= int(anonymous) <= 1):
-    #     return JsonResponse(createTopic_400_ANONYMOUS_INVALID, status=400)
-    # anonymous = int(anonymous)
-    # anonymousToStore = False
-    # if anonymous == 1:
-    #     anonymousToStore = True
-
     # Store data into db
     topic = Topic(title=title,category=Category.objects.get(pk=category), avRating=0, numReviews=0)
     try:

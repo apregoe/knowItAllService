@@ -35,7 +35,7 @@ class Command(BaseCommand):
         self.createTopics()
         self.createPolls()
         self.createVotes()
-        
+        self.createReviews()
 
         #finishing server process
         print("Hit ctrl+c")
@@ -66,37 +66,6 @@ class Command(BaseCommand):
         self.createUser("shuzawa@usc.edu", "12345")
         self.createUser("filipsan@usc.edu", "12345")
         self.createUser("shenjona@usc.edu", "12345")
-
-    def createTopics(self):
-        t = Topic(title="EE 109", category=Category.objects.get(pk=1), avRating=0, numReviews=0); t.save()
-        t = Topic(title="CSCI 103", category=Category.objects.get(pk=1), avRating=0, numReviews=0); t.save()
-        t = Topic(title="CSCI 109", category=Category.objects.get(pk=1), avRating=0, numReviews=0); t.save()
-        t = Topic(title="CSCI 104", category=Category.objects.get(pk=1), avRating=0, numReviews=0); t.save()
-        t = Topic(title="CSCI 170", category=Category.objects.get(pk=1), avRating=0, numReviews=0); t.save()
-        t = Topic(title="CSCI 201", category=Category.objects.get(pk=1), avRating=0, numReviews=0); t.save()
-        t = Topic(title="CSCI 270", category=Category.objects.get(pk=1), avRating=0, numReviews=0); t.save()
-        t = Topic(title="CSCI 310", category=Category.objects.get(pk=1), avRating=0, numReviews=0); t.save()
-        t = Topic(title="CSCI 356", category=Category.objects.get(pk=1), avRating=0, numReviews=0); t.save()
-        t = Topic(title="CSCI 350", category=Category.objects.get(pk=1), avRating=0, numReviews=0); t.save()
-        t = Topic(title="CSCI 360", category=Category.objects.get(pk=1), avRating=0, numReviews=0); t.save()
-
-        t = Topic(title="Blaze Pizza", category=Category.objects.get(pk=2), avRating=0, numReviews=0); t.save()
-        t = Topic(title="Panda Express", category=Category.objects.get(pk=2), avRating=0, numReviews=0); t.save()
-        t = Topic(title="CAVA", category=Category.objects.get(pk=2), avRating=0, numReviews=0); t.save()
-        t = Topic(title="The Habit Burger and Grill", category=Category.objects.get(pk=2), avRating=0, numReviews=0); t.save()
-        t = Topic(title="Chipotle", category=Category.objects.get(pk=2), avRating=0, numReviews=0); t.save()
-        t = Topic(title="EVK", category=Category.objects.get(pk=2), avRating=0, numReviews=0); t.save()
-        t = Topic(title="Cafe 84", category=Category.objects.get(pk=2), avRating=0, numReviews=0); t.save()
-        t = Topic(title="Parkside Dining Hall", category=Category.objects.get(pk=2), avRating=0, numReviews=0); t.save()
-
-        t = Topic(title="Wonder Woman", category=Category.objects.get(pk=3), avRating=0, numReviews=0); t.save()
-        t = Topic(title="USC Football", category=Category.objects.get(pk=3), avRating=0, numReviews=0); t.save()
-        t = Topic(title="URB-E", category=Category.objects.get(pk=3), avRating=0, numReviews=0); t.save()
-
-        t = Topic(title="Leavey Library", category=Category.objects.get(pk=4), avRating=0, numReviews=0); t.save()
-        t = Topic(title="Lyon Center", category=Category.objects.get(pk=4), avRating=0, numReviews=0); t.save()
-        t = Topic(title="Village Gym", category=Category.objects.get(pk=4), avRating=0, numReviews=0); t.save()
-        t = Topic(title="SAL", category=Category.objects.get(pk=4), avRating=0, numReviews=0); t.save()
 
     def createPolls(self):
         self.createPoll(username="shuzawa@usc.edu", text="Best backend Framework?", choices="Django,Ruby on Rails,Spring"
@@ -133,6 +102,72 @@ class Command(BaseCommand):
         self.vote("shenjona@usc.edu", "Who is the best footballer?", "messi")
         self.vote("shenjona@usc.edu", "Best college bar at usc?", "tradis")
 
+    def createTopics(self):
+        t = Topic(title="EE 109", category=Category.objects.get(pk=1), avRating=0, numReviews=0); t.save()
+        t = Topic(title="CSCI 103", category=Category.objects.get(pk=1), avRating=0, numReviews=0); t.save()
+        t = Topic(title="CSCI 109", category=Category.objects.get(pk=1), avRating=0, numReviews=0); t.save()
+        t = Topic(title="CSCI 104", category=Category.objects.get(pk=1), avRating=0, numReviews=0); t.save()
+        t = Topic(title="CSCI 170", category=Category.objects.get(pk=1), avRating=0, numReviews=0); t.save()
+        t = Topic(title="CSCI 201", category=Category.objects.get(pk=1), avRating=0, numReviews=0); t.save()
+        t = Topic(title="CSCI 270", category=Category.objects.get(pk=1), avRating=0, numReviews=0); t.save()
+        t = Topic(title="CSCI 310", category=Category.objects.get(pk=1), avRating=0, numReviews=0); t.save()
+        t = Topic(title="CSCI 356", category=Category.objects.get(pk=1), avRating=0, numReviews=0); t.save()
+        t = Topic(title="CSCI 350", category=Category.objects.get(pk=1), avRating=0, numReviews=0); t.save()
+        t = Topic(title="CSCI 360", category=Category.objects.get(pk=1), avRating=0, numReviews=0); t.save()
+
+        t = Topic(title="Blaze Pizza", category=Category.objects.get(pk=2), avRating=0, numReviews=0); t.save()
+        t = Topic(title="Panda Express", category=Category.objects.get(pk=2), avRating=0, numReviews=0); t.save()
+        t = Topic(title="CAVA", category=Category.objects.get(pk=2), avRating=0, numReviews=0); t.save()
+        t = Topic(title="The Habit Burger and Grill", category=Category.objects.get(pk=2), avRating=0, numReviews=0); t.save()
+        t = Topic(title="Chipotle", category=Category.objects.get(pk=2), avRating=0, numReviews=0); t.save()
+        t = Topic(title="EVK", category=Category.objects.get(pk=2), avRating=0, numReviews=0); t.save()
+        t = Topic(title="Cafe 84", category=Category.objects.get(pk=2), avRating=0, numReviews=0); t.save()
+        t = Topic(title="Parkside Dining Hall", category=Category.objects.get(pk=2), avRating=0, numReviews=0); t.save()
+
+        t = Topic(title="Wonder Woman", category=Category.objects.get(pk=3), avRating=0, numReviews=0); t.save()
+        t = Topic(title="USC Football", category=Category.objects.get(pk=3), avRating=0, numReviews=0); t.save()
+        t = Topic(title="URB-E", category=Category.objects.get(pk=3), avRating=0, numReviews=0); t.save()
+
+        t = Topic(title="Leavey Library", category=Category.objects.get(pk=4), avRating=0, numReviews=0); t.save()
+        t = Topic(title="Lyon Center", category=Category.objects.get(pk=4), avRating=0, numReviews=0); t.save()
+        t = Topic(title="Village Gym", category=Category.objects.get(pk=4), avRating=0, numReviews=0); t.save()
+        t = Topic(title="SAL", category=Category.objects.get(pk=4), avRating=0, numReviews=0); t.save()
+
+    def createReviews(self):
+        self.createReview("prego@usc.edu","CSCI 103","5","Great and challenging for noobs.", "0")
+        self.createReview("shuzawa@usc.edu", "CSCI 103", "2", "at least is better than youtube", "1")
+        self.createReview("filipsan@usc.edu", "CSCI 103", "4", "Great class", "1")
+        self.createReview("shenjona@usc.edu", "CSCI 103", "5", "Best class ever", "0")
+
+        self.createReview("prego@usc.edu", "Cafe 84", "5", "It will always be in my heart", "0")
+        self.createReview("shuzawa@usc.edu", "Cafe 84", "4", "RIP", "1")
+        self.createReview("filipsan@usc.edu", "Cafe 84", "4", "Best crepes ever", "0")
+        self.createReview("shenjona@usc.edu", "Cafe 84", "0", "Found a worm once ew", "1")
+
+        self.createReview("prego@usc.edu", "URB-E", "5", "I just bought an URB-E, I'm an athlete!", "0")
+        self.createReview("shuzawa@usc.edu", "URB-E", "4", "U even URB-E bruh?", "1")
+        self.createReview("filipsan@usc.edu", "URB-E", "1", "Bad service", "1")
+        self.createReview("shenjona@usc.edu", "URB-E", "3", "Efficient, but I look like a clown", "1")
+
+        self.createReview("prego@usc.edu", "Leavey Library", "0", "Smells like public toilet", "0")
+        self.createReview("shuzawa@usc.edu", "Leavey Library", "1", "It's really bad", "1")
+        self.createReview("filipsan@usc.edu", "Leavey Library", "1", "Never going back", "1")
+        self.createReview("shenjona@usc.edu", "Leavey Library", "5", "Smells like flowers!", "0")
+
+        self.createReview("prego@usc.edu", "Village Gym", "5", "Best gym ever, no joke", "0")
+        self.createReview("shuzawa@usc.edu", "Village Gym", "5", "I workout because of this gym", "1")
+        self.createReview("filipsan@usc.edu", "Village Gym", "5", "I don't want to graduate because of this gym", "1")
+        self.createReview("shenjona@usc.edu", "Village Gym", "1", "Not for me", "1")
+
+        self.createReview("prego@usc.edu", "CSCI 310", "5", "Best TAs ever!", "1")
+        self.createReview("shuzawa@usc.edu", "CSCI 310", "5", "Best professor ever!", "1")
+        self.createReview("filipsan@usc.edu", "CSCI 310", "5", "Best grading system ever!", "1")
+        self.createReview("shenjona@usc.edu", "CSCI 310", "5", "Best class ever!", "1")
+
+    def createReview(self, username, topicTitle, rating, comment, anonymous):
+        response = requests.post(self.hostname + "createReview?username="+username+"&topicTitle="+topicTitle+
+                                 "&rating="+rating+"&comment="+comment+"&anonymous="+anonymous)
+        print(response.text)
 
     #creates and authenticates user
     def createUser(self, username, password):
