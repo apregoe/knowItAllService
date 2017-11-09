@@ -1,7 +1,18 @@
 from django.core.management.base import BaseCommand
-import requests
-import os
+from threading import Timer
 from ...models import *
+import requests
+import signal
+import time
+import multiprocessing as mp
+import subprocess
+import os
+import sys
+
+def runLocalServer():
+    # runing server in local machine
+    os.environ['DJANGO_SETTINGS_MODULE'] = 'knowItAllService.settings'
+    os.system('python manage.py runserver')
 
 class Command(BaseCommand):
     # > python manage.py help populate_db
@@ -11,11 +22,23 @@ class Command(BaseCommand):
 
     # 'main' function
     def handle(self, *args, **options):
+        #the setup has to be before running the server because it resets the database
         self.setUp()
+        # creating two processes
+        # runserver process
+        serverProcess = mp.Process(target=runLocalServer, args=())
+        serverProcess.start()
+
+        #I sleep enough time to let the server be created, and then I populate the database
+        time.sleep(3)
         self.createCategories()
         self.createUsers()
         self.createTopics()
         self.createPolls()
+
+        #finishing server process
+        print("Hit ctrl+c")
+        serverProcess.join()
 
     def setUp(self):
         # removing the database
