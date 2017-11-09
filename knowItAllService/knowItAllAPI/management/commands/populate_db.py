@@ -47,7 +47,7 @@ class Command(BaseCommand):
         # removing migration files and creating __init__.py
         os.system("rm -rf knowItAllAPI/migrations/*")
         # We cannot delete __init__.py
-        os.system("git checkout knowItAllAPI/migrations/__init__.py")
+        os.system("touch knowItAllAPI/migrations/__init__.py")
         # makemigrations and migrate
         os.system("python manage.py makemigrations")
         os.system("python manage.py migrate")
