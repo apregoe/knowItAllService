@@ -15,9 +15,8 @@ def runLocalServer():
     os.system('python manage.py runserver')
 
 class Command(BaseCommand):
-    # > python manage.py help populate_db
+    # > python manage.py populate_db
     help = 'This is the help string'
-    # hostname = "http://knowitalllive-dev.us-west-1.elasticbeanstalk.com/api/"
     hostname = "http://127.0.0.1:8000/api/"
 
     # 'main' function
@@ -35,6 +34,8 @@ class Command(BaseCommand):
         self.createUsers()
         self.createTopics()
         self.createPolls()
+        self.createVotes()
+        
 
         #finishing server process
         print("Hit ctrl+c")
@@ -61,9 +62,9 @@ class Command(BaseCommand):
         print(response.text)
 
     def createUsers(self):
+        self.createUser("prego@usc.edu", "12345")
         self.createUser("shuzawa@usc.edu", "12345")
         self.createUser("filipsan@usc.edu", "12345")
-        self.createUser("prego@usc.edu", "12345")
         self.createUser("shenjona@usc.edu", "12345")
 
     def createTopics(self):
@@ -108,8 +109,29 @@ class Command(BaseCommand):
         self.createPoll(username="shenjona@usc.edu", text="Who is the best footballer?", choices="sam,adory,messi",
                         category="3", openForever="0", dayLimit="3", anonymous="0", tags="usc,football,athletic")
 
-        self.createPoll(username="filipsan@usc.edu", text="Best college bar at usc?", choices="tommy,901,banditos,bacaro",
+        self.createPoll(username="filipsan@usc.edu", text="Best college bar at usc?", choices="tradis,901,banditos,bacaro",
                         category="4", openForever="1", dayLimit="0", anonymous="0", tags="usc,bars,drink,nightlife")
+
+    def createVotes(self):
+        self.vote("prego@usc.edu","Best backend Framework?","Ruby on Rails")
+        self.vote("prego@usc.edu","Best Burger Place","in n out")
+        self.vote("prego@usc.edu","Who is the best footballer?","messi")
+        self.vote("prego@usc.edu","Best college bar at usc?","901")
+
+        self.vote("shuzawa@usc.edu","Best backend Framework?","Django")
+        self.vote("shuzawa@usc.edu","Best Burger Place","fatburger")
+        self.vote("shuzawa@usc.edu","Who is the best footballer?","messi")
+        self.vote("shuzawa@usc.edu","Best college bar at usc?","banditos")
+
+        self.vote("filipsan@usc.edu", "Best backend Framework?","Spring")
+        self.vote("filipsan@usc.edu", "Best Burger Place", "jack in the box")
+        self.vote("filipsan@usc.edu", "Who is the best footballer?", "messi")
+        self.vote("filipsan@usc.edu", "Best college bar at usc?", "bacaro")
+
+        self.vote("shenjona@usc.edu", "Best backend Framework?", "Django")
+        self.vote("shenjona@usc.edu", "Best Burger Place", "in n out")
+        self.vote("shenjona@usc.edu", "Who is the best footballer?", "messi")
+        self.vote("shenjona@usc.edu", "Best college bar at usc?", "tradis")
 
 
     #creates and authenticates user
@@ -122,4 +144,8 @@ class Command(BaseCommand):
         response = requests.post(self.hostname + 'createPoll?username=' + username + '&category=' + category +
                                  '&text=' + text + '&choices=' + choices + '&openForever=' + openForever
                                  + '&dayLimit=' + dayLimit + "&anonymous=" + anonymous + "&tags=" + tags)
+        print(response.text)
+
+    def vote(self, username, pollText, choice):
+        response = requests.post(self.hostname + "vote?pollText="+pollText+"&username="+username+"&pollChoiceText="+choice)
         print(response.text)
