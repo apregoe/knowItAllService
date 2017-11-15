@@ -22,10 +22,19 @@ def editPost(request):
             topic = request.GET.get(topicTitle_param)
             newRating = request.GET.get(rating_param)
             newComment = request.GET.get(comment_param)
+            newAnonymous = request.GET.get(anonymous_param)
 
             # Check if all parameters provided
-            if any(var is None for var in [newRating, newComment]):
+            if any(var is None for var in [newRating, newComment, anonymous_param]):
                 return JsonResponse(editPost_400_RV, status=400, safe=False)
+
+            # check anonymous value is 1 or 0
+            if not newAnonymous.isdigit() or not (0 <= int(newAnonymous) <= 1):
+                return JsonResponse(createReview_400_ANONYMOUS_INVALID, status=400)
+            newAnonymous = int(newAnonymous)
+            newAnonymousToStore = False
+            if newAnonymous == 1:
+                newAnonymousToStore = True
 
             # Check if rating is float
             if not isfloat(newRating):
@@ -42,6 +51,7 @@ def editPost(request):
             print(review.rating)
             review.rating = newRating
             review.comment = newComment
+            review.anonymous = newAnonymousToStore
             review.save()
 
             return JsonResponse(editPost_200_RV(username, newRating, newComment), safe=False)
