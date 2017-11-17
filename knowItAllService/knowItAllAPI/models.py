@@ -112,3 +112,10 @@ class TagLinker(models.Model):
     topicID = models.ForeignKey(Topic, on_delete=models.CASCADE, blank=True, null=True)
     def __str__(self):
         return self.tagID.title + " -- " + self.type
+
+class Comment(models.Model):
+    userID = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    pollID = models.ForeignKey(Poll, on_delete=models.CASCADE)
+    text = models.CharField(max_length=200, default='')
+    def __str__(self):
+        return self.pollID.text + " -- " + self.text

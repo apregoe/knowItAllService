@@ -232,6 +232,10 @@ def authenticate_UserCheck(isVerified, username, password):
 createTags_400_ALL = {'status': 400, 'message': "Error: please provide one or more tag titles."}
 createTags_200_ALL = {'status': 200, 'message': "Tag successfully stored in DB."}
 
+# createComment
+createComment_400_ALL = {'status': 400, 'message': "Error: please username, polltext, comment."}
+createComment_200_ALL = {'status': 200, 'message': "Comment successfully stored."}
+
 # Categories
 CATEGORIES = {
     1: "Academic",
