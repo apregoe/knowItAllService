@@ -49,6 +49,7 @@ class Review(models.Model):
     username = models.CharField(max_length=200, default='', unique=False)
     anonymous = models.BooleanField(default=True)
     dateCreated = models.DateTimeField(default=datetime.now)
+    opinionTotal = models.IntegerField(default=0)
     def __str__(self):
         return self.topicID.title + " -- " + str(self.rating) + " brains"
     # User can only create one review per topic
@@ -67,6 +68,7 @@ class Poll(models.Model):
     username = models.CharField(max_length=300, default='', unique=False)
     anonymous = models.BooleanField(default=True)
     dateCreated = models.DateTimeField(default=datetime.now)
+    opinionTotal = models.IntegerField(default=0)
     # endTimeStamp = models.DateTimeField(default=setDeadline(numDays)) if endTime else None
     # https://stackoverflow.com/a/15289461
     def __str__(self):
@@ -119,3 +121,13 @@ class Comment(models.Model):
     text = models.CharField(max_length=200, default='')
     def __str__(self):
         return self.pollID.text + " -- " + self.text
+
+class Opinion(models.Model):
+    userID = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    pollID = models.ForeignKey(Poll, on_delete=models.CASCADE)
+    reviewID = models.ForeignKey(Review, on_delete=models.CASCADE)
+    type = models.CharField(max_length=200, default='')  # poll, review
+    opinion = models.BooleanField()
+    def __str__(self):
+        return self.userID.text + " -- " + self.type + " -- " + self.opinion
+

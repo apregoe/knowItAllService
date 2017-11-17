@@ -72,6 +72,9 @@ tags_param = 'tags'
 ## getTrending
 number_param = 'number'
 
+# opinion
+opinion_param = 'opinion'
+
 ### JsonResponse
 GET_400 = {'status': 400, 'message': "Error, please use GET."}
 POST_400 = {'status': 400, 'message': "Error, please use POST." }
@@ -235,6 +238,9 @@ createTags_200_ALL = {'status': 200, 'message': "Tag successfully stored in DB."
 # createComment
 createComment_400_ALL = {'status': 400, 'message': "Error: please username, polltext, comment."}
 createComment_200_ALL = {'status': 200, 'message': "Comment successfully stored."}
+
+# opinion
+opinion_400_ALL = {'status': 400, 'message': "Error: please provide username, type, text, and opinion."}
 
 # Categories
 CATEGORIES = {
