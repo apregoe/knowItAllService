@@ -24,8 +24,7 @@ def authenticate(request):
         # Check if password is correct
         if password is not None:
             if user.password == password:
-                return JsonResponse(authenticate_UserLoggedIn(username=username, password=password)
-                        , status=200)
+                return JsonResponse(authenticate_UserLoggedIn(username=username, password=password), status=200)
             else:
                 return JsonResponse(PASSWORD_400, status=400)
 
@@ -39,13 +38,12 @@ def authenticate(request):
             return JsonResponse(authenticate_UserCheck(isVerified, username, user.password), status=200)
 
         # If User already authenticated
-        if user.userVerified == True:
+        if user.userVerified:
             return JsonResponse(authenticate_400_AA, status=400)
 
         user.userVerified = True
         user.save()
-        return JsonResponse(authenticate_UserAuthenticated(username)
-                    , status=200)
+        return JsonResponse(authenticate_UserAuthenticated(username), status=200)
         #using json is easier for testing
         # return HttpResponse("<h1>Authentication Success!</h1>"
         #                   "<h2>Your email \'"+username+"\' has been authenticated. Please login on your device.</h2>")

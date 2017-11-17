@@ -65,8 +65,12 @@ searchByTag_param = 'searchByTag'
 
 ## anonymous
 anonymous_param = 'anonymous'
+
 ## Tag
 tags_param = 'tags'
+
+## getTrending
+number_param = 'number'
 
 ### JsonResponse
 GET_400 = {'status': 400, 'message': "Error, please use GET."}
@@ -164,6 +168,8 @@ def editPost_200_RV(username, rating, comment):
 
 ## getTrending
 getTrending_400_TP = {'status': 400, 'message': "Error, type must be either 'poll', 'topic', or 'all'."}
+getTrending_400_NB = {'status' : 400, 'message:' : 'Error, number should be an int >= 1.'}
+
 
 ## getPost
 getPost_400_TP = {'status': 400, 'message': "Error, type must be either 'poll' or 'topic'."}

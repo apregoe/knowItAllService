@@ -26,6 +26,15 @@ def getTrending(request):
             pollSerializer = PollSerializer(poll, many=True)
             return JsonResponse({'status': 200, 'data': pollSerializer.data}, safe=False)
 
+        elif type == 'tags':
+            try:
+                number = int(request.GET.get(number_param))
+            except ValueError:
+                return JsonResponse(getTrending_400_NB, status=400)
+
+            tag = Tag.objects.all().order_by('-id')[:number]
+            tagSerializer = TagSerializer(tag, many=True)
+            return JsonResponse({'status': 200, 'data': tagSerializer.data}, safe=False)
 
         elif type == 'all':
             topic = Topic.objects.all()
