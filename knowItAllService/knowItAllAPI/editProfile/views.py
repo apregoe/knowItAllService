@@ -14,8 +14,8 @@ import smtplib
 
 @csrf_exempt
 def editProfile(request):
-    if request.method != 'POST':
-        return JsonResponse(POST_400, status=400, safe=False)
+    if request.method != 'GET':
+        return JsonResponse(GET_400, status=400, safe=False)
 
     # Grab the query parameters; note that .GET must be used to grab parameters from the actual URL
     username = request.GET.get(username_param)
