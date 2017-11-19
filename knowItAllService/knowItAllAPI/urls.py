@@ -17,12 +17,14 @@ urlpatterns = [
     url(r'^createReview', include('knowItAllAPI.createReview.urls')),
     url(r'^createNotification', include('knowItAllAPI.createNotification.urls')),
     url(r'^createTags', include('knowItAllAPI.createTags.urls')),
+    url(r'^createComment', include('knowItAllAPI.createComment.urls')),
     url(r'^vote', include('knowItAllAPI.vote.urls')),
 
     url(r'^myPosts', include('knowItAllAPI.myPosts.urls')),
     url(r'^getPost', include('knowItAllAPI.getPost.urls')),
     url(r'^editPost', include('knowItAllAPI.editPost.urls')),
     url(r'^getTrending', include('knowItAllAPI.getTrending.urls')),
+    url(r'^getComments', include('knowItAllAPI.getComment.urls')),
 
     url(r'^myNotifications', include('knowItAllAPI.myNotifications.urls')),
     url(r'^search', include('knowItAllAPI.search.urls')),

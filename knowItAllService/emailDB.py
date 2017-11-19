@@ -22,7 +22,7 @@ filename = "db.sqlite3"
 attachment = open("db.sqlite3", "rb")
 
 part = MIMEBase('application', 'octet-stream')
-part.set_payload((attachment).read())
+part.set_payload(attachment.read())
 encoders.encode_base64(part)
 part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
 

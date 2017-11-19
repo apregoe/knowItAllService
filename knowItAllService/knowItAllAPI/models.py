@@ -127,7 +127,7 @@ class Opinion(models.Model):
     pollID = models.ForeignKey(Poll, on_delete=models.CASCADE)
     reviewID = models.ForeignKey(Review, on_delete=models.CASCADE)
     type = models.CharField(max_length=200, default='')  # poll, review
-    opinion = models.BooleanField()
+    upvote = models.BooleanField() # False = downvote
     def __str__(self):
-        return self.userID.text + " -- " + self.type + " -- " + self.opinion
+        return self.userID.text + " -- " + self.type + " -- " + ("Upvote" if self.upvote else "Downvote")
 

@@ -3,7 +3,6 @@ from django.http import JsonResponse
 from .models import *
 from django.db import IntegrityError
 from ..constants import *
-from decimal import Decimal
 from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
