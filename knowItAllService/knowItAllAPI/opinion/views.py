@@ -45,10 +45,6 @@ def opinion(request):
                 return JsonResponse(POLL_400, status=400)
             print(p)
             o = Opinion(userID=u, type='poll', pollID=p.first(), upvote=upvote)
-            try:
-                o.save()
-            except IntegrityError:
-                return JsonResponse(opinion_400_EX, status=400)
 
             if deleteFlag is not None:
                 o = Opinion.objects.filter(userID=u, type='poll', pollID=p.first(), upvote=upvote)
@@ -57,6 +53,12 @@ def opinion(request):
                     return JsonResponse(opinion_200_DEL, status=200)
                 else:
                     return JsonResponse(opinion_400_DEL, status=200)
+
+            else:
+                try:
+                    o.save()
+                except IntegrityError:
+                    return JsonResponse(opinion_400_EX, status=400)
 
         # review
         else:
@@ -69,10 +71,6 @@ def opinion(request):
                 return JsonResponse(TOPIC_400, status=400)
             t = t.first()
             o = Opinion(userID=u, type='review', reviewID=Review.objects.get(userID=ru, topicID=t),upvote=upvote)
-            try:
-                o.save()
-            except IntegrityError:
-                return JsonResponse(opinion_400_EX, status=400)
 
             if deleteFlag is not None:
                 o = Opinion.objects.filter(userID=u, type='review', reviewID=Review.objects.get(userID=ru, topicID=t),upvote=upvote)
@@ -81,6 +79,11 @@ def opinion(request):
                     return JsonResponse(opinion_200_DEL, status=200)
                 else:
                     return JsonResponse(opinion_400_DEL, status=200)
+            else:
+                try:
+                    o.save()
+                except IntegrityError:
+                    return JsonResponse(opinion_400_EX, status=400)
 
         return JsonResponse(opinion_200, status=200, safe=False)
 

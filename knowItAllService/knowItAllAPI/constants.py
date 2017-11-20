@@ -246,7 +246,7 @@ opinion_400_ALL = {'status': 400, 'message': "Error: please provide username, ty
 opinion_400_TP = {'status': 400, 'message': "Error, type must be either poll or review. "}
 opinion_400_UP = {'status': 400, 'message': "Error, upvote must be either 1 or 0. "}
 opinion_400_DEL = {'status': 200, 'message': "Error, opinion does not exist." }
-opinion_200 = {'status': 200, 'message': "Successfully created upvote." }
+opinion_200 = {'status': 200, 'message': "Successfully created opinion." }
 opinion_200_DEL = {'status': 200, 'message': "Successfully deleted opinion." }
 opinion_400_EX = {'status': 400, 'message': "Error, opinion already exists." }
 
