@@ -123,6 +123,8 @@ class Comment(models.Model):
     text = models.CharField(max_length=200, default='')
     def __str__(self):
         return self.pollID.text + " -- " + self.text
+    class Meta:
+        unique_together = (('userID', 'pollID'))
 
 class Opinion(models.Model):
     userID = models.ForeignKey(UserProfile, on_delete=models.CASCADE)

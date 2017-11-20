@@ -86,6 +86,7 @@ UNIQUE_400 = {'status': 400, 'message': "Error: Data already exists!" }
 def UNIQUE_400_EXISTS(data):
     return {'status': 400, 'message': "Error: " + data + " already exists!"}
 PASSWORD_400 = {'status': 400, 'message': "Error, user password not correct."}
+ANONYMOUS_400 = {'status': 400, 'message:' : 'Error, anonymous should be 0 or 1.'}
 
 ## general
 USER_400 = {'status': 400, 'message': "Error: user does not exist." }
@@ -107,7 +108,6 @@ createCategory_SUCCESS = {'status': 200,
 ## createTopic
 createTopic_400_ALL = {'status': 400, 'message': "Error: please provide a title, category, username, and tags."}
 createTopic_400_C = {'status': 400, 'message': "Error: category must be an int 1-4."}
-createTopic_400_ANONYMOUS_INVALID = {'status' : 400, 'message:' : 'Error, anonymous variable should be either 1 or 0'}
 def createTopic_SUCCESS(title, category, tags):
     return {'status': 200,
      'message': "Successfully created topic.",
@@ -117,7 +117,6 @@ def createTopic_SUCCESS(title, category, tags):
 createPoll_400_ALL = {'status': 400, 'message': "Error, please provide username, text, choices, anonymous, openForever, and tags."}
 createPoll_400_OF = {'status': 400, 'message': "Error, openForever must be either 1 (true) or 0 (false)."}
 createPoll_400_DL = {'status': 400, 'message': "Error, dayLimit must be a value > 0."}
-createPoll_400_Anonymous = {'status' : 400, 'message:' : 'Error, anonymous variable should be either 1 or 0'}
 def createPoll_SUCCESS(pollTitle, choices, tags):
     return {'status': 200,
             'message': "Successfully created poll.",
@@ -138,7 +137,6 @@ def createReview_SUCCESS(topicTitle, rating, comment):
     return {'status': 200,
      'message': "Successfully created review for topic " + topicTitle + ".",
      'data': {'rating': rating, 'comment': comment}}
-createReview_400_ANONYMOUS_INVALID = {'status' : 400, 'message:' : 'Error, anonymous variable should be either 1 or 0'}
 
 ## delete Review
 deleteReview_400_INVALID_PARAMS = {'message': 'Plase provide ' + username_param + ', and ' + topicTitle_param}
@@ -146,7 +144,6 @@ def  deleteReview_SUCESS(username, topicTitle):
     return {'message': 'Review about:' + topicTitle + ' from: ' + username + '. Has been deleted' }
 def deleteReview_USERHASNOREVIEWONTHISTOPIC(username, topicTitle):
     return {'message': username + ' has no review for ' + topicTitle}
-
 
 ## createNotification
 createNotification_400_ALL = {'status': 400, 'message': "Error, please provide a username, type, and text."}
@@ -240,8 +237,9 @@ createTags_400_ALL = {'status': 400, 'message': "Error: please provide one or mo
 createTags_200_ALL = {'status': 200, 'message': "Tag successfully stored in DB."}
 
 # createComment
-createComment_400_ALL = {'status': 400, 'message': "Error: please username, polltext, comment."}
+createComment_400_ALL = {'status': 400, 'message': "Error: please provide a username, pollText, and comment."}
 createComment_200_ALL = {'status': 200, 'message': "Comment successfully stored."}
+
 
 # opinion
 opinion_400_ALL = {'status': 400, 'message': "Error: please provide username, type, and opinion."}

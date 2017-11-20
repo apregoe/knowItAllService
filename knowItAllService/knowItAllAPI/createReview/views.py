@@ -32,7 +32,7 @@ def createReview(request):
 
     #check anonymous value is 1 or 0
     if not anonymous.isdigit() or not (0 <= int(anonymous) <= 1):
-        return JsonResponse(createReview_400_ANONYMOUS_INVALID, status=400)
+        return JsonResponse(ANONYMOUS_400, status=400)
     anonymous = int(anonymous)
 
     anonymousToStore = False
