@@ -248,6 +248,7 @@ opinion_400_UP = {'status': 400, 'message': "Error, upvote must be either 1 or 0
 opinion_400_DEL = {'status': 200, 'message': "Error, opinion does not exist." }
 opinion_200 = {'status': 200, 'message': "Successfully created upvote." }
 opinion_200_DEL = {'status': 200, 'message': "Successfully deleted opinion." }
+opinion_400_EX = {'status': 400, 'message': "Error, opinion already exists." }
 
 # Categories
 CATEGORIES = {

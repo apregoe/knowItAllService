@@ -49,12 +49,13 @@ class Review(models.Model):
     username = models.CharField(max_length=200, default='', unique=False)
     anonymous = models.BooleanField(default=True)
     dateCreated = models.DateTimeField(default=datetime.now)
-    opinionTotal = models.IntegerField(default=0)
+    upvote = models.IntegerField(default=0)
+    downvote = models.IntegerField(default=0)
     def __str__(self):
-        return self.topicID.title + " -- " + str(self.rating) + " brains"
+        return self.topicID.title + " -- " + str(self.rating) + " stars"
     # User can only create one review per topic
     class Meta:
-        unique_together = (('userID', 'topicID'))
+        unique_together = ('userID', 'topicID')
 
 class Poll(models.Model):
     # def setDeadline(dayLimit):
@@ -89,7 +90,7 @@ class Vote(models.Model):
         return self.pollChoiceID.pollID.text + " -- " + self.pollChoiceID.text + " -- " + self.userID.username
     # Vote once on poll choice
     class Meta:
-        unique_together = (('userID', 'pollChoiceID'))
+        unique_together = ('userID', 'pollChoiceID')
 
 class Notification(models.Model):
     userID = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
@@ -124,14 +125,13 @@ class Comment(models.Model):
     def __str__(self):
         return self.pollID.text + " -- " + self.text
     class Meta:
-        unique_together = (('userID', 'pollID'))
+        unique_together = ('userID', 'pollID')
 
 class Opinion(models.Model):
     userID = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-    pollID = models.ForeignKey(Poll, on_delete=models.CASCADE)
-    reviewID = models.ForeignKey(Review, on_delete=models.CASCADE)
+    pollID = models.ForeignKey(Poll, on_delete=models.CASCADE, blank=True, null=True)
+    reviewID = models.ForeignKey(Review, on_delete=models.CASCADE, blank=True, null=True)
     type = models.CharField(max_length=200, default='')  # poll, review
     upvote = models.BooleanField() # False = downvote
     def __str__(self):
-        return self.userID.text + " -- " + self.type + " -- " + ("Upvote" if self.upvote else "Downvote")
-
+        return self.userID.username + " -- " + self.type + " -- " + ("Upvote" if self.upvote else "Downvote")
