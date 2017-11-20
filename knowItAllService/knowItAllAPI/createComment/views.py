@@ -14,6 +14,13 @@ def createComment(request):
     username = request.GET.get(username_param)
     pollText = request.GET.get(pollText_param)
     comment = request.GET.get(comment_param)
+    anonymous = request.GET.get(anonymous_param)
+
+    # Check if anonymous = 0 or 1
+    if not anonymous.isdigit() or not (0 <= int(anonymous) <= 1):
+        return JsonResponse(createReview_400_ANONYMOUS_INVALID, status=400)
+    anonymous = int(anonymous)
+    anonymous = True if anonymous is '1' else False
 
     # Check if all parameters provided
     if any(var is None for var in [username, pollText, comment]):
@@ -22,7 +29,7 @@ def createComment(request):
     try:
         u=UserProfile.objects.get(username=username)
         p=Poll.objects.get(text=pollText)
-        c = Comment(userID=u, pollID=p, text=comment)
+        c = Comment(userID=u, pollID=p, text=comment, username=username, anonymous=anonymous)
         c.save()
 
         return JsonResponse(createComment_200_ALL, status=200)
