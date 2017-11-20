@@ -19,7 +19,6 @@ def createComment(request):
     # Check if anonymous = 0 or 1
     if not anonymous.isdigit() or not (0 <= int(anonymous) <= 1):
         return JsonResponse(createReview_400_ANONYMOUS_INVALID, status=400)
-    anonymous = int(anonymous)
     anonymous = True if anonymous is '1' else False
 
     # Check if all parameters provided
