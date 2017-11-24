@@ -20,7 +20,6 @@ def createNotification(request):
     if any(var is None for var in [username, type, text, title]):
         return JsonResponse(createNotification_400_ALL, status=400, safe=False)
 
-
     try:
         p = Poll.objects.get(text=title)
     # Poll does not exist
@@ -33,8 +32,7 @@ def createNotification(request):
         n = Notification(userID=u, pollID=p, type=type, text=text)
         n.save()
 
-        return JsonResponse(createNotification_SUCCESS(username, type, text)
-                        , status=200)
+        return JsonResponse(createNotification_SUCCESS(username, type, text), status=200)
 
     # Data already exists
     # except IntegrityError:

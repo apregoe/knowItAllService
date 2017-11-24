@@ -24,8 +24,8 @@ def createCategory(request):
         e = Category(title='Entertainment'); e.save()
         l = Category(title='Location'); l.save()
 
-        return JsonResponse(createCategory_SUCCESS
-                        , status=200)
+        return JsonResponse(createCategory_SUCCESS, status=200)
+
     # Data already exists
     except IntegrityError:
             return JsonResponse(UNIQUE_400, status=400)

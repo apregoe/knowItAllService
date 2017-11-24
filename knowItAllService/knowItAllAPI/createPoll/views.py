@@ -48,6 +48,7 @@ def createPoll(request):
         return JsonResponse(createPoll_400_Anonymous, status=400)
     anonymous = int(anonymous)
     anonymousToStore = False
+
     # Store poll into db
     if anonymous == 1:
         anonymousToStore = True

@@ -39,6 +39,7 @@ def createReview(request):
     # Store poll into db
     if anonymous == 1:
         anonymousToStore = True
+
     try:
         t = Topic.objects.get(title=topicTitle)
         userId=UserProfile.objects.get(username=username)
