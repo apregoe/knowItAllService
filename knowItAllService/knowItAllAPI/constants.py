@@ -73,15 +73,20 @@ tags_param = 'tags'
 number_param = 'number'
 
 # opinion
-opinion_param = 'opinion'
+upvote_param = 'upvote'
+reviewUsername_param = 'reviewUsername'
+reviewTopic_param = 'reviewTopic'
+deleteFlag_param = 'deleteFlag'
 
 ### JsonResponse
 GET_400 = {'status': 400, 'message': "Error, please use GET."}
 POST_400 = {'status': 400, 'message': "Error, please use POST." }
+POSTGET_400 = {'status': 400, 'message': "Error, please use POST or GET." }
 UNIQUE_400 = {'status': 400, 'message': "Error: Data already exists!" }
 def UNIQUE_400_EXISTS(data):
     return {'status': 400, 'message': "Error: " + data + " already exists!"}
 PASSWORD_400 = {'status': 400, 'message': "Error, user password not correct."}
+ANONYMOUS_400 = {'status': 400, 'message:' : 'Error, anonymous should be 0 or 1.'}
 
 ## general
 USER_400 = {'status': 400, 'message': "Error: user does not exist." }
@@ -89,7 +94,7 @@ DATA_400 = {'status': 400, 'message': "Error: data does not exist." }
 def DATA_400_NOT_EXISTS(data):
     return {'message': "Error: " + data + " do/does not exist."}
 POLL_400 = {'status': 400, 'message': "Error: poll does not exist." }
-
+TOPIC_400 = {'status': 400, 'message': "Error: topic does not exist." }
 
 ## authenticate
 authenticate_400_AA = {'status': 400, 'message': "Error, user already authenticated."}
@@ -103,17 +108,15 @@ createCategory_SUCCESS = {'status': 200,
 ## createTopic
 createTopic_400_ALL = {'status': 400, 'message': "Error: please provide a title, category, username, and tags."}
 createTopic_400_C = {'status': 400, 'message': "Error: category must be an int 1-4."}
-createTopic_400_ANONYMOUS_INVALID = {'status' : 400, 'message:' : 'Error, anonymous variable should be either 1 or 0'}
 def createTopic_SUCCESS(title, category, tags):
     return {'status': 200,
      'message': "Successfully created topic.",
      'data': {'title': title, 'category': category, 'tags': tags }}
 
-## createPoll
+# createPoll
 createPoll_400_ALL = {'status': 400, 'message': "Error, please provide username, text, choices, anonymous, openForever, and tags."}
 createPoll_400_OF = {'status': 400, 'message': "Error, openForever must be either 1 (true) or 0 (false)."}
 createPoll_400_DL = {'status': 400, 'message': "Error, dayLimit must be a value > 0."}
-createPoll_400_Anonymous = {'status' : 400, 'message:' : 'Error, anonymous variable should be either 1 or 0'}
 def createPoll_SUCCESS(pollTitle, choices, tags):
     return {'status': 200,
             'message': "Successfully created poll.",
@@ -134,7 +137,6 @@ def createReview_SUCCESS(topicTitle, rating, comment):
     return {'status': 200,
      'message': "Successfully created review for topic " + topicTitle + ".",
      'data': {'rating': rating, 'comment': comment}}
-createReview_400_ANONYMOUS_INVALID = {'status' : 400, 'message:' : 'Error, anonymous variable should be either 1 or 0'}
 
 ## delete Review
 deleteReview_400_INVALID_PARAMS = {'message': 'Plase provide ' + username_param + ', and ' + topicTitle_param}
@@ -142,7 +144,6 @@ def  deleteReview_SUCESS(username, topicTitle):
     return {'message': 'Review about:' + topicTitle + ' from: ' + username + '. Has been deleted' }
 def deleteReview_USERHASNOREVIEWONTHISTOPIC(username, topicTitle):
     return {'message': username + ' has no review for ' + topicTitle}
-
 
 ## createNotification
 createNotification_400_ALL = {'status': 400, 'message': "Error, please provide a username, type, and text."}
@@ -236,11 +237,18 @@ createTags_400_ALL = {'status': 400, 'message': "Error: please provide one or mo
 createTags_200_ALL = {'status': 200, 'message': "Tag successfully stored in DB."}
 
 # createComment
-createComment_400_ALL = {'status': 400, 'message': "Error: please username, polltext, comment."}
+createComment_400_ALL = {'status': 400, 'message': "Error: please provide a username, pollText, and comment."}
 createComment_200_ALL = {'status': 200, 'message': "Comment successfully stored."}
 
+
 # opinion
-opinion_400_ALL = {'status': 400, 'message': "Error: please provide username, type, text, and opinion."}
+opinion_400_ALL = {'status': 400, 'message': "Error: please provide username, type, and opinion."}
+opinion_400_TP = {'status': 400, 'message': "Error, type must be either poll or review. "}
+opinion_400_UP = {'status': 400, 'message': "Error, upvote must be either 1 or 0. "}
+opinion_400_DEL = {'status': 200, 'message': "Error, opinion does not exist." }
+opinion_200 = {'status': 200, 'message': "Successfully created opinion." }
+opinion_200_DEL = {'status': 200, 'message': "Successfully deleted opinion." }
+opinion_400_EX = {'status': 400, 'message': "Error, opinion already exists." }
 
 # Categories
 CATEGORIES = {
