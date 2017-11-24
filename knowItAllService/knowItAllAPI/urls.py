@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^getPost', include('knowItAllAPI.getPost.urls')),
     url(r'^editPost', include('knowItAllAPI.editPost.urls')),
     url(r'^getTrending', include('knowItAllAPI.getTrending.urls')),
+    url(r'^getTags', include('knowItAllAPI.getTags.urls')),
     url(r'^getComments', include('knowItAllAPI.getComments.urls')),
 
     url(r'^myNotifications', include('knowItAllAPI.myNotifications.urls')),

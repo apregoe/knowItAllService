@@ -78,6 +78,9 @@ reviewUsername_param = 'reviewUsername'
 reviewTopic_param = 'reviewTopic'
 deleteFlag_param = 'deleteFlag'
 
+# getTags
+startsWith_param = "startsWith"
+
 ### JsonResponse
 GET_400 = {'status': 400, 'message': "Error, please use GET."}
 POST_400 = {'status': 400, 'message': "Error, please use POST." }
@@ -240,6 +243,8 @@ createTags_200_ALL = {'status': 200, 'message': "Tag successfully stored in DB."
 createComment_400_ALL = {'status': 400, 'message': "Error: please provide a username, pollText, and comment."}
 createComment_200_ALL = {'status': 200, 'message': "Comment successfully stored."}
 
+# getTags
+getTags_400 = {'status': 400, 'message': "Error: please provide startsWith letters."}
 
 # opinion
 opinion_400_ALL = {'status': 400, 'message': "Error: please provide username, type, and opinion."}
