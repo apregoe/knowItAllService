@@ -100,7 +100,7 @@ class Notification(models.Model):
     # isSeen = models.BooleanField(default=False) # Has user opened it
     def __str__(self):
         return self.userID.username + " -- " + self.text
-# Read/unread
+    # Read/unread
 
 class Tag(models.Model):
     title = models.CharField(max_length=200, default='', unique=True)

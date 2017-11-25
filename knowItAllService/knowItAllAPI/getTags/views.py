@@ -10,21 +10,26 @@ from rest_framework.views import APIView
 class getTags(APIView):
     # GET request
     def get(self, request):
-        startsWith = request.GET.get(startsWith_param)
+        startsWithString = request.GET.get(startsWith_param)
 
-        if startsWith is None:
+        if startsWithString is None:
             return JsonResponse(getTags_400, status=400)
 
         # Get tags that match firstLetters
         try:
-            allTags = Tag.objects.all()
-            startsWithTags = []
-            for tag in allTags:
-                if tag.title.startswith(startsWith):
-                    startsWithTags.append(tag.title)
-            # TODO(Nico): Sort these by popularity once the intial code works.
+            startsWithTags = Tag.objects.filter(title__startswith=startsWithString)
 
-            return JsonResponse({'status': 200, 'tags': ",".join(startsWithTags)}, safe=False)
+            # Make a map from tag to number of links for the tag.
+            startsWithDict = {}
+            for tag in startsWithTags:
+                links = TagLinker.objects.filter(tagID = tag)
+                startsWithDict[tag.title] = links.count()
+
+            startWithList = startsWithDict.items()
+            sortedList = sorted(startWithList, key=lambda x : (x[1], x[0]))
+            sortedTags = [t[0] for t in sortedList]
+
+            return JsonResponse({'status': 200, 'tags': ",".join(sortedTags)}, safe=False)
 
         # Data does not exist
         except ObjectDoesNotExist:
