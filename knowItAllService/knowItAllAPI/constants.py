@@ -3,7 +3,7 @@
 #email certifications
 # knowItAllDomain = "http://127.0.0.1:8000/api"
 # knowItAllDomain = "https://0a79ab09.ngrok.io/api"
-knowItAllDomain = "knowItAllLive-dev.us-west-1.elasticbeanstalk.com"
+knowItAllDomain = "knowitalllive2-dev.us-west-1.elasticbeanstalk.com"
 knowItAllEmail = 'knowitallusc310@gmail.com'
 knowItAllEmailPassword = 'H52-J5K-Wm7-WFb'
 def confirmationMessage(username):

@@ -1,11 +1,11 @@
 branch-defaults:
   default:
-    environment: knowItAllLive-dev
+    environment: knowItAllLive2-dev
     group_suffix: null
 global:
-  application_name: knowItAllLive
+  application_name: knowItAllLive2
   branch: null
-  default_ec2_keyname: knowItAll
+  default_ec2_keyname: knowItAllKeypair
   default_platform: Python 2.7
   default_region: us-west-1
   include_git_submodules: true
