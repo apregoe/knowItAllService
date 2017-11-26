@@ -26,7 +26,9 @@ class getTags(APIView):
                 startsWithDict[tag.title] = links.count()
 
             startWithList = startsWithDict.items()
-            sortedList = sorted(startWithList, key=lambda x : (x[1], x[0]))
+            # Note: Returned tags are first sorted in decreasing order. The tiebreaker will then sort the tags by
+            # increasing alphabetical order.
+            sortedList = sorted(startWithList, key=lambda x : (-x[1], x[0]))
             sortedTags = [t[0] for t in sortedList]
 
             return JsonResponse({'status': 200, 'tags': ",".join(sortedTags)}, safe=False)
@@ -38,5 +40,4 @@ class getTags(APIView):
     # POST request
     def post(self, request):
         return JsonResponse(GET_400, status=400)
-
 
