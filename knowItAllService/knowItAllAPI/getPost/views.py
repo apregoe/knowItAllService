@@ -13,6 +13,7 @@ class getPost(APIView):
     def get(self, request):
         type = request.GET.get(type_param)
         text = request.GET.get(text_param)
+        username = request.GET.get(username_param)
         
         try:
             if type == 'topic':
@@ -20,7 +21,21 @@ class getPost(APIView):
                 topicSerializer = TopicSerializer(topic, many=True)
                 reviews = Review.objects.filter(topicID=topic)
                 reviewsSerializer = ReviewSerializer(reviews, many=True)
-                return JsonResponse({'status': 200, 'topic': topicSerializer.data, 'reviews': reviewsSerializer.data }, safe=False)
+                opinions = []
+                uservotes = []
+                for review in reviews:
+                    upvotes = len(Opinion.objects.filter(reviewID=review, upvote=True))
+                    downvotes = len(Opinion.objects.filter(reviewID=review, upvote=False))
+                    opinions.append({'reviewID': review.pk, 'upvotes': upvotes, 'downvotes': downvotes })
+                    if username is not None:
+                        if len(UserProfile.objects.filter(username=username)) != 0:
+                            u = UserProfile.objects.filter(username=username)
+                            if len(Opinion.objects.filter(userID=u, reviewID=review)) != 0:
+                                uservotes.append({'reviewID': review.pk, 'upvote':
+                                    Opinion.objects.get(userID=u, reviewID=review).upvote})
+
+                return JsonResponse({'status': 200, 'topic': topicSerializer.data, 'reviews': reviewsSerializer.data,
+                                     'opinions': opinions, 'uservotes': uservotes}, safe=False)
 
             elif type == 'poll':
                 poll = Poll.objects.filter(text=text)
