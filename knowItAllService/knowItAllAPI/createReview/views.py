@@ -51,19 +51,21 @@ def createReview(request):
     try:
         t = Topic.objects.get(title=topicTitle)
         userId=UserProfile.objects.get(username=username)
-
-        imageKey = createReviewKey(username, topicTitle)
-        if imageFlag == 1:#store image in s3
-            #parsing the body
-            body = json.loads(request.body)
-            image = body['image']
-            saveFile(bucketName=bucket_name, key=imageKey, fileBinary=image)
         r = Review(userID=userId, topicID=t, rating=rating, comment=comment, username=username, anonymous=anonymousToStore)
         r.save()
         # Update review value
         t.avRating = ((t.avRating * t.numReviews) + Decimal.from_float(rating))/(t.numReviews+1)
         t.numReviews += 1
         t.save()
+
+        #I upload the image after it's save() because if there
+        #is an integrity error, then the image won't be uploaded
+        imageKey = createReviewKey(username, topicTitle)
+        if imageFlag == 1:#store image in s3
+            #parsing the body
+            body = json.loads(request.body)
+            image = body['image']
+            saveFile(bucketName=bucket_name, key=imageKey, fileBinary=image)
 
         return JsonResponse(createReview_SUCCESS(topicTitle, rating, comment)
                         , status=200)
