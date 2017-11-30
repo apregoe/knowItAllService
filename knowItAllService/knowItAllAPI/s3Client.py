@@ -31,7 +31,7 @@ def getObject(bucketName, key):
             Bucket=bucketName,
             Key=key
         )
-        body = response['Body']
+        body = response['Body'].read()
         return body
     except ClientError as e:
         if e.response['Error']['Code'] == 'NoSuchKey':
