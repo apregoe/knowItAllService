@@ -3,7 +3,7 @@
 #email certifications
 # knowItAllDomain = "http://127.0.0.1:8000/api"
 # knowItAllDomain = "https://0a79ab09.ngrok.io/api"
-knowItAllDomain = "knowitalllive2-dev.us-west-1.elasticbeanstalk.com"
+knowItAllDomain = "knowitalllive2.xxs9rzfmhq.us-west-1.elasticbeanstalk.com"
 knowItAllEmail = 'knowitallusc310@gmail.com'
 knowItAllEmailPassword = 'H52-J5K-Wm7-WFb'
 def confirmationMessage(username):
@@ -14,8 +14,11 @@ def changePassMessage(username, newPassword):
            +knowItAllDomain+"/api/editProfile?username="+username+"&newPassword="+newPassword+"\n\nBest,\nKnowItAll Team"
 
 ##S3 credentials and constants
-aws_access_key_id = "AKIAIBKPTTWOPGSPYECA"
-aws_secret_access_key = "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"
+#2nd one
+aws_access_key_id = "AKIAI2YSJSGKSDKHJ44A"
+aws_secret_access_key = "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"
+# aws_secret_access_key = "hBxAJ2FAlh9/0kY+uQYQTljcvtBjGvEpBk9qKFto"
+# aws_access_key_id = "AKIAIBKPTTWOPGSPYECA"
 bucket_name = "knowitall2"
 reviewImageFilename = "reviewImage.png"
 
@@ -26,9 +29,6 @@ password_param = 'password'
 check_param = 'check'
 userVerified_param = 'userVerified'
 
-#old ones
-# aws_access_key_id = AKIAIE6WTMT345QBP32Q
-# aws_secret_access_key = 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
 
 ## Edit Profile
 newPassword_param = 'newPassword'
