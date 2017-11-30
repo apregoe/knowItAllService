@@ -1,7 +1,9 @@
 awscli==1.11.172
 awsebcli==3.12.0
 blessed==1.14.2
-botocore==1.7.30
+boto3==1.4.8
+botocore==1.8.4
+boto==2.48.0
 cement==2.8.2
 colorama==0.3.7
 Django==1.11.5

@@ -13,6 +13,11 @@ def changePassMessage(username, newPassword):
     return "Hi "+username[:-8].capitalize()+"!\n\nPlease confirm your password change by clicking the following link:\n\n " \
            +knowItAllDomain+"/api/editProfile?username="+username+"&newPassword="+newPassword+"\n\nBest,\nKnowItAll Team"
 
+##S3 credentials and constants
+aws_access_key_id = "AKIAIE6WTMT345QBP32Q"
+aws_secret_access_key = "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"
+bucket_name = "knowitall2"
+
 ## User
 username_param = 'username'
 password_param = 'password'
@@ -58,6 +63,7 @@ deleteVoteFlag_param = 'deleteVote'
 topicTitle_param = 'topicTitle'
 rating_param = 'rating'
 comment_param = 'comment'
+image_param = "image"
 
 ## Search
 query_param = 'query'
@@ -134,8 +140,9 @@ deletePoll_200_SUCCESS = {'message': 'Poll deleted successfully'}
 deletePoll_400_UNSUCCESSFUL = {'message': 'No poll deleted. Reason: Not found'}
 
 ## createReview
-createReview_400_ALL = {'status': 400, 'message': "Error, please provide a username, topicTitle, anonymous, and rating."}
+createReview_400_ALL = {'status': 400, 'message': "Error, please provide a username, topicTitle, anonymous, image, and rating."}
 createReview_400_RT = {'status': 400, 'message': "Error, rating must be a float between 0 and 5."}
+createReview_400_Image = {'status': 400, 'message': "Error, image parameter must be an integer between 0 and 1"}
 def createReview_SUCCESS(topicTitle, rating, comment):
     return {'status': 200,
      'message': "Successfully created review for topic " + topicTitle + ".",

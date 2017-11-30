@@ -3,13 +3,20 @@ from django.http import JsonResponse
 from .models import UserProfile, Topic, Review
 from django.db import IntegrityError
 from ..constants import *
+from ..s3Client import *
 from decimal import Decimal
 from django.views.decorators.csrf import csrf_exempt
+import json
 
 @csrf_exempt
 def createReview(request):
     if request.method != "POST":
         return JsonResponse(POST_400, status=400, safe=False)
+
+    # body_unicode = request.body.decode('utf-8')
+    # body = json.loads(request.body)
+    # image = body['status']
+    # print("request body: " + str(image))
 
     # Grab the query parameters; note that .GET must be used to grab parameters from the actual URL
     username = request.GET.get(username_param)
@@ -17,9 +24,10 @@ def createReview(request):
     rating = request.GET.get(rating_param)
     comment = request.GET.get(comment_param)
     anonymous = request.GET.get(anonymous_param)
+    imageFlag = request.GET.get(image_param)
 
     # Check if all parameters provided
-    if any(var is None for var in [username, topicTitle, rating, anonymous]):
+    if any(var is None for var in [username, topicTitle, rating, anonymous, imageFlag]):
         return JsonResponse(createReview_400_ALL, status=400, safe=False)
 
     # Check if rating is float
@@ -29,6 +37,11 @@ def createReview(request):
         rating = float(rating)
     if not (0 <= rating <= 5):
         return JsonResponse(createReview_400_RT, status=400, safe=False)
+
+    # Check if imageFlag is int 0<=x<=1
+    if not imageFlag.isdigit() or not (0 <= int(imageFlag) <= 1):
+        return JsonResponse(createReview_400_Image, status=400)
+    imageFlag = int(imageFlag)
 
     #check anonymous value is 1 or 0
     if not anonymous.isdigit() or not (0 <= int(anonymous) <= 1):
@@ -43,6 +56,9 @@ def createReview(request):
     try:
         t = Topic.objects.get(title=topicTitle)
         userId=UserProfile.objects.get(username=username)
+        # imageS3Path = username+"/"+topicTitle + "/"
+        # fileName = "reviewImage.jpg"
+        # saveFile(bucketName=bucket_name, path=imageS3Path, fileName=fileName, fileBinary="bruh")
         r = Review(userID=userId, topicID=t, rating=rating, comment=comment, username=username, anonymous=anonymousToStore)
         r.save()
         # Update review value
@@ -67,3 +83,10 @@ def isfloat(value):
     return True
   except ValueError:
     return False
+
+def isInt(value):
+    try:
+        int(value)
+        return True
+    except ValueError:
+        return False
