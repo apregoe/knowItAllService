@@ -1,3 +1,4 @@
+import os
 ### Classes
 
 #email certifications
@@ -15,8 +16,9 @@ def changePassMessage(username, newPassword):
 
 ##S3 credentials and constants
 #2nd one
-aws_secret_access_key = "dyNYIb6PsrWUl770HtgThGKdwRHC0NFc+ix9CiUZ"
-aws_access_key_id = "AKIAJDQYGAFYXKB5A7XQ"
+aws_secret_access_key = os.environ["aws_secret_access_key"]
+aws_access_key_id = os.environ["aws_access_key_id"]
+
 bucket_name = "knowitall2"
 reviewImageFilename = "reviewImage.png"
 def createReviewKey(username, topicTitle):

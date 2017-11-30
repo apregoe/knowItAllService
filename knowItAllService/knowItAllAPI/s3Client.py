@@ -1,5 +1,5 @@
 import boto3
-import botocore
+import os
 from botocore.client import Config
 from .constants import *
 
@@ -18,8 +18,6 @@ def saveFile(bucketName, key, fileBinary):
     )
 
 def getObject(bucketName, key):
-    # KEY = "prego@usc.edu/Blaze Pizza/reviewImage.png"
-    print("KEY: ", key)
     client = boto3.client(
         's3',
         aws_access_key_id=aws_access_key_id,
