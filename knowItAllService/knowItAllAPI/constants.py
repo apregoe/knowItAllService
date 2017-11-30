@@ -15,10 +15,8 @@ def changePassMessage(username, newPassword):
 
 ##S3 credentials and constants
 #2nd one
-aws_access_key_id = "AKIAI2YSJSGKSDKHJ44A"
-aws_secret_access_key = "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"
-# aws_secret_access_key = "hBxAJ2FAlh9/0kY+uQYQTljcvtBjGvEpBk9qKFto"
-# aws_access_key_id = "AKIAIBKPTTWOPGSPYECA"
+aws_secret_access_key = "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"
+aws_access_key_id = "AKIAJDQYGAFYXKB5A7XQ"
 bucket_name = "knowitall2"
 reviewImageFilename = "reviewImage.png"
 def createReviewKey(username, topicTitle):
