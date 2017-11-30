@@ -13,11 +13,6 @@ def createReview(request):
     if request.method != "POST":
         return JsonResponse(POST_400, status=400, safe=False)
 
-    # body_unicode = request.body.decode('utf-8')
-    # body = json.loads(request.body)
-    # image = body['status']
-    # print("request body: " + str(image))
-
     # Grab the query parameters; note that .GET must be used to grab parameters from the actual URL
     username = request.GET.get(username_param)
     topicTitle = request.GET.get(topicTitle_param)
@@ -56,9 +51,15 @@ def createReview(request):
     try:
         t = Topic.objects.get(title=topicTitle)
         userId=UserProfile.objects.get(username=username)
-        # imageS3Path = username+"/"+topicTitle + "/"
-        # fileName = "reviewImage.jpg"
-        # saveFile(bucketName=bucket_name, path=imageS3Path, fileName=fileName, fileBinary="bruh")
+
+        imageS3Path = username + "/" + topicTitle + "/"
+        fileName = reviewImageFilename
+        if imageFlag == 1:#store image in s3
+            #parsing the body
+            body = json.loads(request.body)
+            image = body['image']
+            saveFile(bucketName=bucket_name, path=imageS3Path, fileName=fileName, fileBinary=image)
+
         r = Review(userID=userId, topicID=t, rating=rating, comment=comment, username=username, anonymous=anonymousToStore)
         r.save()
         # Update review value

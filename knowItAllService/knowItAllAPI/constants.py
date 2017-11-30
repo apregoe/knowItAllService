@@ -14,15 +14,21 @@ def changePassMessage(username, newPassword):
            +knowItAllDomain+"/api/editProfile?username="+username+"&newPassword="+newPassword+"\n\nBest,\nKnowItAll Team"
 
 ##S3 credentials and constants
-aws_access_key_id = "AKIAIE6WTMT345QBP32Q"
-aws_secret_access_key = "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"
+aws_access_key_id = "AKIAIBKPTTWOPGSPYECA"
+aws_secret_access_key = "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"
 bucket_name = "knowitall2"
+reviewImageFilename = "reviewImage.png"
+
 
 ## User
 username_param = 'username'
 password_param = 'password'
 check_param = 'check'
 userVerified_param = 'userVerified'
+
+#old ones
+# aws_access_key_id = AKIAIE6WTMT345QBP32Q
+# aws_secret_access_key = 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
 
 ## Edit Profile
 newPassword_param = 'newPassword'
