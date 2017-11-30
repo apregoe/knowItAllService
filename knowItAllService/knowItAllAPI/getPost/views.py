@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.db import IntegrityError
 from .models import *
 from ..constants import *
+from ..s3Client import *
 from ..serializers import *
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -23,6 +24,10 @@ class getPost(APIView):
                 reviewsSerializer = ReviewSerializer(reviews, many=True)
                 opinions = []
                 uservotes = []
+                images =[]
+                # getting the image, if there is any
+                # imageKey = createReviewKey(username=username, topicTitle=topic)
+                # image = getObject(bucketName=bucket_name, key=imageKey)
                 for review in reviews:
                     upvotes = len(Opinion.objects.filter(reviewID=review, upvote=True))
                     downvotes = len(Opinion.objects.filter(reviewID=review, upvote=False))
@@ -33,9 +38,15 @@ class getPost(APIView):
                             if len(Opinion.objects.filter(userID=u, reviewID=review)) != 0:
                                 uservotes.append({'reviewID': review.pk, 'upvote':
                                     Opinion.objects.get(userID=u, reviewID=review).upvote})
+                    #get image data drom s3
+                    # getting the image, if there is any
+                    imageKey = createReviewKey(username=review.username, topicTitle=text)
+                    image = getObject(bucketName=bucket_name, key=imageKey)
+                    if image != "":
+                        images.append({'reviewID': review.pk, 'image': image})
 
                 return JsonResponse({'status': 200, 'topic': topicSerializer.data, 'reviews': reviewsSerializer.data,
-                                     'opinions': opinions, 'uservotes': uservotes}, safe=False)
+                                     'opinions': opinions, 'uservotes': uservotes, 'images':images}, safe=False)
 
             elif type == 'poll':
                 poll = Poll.objects.filter(text=text)
@@ -47,7 +58,6 @@ class getPost(APIView):
             # Type is incorrect
             else:
                 return JsonResponse(getPost_400_TP, status=400)
-
         # Data does not exist
         except ObjectDoesNotExist:
             return JsonResponse(DATA_400, status=400)

@@ -1,6 +1,7 @@
 import boto3
 import os
 from botocore.client import Config
+from botocore.exceptions import ClientError
 from .constants import *
 
 def saveFile(bucketName, key, fileBinary):
@@ -24,11 +25,17 @@ def getObject(bucketName, key):
         aws_secret_access_key=aws_secret_access_key,
         config=Config(signature_version='s3v4')
     )
-    response = client.get_object(
-        Bucket=bucketName,
-        Key=key
-    )
-    body = response['Body'].read()
-    body = str(body)
-    body = body[2:len(body)-1]
-    return body
+    response = None
+    try:
+        response = client.get_object(
+            Bucket=bucketName,
+            Key=key
+        )
+        body = response['Body'].read()
+        body = str(body)
+        body = body[2:len(body) - 1]
+        return body
+    except ClientError as e:
+        if e.response['Error']['Code'] == 'NoSuchKey':
+            print("No such key:", key)
+        return ""
