@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.db import IntegrityError
 from .models import *
 from ..constants import *
+import base64
 from ..s3Client import *
 from ..serializers import *
 from rest_framework.response import Response
@@ -43,6 +44,8 @@ class getPost(APIView):
                     imageKey = createReviewKey(username=review.username, topicTitle=text)
                     image = getObject(bucketName=bucket_name, key=imageKey)
                     if image != "":
+                        # with open("image.png", "wb") as fh:
+                        #     fh.write(image)
                         images.append({'reviewID': review.pk, 'image': image})
 
                 return JsonResponse({'status': 200, 'topic': topicSerializer.data, 'reviews': reviewsSerializer.data,
