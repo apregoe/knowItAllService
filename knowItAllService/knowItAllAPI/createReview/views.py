@@ -52,13 +52,14 @@ def createReview(request):
         t = Topic.objects.get(title=topicTitle)
         userId=UserProfile.objects.get(username=username)
 
-        imageS3Path = username + "/" + topicTitle + "/"
+        imageS3Path = "/" + username + "/" + topicTitle + "/"
         fileName = reviewImageFilename
         if imageFlag == 1:#store image in s3
             #parsing the body
             body = json.loads(request.body)
             image = body['image']
             saveFile(bucketName=bucket_name, path=imageS3Path, fileName=fileName, fileBinary=image)
+            getObject(bucketName=bucket_name, path=imageS3Path, fileName="text.txt")
 
         r = Review(userID=userId, topicID=t, rating=rating, comment=comment, username=username, anonymous=anonymousToStore)
         r.save()
