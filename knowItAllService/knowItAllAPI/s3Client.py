@@ -3,7 +3,7 @@ import botocore
 from botocore.client import Config
 from .constants import *
 
-def saveFile(bucketName, path, fileName, fileBinary):
+def saveFile(bucketName, key, fileBinary):
     s3 = boto3.resource(
         's3',
         aws_access_key_id=aws_access_key_id,
@@ -13,12 +13,13 @@ def saveFile(bucketName, path, fileName, fileBinary):
 
     bucket = s3.Bucket(bucket_name)
     bucket.put_object(
-        Key=path+fileName,
+        Key=key,
         Body = fileBinary
     )
 
-def getObject(bucketName, path, fileName):
-    KEY = "prego@usc.edu/Blaze Pizza/reviewImage.png"
+def getObject(bucketName, key):
+    # KEY = "prego@usc.edu/Blaze Pizza/reviewImage.png"
+    print("KEY: ", key)
     client = boto3.client(
         's3',
         aws_access_key_id=aws_access_key_id,
@@ -27,7 +28,7 @@ def getObject(bucketName, path, fileName):
     )
     response = client.get_object(
         Bucket=bucketName,
-        Key=KEY
+        Key=key
     )
     body = response['Body'].read()
     body = str(body)

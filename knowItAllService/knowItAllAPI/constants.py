@@ -21,6 +21,8 @@ aws_secret_access_key = "yVleKKMGd5dPYwSS9T4EfX/9haX4gr0JXKXVW95q"
 # aws_access_key_id = "AKIAIBKPTTWOPGSPYECA"
 bucket_name = "knowitall2"
 reviewImageFilename = "reviewImage.png"
+def createReviewKey(username, topicTitle):
+    return username + "/" + topicTitle + "/" + reviewImageFilename
 
 
 ## User
