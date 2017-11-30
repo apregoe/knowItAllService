@@ -183,7 +183,7 @@ def editProfile_200_EM(username, newPassword):
 
 ## editPost
 editPost_400_TP = {'status': 400, 'message': "Error, type must be either 'poll' or 'review'."}
-editPost_400_RV = {'status': 400, 'message': "Error, please provide rating, anonymous and comment."}
+editPost_400_RV = {'status': 400, 'message': "Error, please provide rating, anonymous, image, and comment."}
 def editPost_200_RV(username, rating, comment):
     return {'status': 200, 'message': "Successfully updated review for user "+username+'!',
             'data': {'newRating': rating, 'newComment': comment } }

@@ -2,6 +2,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from .models import *
 from ..constants import *
+from ..s3Client import *
+import json
 from decimal import Decimal
 from django.views.decorators.csrf import csrf_exempt
 
@@ -23,10 +25,16 @@ def editPost(request):
             newRating = request.GET.get(rating_param)
             newComment = request.GET.get(comment_param)
             newAnonymous = request.GET.get(anonymous_param)
+            imageFlag = request.GET.get(image_param)
 
             # Check if all parameters provided
-            if any(var is None for var in [newRating, newComment, anonymous_param]):
+            if any(var is None for var in [newRating, newComment, anonymous_param, imageFlag]):
                 return JsonResponse(editPost_400_RV, status=400, safe=False)
+
+            # Check if imageFlag is int 0<=x<=1
+            if not imageFlag.isdigit() or not (0 <= int(imageFlag) <= 1):
+                return JsonResponse(createReview_400_Image, status=400)
+            imageFlag = int(imageFlag)
 
             # check anonymous value is 1 or 0
             if not newAnonymous.isdigit() or not (0 <= int(newAnonymous) <= 1):
@@ -44,11 +52,16 @@ def editPost(request):
             if not (0 <= newRating <= 5):
                 return JsonResponse(createReview_400_RT, status=400, safe=False)
 
-            print(topic)
+            imageKey = createReviewKey(username, topic)
+            if imageFlag == 1:  # store image in s3
+                # parsing the body
+                body = json.loads(request.body)
+                image = body['image']
+                saveFile(bucketName=bucket_name, key=imageKey, fileBinary=image)
+
             topic = Topic.objects.get(title=topic)
             user = UserProfile.objects.get(username=username)
             review = Review.objects.get(userID=user, topicID=topic)
-            print(review.rating)
             review.rating = newRating
             review.comment = newComment
             review.anonymous = newAnonymousToStore
