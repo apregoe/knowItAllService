@@ -4,6 +4,7 @@ from django.db import IntegrityError
 from .models import *
 from ..constants import *
 import base64
+import json
 from ..s3Client import *
 from ..serializers import *
 from rest_framework.response import Response
@@ -46,7 +47,7 @@ class getPost(APIView):
                     if image != "":
                         # with open("image.png", "wb") as fh:
                         #     fh.write(image)
-                        images.append({'reviewID': review.pk, 'image': image})
+                        images.append({'reviewID': review.pk, 'image': str(image)})
 
                 return JsonResponse({'status': 200, 'topic': topicSerializer.data, 'reviews': reviewsSerializer.data,
                                      'opinions': opinions, 'uservotes': uservotes, 'images':images}, safe=False)

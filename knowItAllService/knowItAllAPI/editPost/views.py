@@ -55,8 +55,8 @@ def editPost(request):
             imageKey = createReviewKey(username, topic)
             if imageFlag == 1:  # store image in s3
                 # parsing the body
-                body = json.loads(request.body)
-                image = body['image']
+                image = request.body
+                print(image)
                 saveFile(bucketName=bucket_name, key=imageKey, fileBinary=image)
 
             topic = Topic.objects.get(title=topic)
