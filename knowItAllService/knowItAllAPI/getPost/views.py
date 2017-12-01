@@ -40,14 +40,6 @@ class getPost(APIView):
                             if len(Opinion.objects.filter(userID=u, reviewID=review)) != 0:
                                 uservotes.append({'reviewID': review.pk, 'upvote':
                                     Opinion.objects.get(userID=u, reviewID=review).upvote})
-                    #get image data drom s3
-                    # getting the image, if there is any
-                    imageKey = createReviewKey(username=review.username, topicTitle=text)
-                    image = getObject(bucketName=bucket_name, key=imageKey)
-                    if image != "":
-                        # with open("image.png", "wb") as fh:
-                        #     fh.write(image)
-                        images.append({'reviewID': review.pk, 'image': str(image)})
 
                 return JsonResponse({'status': 200, 'topic': topicSerializer.data, 'reviews': reviewsSerializer.data,
                                      'opinions': opinions, 'uservotes': uservotes, 'images':images}, safe=False)

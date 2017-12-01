@@ -52,13 +52,6 @@ def editPost(request):
             if not (0 <= newRating <= 5):
                 return JsonResponse(createReview_400_RT, status=400, safe=False)
 
-            imageKey = createReviewKey(username, topic)
-            if imageFlag == 1:  # store image in s3
-                # parsing the body
-                image = request.body
-                print(image)
-                saveFile(bucketName=bucket_name, key=imageKey, fileBinary=image)
-
             topic = Topic.objects.get(title=topic)
             user = UserProfile.objects.get(username=username)
             review = Review.objects.get(userID=user, topicID=topic)

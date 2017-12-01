@@ -58,15 +58,6 @@ def createReview(request):
         t.numReviews += 1
         t.save()
 
-        #I upload the image after it's save() because if there
-        #is an integrity error, then the image won't be uploaded
-        imageKey = createReviewKey(username, topicTitle)
-        if imageFlag == 1:#store image in s3
-            #parsing the body
-            # body = json.loads(request.body)
-            image = request.body
-            saveFile(bucketName=bucket_name, key=imageKey, fileBinary=image)
-
         return JsonResponse(createReview_SUCCESS(topicTitle, rating, comment)
                         , status=200)
     # Data already exists
