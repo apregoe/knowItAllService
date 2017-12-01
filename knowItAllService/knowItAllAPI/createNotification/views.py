@@ -4,6 +4,7 @@ from ..models import *
 from django.db import IntegrityError
 from ..constants import *
 from django.views.decorators.csrf import csrf_exempt
+import smtplib
 
 @csrf_exempt
 def createNotification(request):

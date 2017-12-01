@@ -40,7 +40,7 @@ def createPoll(request):
     elif openForever == 0 and (dayLimit is None or not dayLimit.isdigit() or int(dayLimit) < 1):
         return JsonResponse(createPoll_400_DL, status=400, safe=False)
     else:
-        dayLimit = 0
+        # dayLimit = 0
         openForever = True if (openForever == 1) else False
 
     # check anonymous value is 1 or 0

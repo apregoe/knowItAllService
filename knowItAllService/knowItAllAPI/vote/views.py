@@ -3,7 +3,9 @@ from django.http import JsonResponse
 from ..models import *
 from django.db import IntegrityError
 from ..constants import *
+import multiprocessing as mp
 from decimal import Decimal
+import smtplib
 from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
@@ -85,6 +87,9 @@ def vote(request):
             n = Notification(userID=p.userID, pollID=p, type="poll", text=text)
             n.save()
 
+            mailProcess = mp.Process(target=sendEmail, args=(p.userID.username, knowItAllEmail, knowItAllEmailPassword,"", text))
+            mailProcess.start()
+
         except IntegrityError:
             return JsonResponse(UNIQUE_400, status=400)
 
@@ -105,3 +110,15 @@ def vote(request):
         pc.save()
 
         return JsonResponse(deleteVoteFlag_200_VoteDeleted(username, pollChoiceText), status=200, safe=False)
+
+# sends email
+# TODO figure put how to put a subject
+def sendEmail(to, from_, from_password, subject, content):
+    print("to: ", to)
+    mail = smtplib.SMTP('smtp.gmail.com', 587)
+    mail.ehlo()
+    mail.starttls()
+    mail.login(from_, from_password)
+    print(content)
+    mail.sendmail(from_, to, content)
+    mail.quit()

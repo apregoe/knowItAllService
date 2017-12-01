@@ -49,14 +49,21 @@ def createReview(request):
         anonymousToStore = True
 
     try:
+        print("1")
         t = Topic.objects.get(title=topicTitle)
+        print("2")
         userId=UserProfile.objects.get(username=username)
+        print("3")
         r = Review(userID=userId, topicID=t, rating=rating, comment=comment, username=username, anonymous=anonymousToStore)
+        print("4")
         r.save()
+        print("5")
         # Update review value
         t.avRating = ((t.avRating * t.numReviews) + Decimal.from_float(rating))/(t.numReviews+1)
+        print("6")
         t.numReviews += 1
         t.save()
+        print("7")
 
         return JsonResponse(createReview_SUCCESS(topicTitle, rating, comment)
                         , status=200)
